@@ -19,6 +19,9 @@ permissions: {}
 
 jobs:
   publish:
+    # This workflow publishes the upstream image name and credentials. Keep it
+    # confined to the upstream repository when this project is forked.
+    if: github.repository == 'srbhr/Resume-Matcher'
     runs-on: ubuntu-latest
     permissions:
       contents: read
