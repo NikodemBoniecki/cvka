@@ -1195,7 +1195,7 @@ class StatusResponse(BaseModel):
         default=False,
         description=(
             "True when the 'agent' provider is selected: the user's coding agent "
-            "does the AI work through the resume-matcher command or MCP, and the "
+            "does the AI work through the cvka command or MCP, and the "
             "app makes no model calls of its own."
         ),
     )

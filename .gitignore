@@ -89,7 +89,7 @@ skills-lock.json
 .codex/
 .firecrawl/
 AGENTS.md
-# The root AGENTS.md is shared: it tells agents how to use Resume Matcher.
+# The root AGENTS.md is shared: it tells agents how to use CVKA.
 !/AGENTS.md
 GEMINI.md
 CODEX.md

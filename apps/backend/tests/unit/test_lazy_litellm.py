@@ -1,7 +1,7 @@
 """LiteLLM loads on the first model call, not at import.
 
 Importing it takes about 1 s and 160 MB. Agent mode makes no model calls, yet
-every ``resume-matcher`` CLI run used to pay that cost. Each check runs in a
+every ``cvka`` CLI run used to pay that cost. Each check runs in a
 fresh interpreter, so modules other tests imported can't hide a regression.
 """
 

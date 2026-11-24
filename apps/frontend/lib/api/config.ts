@@ -190,7 +190,7 @@ export const PROVIDER_INFO: Record<
      */
     chatgptSignIn?: boolean;
     /**
-     * The user's coding agent does the AI work through the resume-matcher command.
+     * The user's coding agent does the AI work through the cvka command.
      * There is no key, model, endpoint or reasoning effort to configure.
      */
     agentMode?: boolean;

@@ -1,6 +1,6 @@
 # e2e_monitor — agentic end-to-end monitor
 
-An **opt-in, on-demand** harness that drives the real Resume-Matcher app end to end, captures a durable evidence bundle, and has a Claude Code skill judge it. It is a **report, never a gate** — it informs; it never blocks a push and is never wired into CI.
+An **opt-in, on-demand** harness that drives the real CVKA app end to end, captures a durable evidence bundle, and has a Claude Code skill judge it. It is a **report, never a gate** — it informs; it never blocks a push and is never wired into CI.
 
 ---
 

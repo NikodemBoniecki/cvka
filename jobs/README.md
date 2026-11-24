@@ -8,4 +8,4 @@ Each job becomes a tailored resume on the dashboard at <http://localhost:3000>. 
 
 Everything in this folder except this README is gitignored, so your job descriptions stay on your machine.
 
-Setup: [SETUP.md](../SETUP.md#use-resume-matcher-with-a-coding-agent).
+Setup: [SETUP.md](../SETUP.md#use-cvka-with-a-coding-agent).

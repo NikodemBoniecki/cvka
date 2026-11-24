@@ -1,7 +1,7 @@
-"""Run the MCP tools from a shell: ``resume-matcher <tool> [arguments]``.
+"""Run the MCP tools from a shell: ``cvka <tool> [arguments]``.
 
 For agents that run commands rather than connect to an MCP server. Each call
-goes through an in-memory MCP client to the same server ``resume-matcher-mcp``
+goes through an in-memory MCP client to the same server ``cvka-mcp``
 runs, so arguments are validated and results shaped exactly as over MCP. The
 result is printed to stdout as JSON. A tool error goes to stderr with exit code
 1, a bad command line with exit code 2.
@@ -20,8 +20,8 @@ from mcp import Client
 from app.mcp_server.server import build_server
 
 USAGE = """\
-Usage: resume-matcher <tool> [arguments]
-       resume-matcher <tool> --help     the tool's description and argument schema
+Usage: cvka <tool> [arguments]
+       cvka <tool> --help     the tool's description and argument schema
 
 Arguments are one JSON object:
   '{"resume_id": "abc"}'   inline
@@ -106,7 +106,7 @@ async def run(args: list[str], stdin: TextIO, stdout: TextIO, stderr: TextIO) ->
     try:
         arguments = {} if show_help else parse_arguments(args[1:], stdin)
     except UsageError as e:
-        stderr.write(f"resume-matcher: {e}\n")
+        stderr.write(f"cvka: {e}\n")
         return 2
 
     async with Client(build_server()) as client:
@@ -115,8 +115,8 @@ async def run(args: list[str], stdin: TextIO, stdout: TextIO, stderr: TextIO) ->
         )
         if tool is None:
             stderr.write(
-                f"resume-matcher: unknown tool {args[0]!r}. "
-                "Run resume-matcher --help for the list.\n"
+                f"cvka: unknown tool {args[0]!r}. "
+                "Run cvka --help for the list.\n"
             )
             return 2
         if show_help:

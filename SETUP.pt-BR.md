@@ -1,8 +1,8 @@
-# Guia de Instalação do Resume Matcher
+# Guia de Instalação do CVKA
 
 [English](SETUP.md) | [Español](SETUP.es.md) | [简体中文](SETUP.zh-CN.md) | [日本語](SETUP.ja.md) | [**Português (BR)**](SETUP.pt-BR.md)
 
-Bem-vindo! Este guia vai levar você pela instalação do Resume Matcher na sua máquina local. Seja você uma pessoa desenvolvedora que quer contribuir ou alguém que só quer rodar a aplicação localmente, este guia cobre tudo.
+Bem-vindo! Este guia vai levar você pela instalação do CVKA na sua máquina local. Seja você uma pessoa desenvolvedora que quer contribuir ou alguém que só quer rodar a aplicação localmente, este guia cobre tudo.
 
 ---
 
@@ -21,8 +21,8 @@ Bem-vindo! Este guia vai levar você pela instalação do Resume Matcher na sua 
   - [Opção C: seu plano do ChatGPT (Sign in with ChatGPT)](#option-c-your-chatgpt-plan-sign-in-with-chatgpt)
 - [Deploy com Docker](#docker-deployment)
 - [Acessar a aplicação](#accessing-the-application)
-- [Usar o Resume Matcher com um agente de código](#use-resume-matcher-with-a-coding-agent)
-- [Usar o Resume Matcher pelo Claude Code ou Claude Desktop (MCP)](#use-resume-matcher-from-claude-code-or-claude-desktop-mcp)
+- [Usar o CVKA com um agente de código](#use-cvka-with-a-coding-agent)
+- [Usar o CVKA pelo Claude Code ou Claude Desktop (MCP)](#use-cvka-from-claude-code-or-claude-desktop-mcp)
 - [Referência de comandos comuns](#common-commands-reference)
 - [Solução de problemas](#troubleshooting)
 - [Visão geral da estrutura do projeto](#project-structure-overview)
@@ -46,7 +46,7 @@ Antes de começar, confira se você tem o seguinte instalado no seu sistema:
 
 ### Instalar o uv (gerenciador de pacotes Python)
 
-O Resume Matcher usa o `uv` para gerenciar dependências Python de forma rápida e confiável. Instale com:
+O CVKA usa o `uv` para gerenciar dependências Python de forma rápida e confiável. Instale com:
 
 ```bash
 # macOS/Linux
@@ -69,8 +69,8 @@ Se você já está familiarizado com ferramentas de desenvolvimento e quer rodar
 
 ```bash
 # 1. Clone o repositório
-git clone https://github.com/srbhr/Resume-Matcher.git
-cd Resume-Matcher
+git clone https://github.com/NikodemBoniecki/cvka.git
+cd CVKA
 
 # 2. Inicie o backend (Terminal 1)
 cd apps/backend
@@ -114,11 +114,11 @@ Você também pode usar os instaladores dos links da tabela de [Pré-requisitos]
 Clone com o Git:
 
 ```powershell
-git clone https://github.com/srbhr/Resume-Matcher.git
-cd Resume-Matcher
+git clone https://github.com/NikodemBoniecki/cvka.git
+cd CVKA
 ```
 
-Ou, sem o Git, abra a [página do repositório](https://github.com/srbhr/Resume-Matcher), clique em **Code → Download ZIP**, extraia o ZIP e use `cd` para entrar na pasta extraída no PowerShell.
+Ou, sem o Git, abra a [página do repositório](https://github.com/NikodemBoniecki/cvka), clique em **Code → Download ZIP**, extraia o ZIP e use `cd` para entrar na pasta extraída no PowerShell.
 
 ### 3. Iniciar o backend (janela 1 do PowerShell)
 
@@ -134,10 +134,10 @@ Mantenha `HOST=127.0.0.1` no `.env` para que o backend fique acessível apenas a
 
 ### 4. Iniciar o frontend (janela 2 do PowerShell)
 
-Uma nova janela do PowerShell abre na sua pasta pessoal, então primeiro vá até a pasta onde você clonou ou extraiu o Resume Matcher (troque o caminho pelo seu):
+Uma nova janela do PowerShell abre na sua pasta pessoal, então primeiro vá até a pasta onde você clonou ou extraiu o CVKA (troque o caminho pelo seu):
 
 ```powershell
-cd C:\path\to\Resume-Matcher
+cd C:\path\to\CVKA
 cd apps\frontend
 npm install
 npm run dev
@@ -145,7 +145,7 @@ npm run dev
 
 Abra **<http://localhost:3000>** no navegador.
 
-> **Exportação de PDF:** o Resume Matcher gera PDFs com o Chromium headless. Ele prefere o Google Chrome instalado, com o sandbox do Chrome ativado, porque o Chrome se mantém atualizado sozinho. Sem o Chrome, usa o Chromium do Playwright (instale-o a partir de `apps\backend` com `uv run playwright install chromium`) e, depois, o Microsoft Edge (o Edge já vem no Windows 11).
+> **Exportação de PDF:** o CVKA gera PDFs com o Chromium headless. Ele prefere o Google Chrome instalado, com o sandbox do Chrome ativado, porque o Chrome se mantém atualizado sozinho. Sem o Chrome, usa o Chromium do Playwright (instale-o a partir de `apps\backend` com `uv run playwright install chromium`) e, depois, o Microsoft Edge (o Edge já vem no Windows 11).
 
 > **Prefere Docker?** Instale o [Docker Desktop para Windows](https://docs.docker.com/desktop/setup/install/windows-install/) e siga [Deploy com Docker](#docker-deployment). Para definir variáveis como `PORT` no PowerShell, use `$env:PORT="4000"; docker compose up -d`. Para a [configuração opcional do PostgreSQL](#optional-postgresql), rode `$env:POSTGRES_PASSWORD=[guid]::NewGuid().ToString('N'); docker compose -f docker-compose.yml -f docker-compose.postgres.yml up -d`; fora do Docker, defina `DATABASE_URL` em `apps\backend\.env`.
 
@@ -162,8 +162,8 @@ Abra **<http://localhost:3000>** no navegador.
 Primeiro, coloque o código na sua máquina:
 
 ```bash
-git clone https://github.com/srbhr/Resume-Matcher.git
-cd Resume-Matcher
+git clone https://github.com/NikodemBoniecki/cvka.git
+cd CVKA
 ```
 
 <a id="2-backend-setup"></a>
@@ -270,7 +270,7 @@ Você deve ver:
 - Local:        http://localhost:3000
 ```
 
-Abra **<http://localhost:3000>** no navegador. Você deve ver o painel do Resume Matcher!
+Abra **<http://localhost:3000>** no navegador. Você deve ver o painel do CVKA!
 
 ---
 
@@ -278,7 +278,7 @@ Abra **<http://localhost:3000>** no navegador. Você deve ver o painel do Resume
 
 ## Configurar seu provedor de IA
 
-O Resume Matcher é compatível com vários provedores de IA. Você pode configurar o seu provedor pela página Configurações (Settings) do app ou editando o arquivo `.env` do backend.
+O CVKA é compatível com vários provedores de IA. Você pode configurar o seu provedor pela página Configurações (Settings) do app ou editando o arquivo `.env` do backend.
 
 <a id="option-a-cloud-providers"></a>
 
@@ -347,12 +347,12 @@ Um provedor criado pela comunidade que usa o [Sign in with ChatGPT para apps de 
 
 1. Inicie o backend e o frontend e abra **Configurações** (Settings) em um navegador **na mesma máquina do backend**.
 2. Escolha **Plano ChatGPT** (ChatGPT plan) e clique em **Continuar com o ChatGPT** (Continue with ChatGPT).
-3. Entre na sua conta na OpenAI e autorize o Resume Matcher a usar o seu plano do ChatGPT. Na primeira vez, a OpenAI registra o app na sua conta; as próximas entradas reaproveitam esse registro.
+3. Entre na sua conta na OpenAI e autorize o CVKA a usar o seu plano do ChatGPT. Na primeira vez, a OpenAI registra o app na sua conta; as próximas entradas reaproveitam esse registro.
 4. Você volta para Configurações. Escolha um dos modelos da sua conta e clique em **Salvar** (Save).
 
-A OpenAI redireciona o navegador para `http://127.0.0.1:<port>/auth/callback`, em que `<port>` é a porta em que você abriu o Resume Matcher (`3000` por padrão). O frontend encaminha esse caminho para o backend, e o backend só aceita o callback vindo da própria máquina em que roda. Por isso, o navegador precisa rodar na máquina que executa o Resume Matcher, e você deve abri-lo como `http://localhost:<port>` ou `http://127.0.0.1:<port>`. Os tokens ficam armazenados criptografados no diretório de dados do backend (`chatgpt_credentials.enc`). **Desconectar** (Disconnect) revoga a sessão na OpenAI e apaga os tokens; **Gerenciar uso** (Manage usage) abre as configurações de uso do seu ChatGPT.
+A OpenAI redireciona o navegador para `http://127.0.0.1:<port>/auth/callback`, em que `<port>` é a porta em que você abriu o CVKA (`3000` por padrão). O frontend encaminha esse caminho para o backend, e o backend só aceita o callback vindo da própria máquina em que roda. Por isso, o navegador precisa rodar na máquina que executa o CVKA, e você deve abri-lo como `http://localhost:<port>` ou `http://127.0.0.1:<port>`. Os tokens ficam armazenados criptografados no diretório de dados do backend (`chatgpt_credentials.enc`). **Desconectar** (Disconnect) revoga a sessão na OpenAI e apaga os tokens; **Gerenciar uso** (Manage usage) abre as configurações de uso do seu ChatGPT.
 
-**Docker:** o login funciona com a configuração padrão, que publica apenas a porta 3000: abra o Resume Matcher em `http://localhost:3000` (ou na `PORT` que você publicou) na máquina que executa o contêiner. A OpenAI devolve o navegador para essa mesma porta, e o frontend encaminha `/auth/callback` para o backend dentro do contêiner. Não funciona a partir de outro computador nem por um domínio de reverse proxy, porque a OpenAI só permite redirecionamentos para `http://127.0.0.1`.
+**Docker:** o login funciona com a configuração padrão, que publica apenas a porta 3000: abra o CVKA em `http://localhost:3000` (ou na `PORT` que você publicou) na máquina que executa o contêiner. A OpenAI devolve o navegador para essa mesma porta, e o frontend encaminha `/auth/callback` para o backend dentro do contêiner. Não funciona a partir de outro computador nem por um domínio de reverse proxy, porque a OpenAI só permite redirecionamentos para `http://127.0.0.1`.
 
 O `.env` equivalente (você ainda faz o login em Configurações):
 
@@ -367,7 +367,7 @@ LLM_MODEL=gpt-6.1-sol  # troque por um modelo da lista da sua conta em Configura
 
 ## Deploy com Docker
 
-Prefere um deploy em contêiner? O Resume Matcher inclui suporte a Docker.
+Prefere um deploy em contêiner? O CVKA inclui suporte a Docker.
 
 ### Início rápido com Docker Compose
 
@@ -410,7 +410,7 @@ PORT=4000 docker compose up -d
 
 ### Abrir de outro dispositivo
 
-O contêiner é publicado apenas em `127.0.0.1`, então ele abre na máquina que roda o Docker e em nenhum outro lugar. O Resume Matcher não tem login: qualquer pessoa que consiga acessá-lo pode ler seus currículos e alterar suas configurações de IA. Para usá-lo de um celular ou de outro computador em uma rede em que você confia, publique em todas as interfaces e permita o endereço que você vai digitar:
+O contêiner é publicado apenas em `127.0.0.1`, então ele abre na máquina que roda o Docker e em nenhum outro lugar. O CVKA não tem login: qualquer pessoa que consiga acessá-lo pode ler seus currículos e alterar suas configurações de IA. Para usá-lo de um celular ou de outro computador em uma rede em que você confia, publique em todas as interfaces e permita o endereço que você vai digitar:
 
 ```bash
 BIND_ADDRESS=0.0.0.0 ALLOWED_HOSTS=192.168.1.20 docker compose up -d
@@ -492,7 +492,7 @@ LOG_LEVEL=INFO LOG_LLM=DEBUG docker compose up -d
 
 O SQLite é o padrão e não exige configuração. Para ter backups, ou para manter o banco em um servidor separado que você controla, você pode usar o PostgreSQL.
 
-> **Segurança:** o Resume Matcher não tem contas de usuário nem autenticação, e o PostgreSQL não adiciona nenhuma. Rode-o apenas para você mesmo ou em uma rede privada confiável, nunca exposto publicamente. Para qualquer uso além do local, conecte com um role de banco de menor privilégio (o usuário `resume` do arquivo Compose é superusuário).
+> **Segurança:** o CVKA não tem contas de usuário nem autenticação, e o PostgreSQL não adiciona nenhuma. Rode-o apenas para você mesmo ou em uma rede privada confiável, nunca exposto publicamente. Para qualquer uso além do local, conecte com um role de banco de menor privilégio (o usuário `resume` do arquivo Compose é superusuário).
 
 Para iniciá-lo com Docker Compose:
 
@@ -544,7 +544,7 @@ Se alguma etapa do build baixar devagar, aponte-a para um mirror. Os três build
 docker build \
   --build-arg DEBIAN_MIRROR=https://mirrors.edge.kernel.org/debian \
   --build-arg PIP_INDEX_URL=https://pypi.mirrors.ustc.edu.cn/simple \
-  -t resume-matcher .
+  -t cvka .
 ```
 
 `docker compose build` e `scripts/docker-smoke.sh` leem os três a partir de variáveis de ambiente de mesmo nome, por exemplo `DEBIAN_MIRROR=https://mirrors.edge.kernel.org/debian ./scripts/docker-smoke.sh`.
@@ -582,16 +582,16 @@ Com o contêiner rodando, abra o navegador:
 
 ---
 
-<a id="use-resume-matcher-with-a-coding-agent"></a>
+<a id="use-cvka-with-a-coding-agent"></a>
 
-## Usar o Resume Matcher com um agente de código
+## Usar o CVKA com um agente de código
 
-Já usa Claude Code, Codex, Cursor, GitHub Copilot ou Antigravity? Seu agente consegue fazer todo o trabalho de IA do Resume Matcher, então você **não precisa de chave de API**. O agente lê o seu currículo e as descrições de vaga e escreve as versões adaptadas. O Resume Matcher as armazena, confere que nada foi inventado, calcula a pontuação e renderiza os PDFs. Você revisa e edita tudo no app web.
+Já usa Claude Code, Codex, Cursor, GitHub Copilot ou Antigravity? Seu agente consegue fazer todo o trabalho de IA do CVKA, então você **não precisa de chave de API**. O agente lê o seu currículo e as descrições de vaga e escreve as versões adaptadas. O CVKA as armazena, confere que nada foi inventado, calcula a pontuação e renderiza os PDFs. Você revisa e edita tudo no app web.
 
 1. Clone este repositório e abra o seu agente na pasta dele.
-2. Peça a ele: *"Configure o Resume Matcher e adapte meu currículo a esta vaga: …"*
+2. Peça a ele: *"Configure o CVKA e adapte meu currículo a esta vaga: …"*
 
-O [`AGENTS.md`](AGENTS.md) do repositório (lido por Codex, Cursor, Copilot e Antigravity, e pelo Claude Code por meio do `CLAUDE.md`) direciona o agente para a [skill `resume-matcher`](.claude/skills/resume-matcher/SKILL.md). No Claude Code, ela também é o comando `/resume-matcher`. Então o agente:
+O [`AGENTS.md`](AGENTS.md) do repositório (lido por Codex, Cursor, Copilot e Antigravity, e pelo Claude Code por meio do `CLAUDE.md`) direciona o agente para a [skill `cvka`](.claude/skills/cvka/SKILL.md). No Claude Code, ela também é o comando `/cvka`. Então o agente:
 
 - **Instala o app**: localmente com uv e npm, ou com Docker (`docker compose up -d --build`), como você preferir.
 - **Ativa o modo agente** depois que você concordar. Você também pode escolher **Agente de código** (Coding agent) em Configurações > Configuração de LLM (Settings > LLM configuration). No modo agente, o app não faz nenhuma chamada de IA por conta própria: botões como Gerar Carta de Apresentação (Generate Cover Letter) mostram um prompt para você colar no seu agente.
@@ -599,32 +599,32 @@ O [`AGENTS.md`](AGENTS.md) do repositório (lido por Codex, Cursor, Copilot e An
 - **Adapta um currículo por descrição de vaga**. Cole uma descrição de vaga no chat, ou salve várias como arquivos `.md` ou `.txt` em [`jobs/`](jobs/README.md) e peça que ele adapte seu currículo para cada vaga de lá.
 - **Passa o bastão para o app web**: cada currículo adaptado aparece no Painel (Dashboard) em <http://localhost:3000>, onde você o edita e baixa o PDF. As páginas abertas recebem por conta própria o que o agente salvar. Se você tiver edições não salvas na mesma parte, o editor pausa o autosave e pergunta qual versão manter.
 
-O agente trabalha pelo comando `resume-matcher`, que executa as mesmas ferramentas do [servidor MCP](#use-resume-matcher-from-claude-code-or-claude-desktop-mcp) e não precisa de configuração:
+O agente trabalha pelo comando `cvka`, que executa as mesmas ferramentas do [servidor MCP](#use-cvka-from-claude-code-or-claude-desktop-mcp) e não precisa de configuração:
 
 ```bash
-uv run --directory apps/backend resume-matcher --help            # instalação local
+uv run --directory apps/backend cvka --help            # instalação local
 docker exec -i -w /app/backend resume-matcher \
   python -m app.mcp_server.cli --help                             # Docker
 ```
 
 As descrições de vaga (`jobs/`) e os dados do app (`apps/backend/data/`) ficam na sua máquina e estão no gitignore.
 
-> **Por que não usar o provedor da assinatura do Claude?** Essa opção faz o Resume Matcher chamar o Claude por meio do seu plano, o que os termos da Anthropic podem não permitir para apps de terceiros. Com um agente de código, você usa o seu agente por conta própria, e o Resume Matcher nunca o chama.
+> **Por que não usar o provedor da assinatura do Claude?** Essa opção faz o CVKA chamar o Claude por meio do seu plano, o que os termos da Anthropic podem não permitir para apps de terceiros. Com um agente de código, você usa o seu agente por conta própria, e o CVKA nunca o chama.
 
 ---
 
-<a id="use-resume-matcher-from-claude-code-or-claude-desktop-mcp"></a>
+<a id="use-cvka-from-claude-code-or-claude-desktop-mcp"></a>
 
-## Usar o Resume Matcher pelo Claude Code ou Claude Desktop (MCP)
+## Usar o CVKA pelo Claude Code ou Claude Desktop (MCP)
 
-O Resume Matcher inclui um servidor [MCP](https://modelcontextprotocol.io) que permite ao Claude Code, Claude Desktop, Cursor ou Codex controlá-lo diretamente. Ele roda via stdio e **não precisa de chave de API de LLM**: o Claude escreve o conteúdo, e o Resume Matcher armazena, valida, pontua e renderiza. Ele compartilha o banco de dados do app web, então tudo que o Claude salvar aparece na interface.
+O CVKA inclui um servidor [MCP](https://modelcontextprotocol.io) que permite ao Claude Code, Claude Desktop, Cursor ou Codex controlá-lo diretamente. Ele roda via stdio e **não precisa de chave de API de LLM**: o Claude escreve o conteúdo, e o CVKA armazena, valida, pontua e renderiza. Ele compartilha o banco de dados do app web, então tudo que o Claude salvar aparece na interface.
 
 **Pré-requisito:** uma instalação local (sem Docker). Clone o repositório e rode `cd apps/backend && uv sync` (veja [Configuração do backend](#2-backend-setup)).
 
 ### Claude Code
 
 ```bash
-claude mcp add resume-matcher -- uv run --directory /abs/path/to/Resume-Matcher/apps/backend resume-matcher-mcp
+claude mcp add cvka -- uv run --directory /abs/path/to/CVKA/apps/backend cvka-mcp
 ```
 
 ### Claude Desktop
@@ -634,9 +634,9 @@ Adicione isto ao `claude_desktop_config.json` (macOS: `~/Library/Application Sup
 ```json
 {
   "mcpServers": {
-    "resume-matcher": {
+    "cvka": {
       "command": "/absolute/path/to/uv",
-      "args": ["run", "--directory", "/abs/path/to/Resume-Matcher/apps/backend", "resume-matcher-mcp"]
+      "args": ["run", "--directory", "/abs/path/to/CVKA/apps/backend", "cvka-mcp"]
     }
   }
 }
@@ -646,7 +646,7 @@ Use o **caminho absoluto** do `uv` em `command` (descubra com `which uv` no macO
 
 ### Outros clientes MCP
 
-Cursor, Codex e outros clientes usam o mesmo comando (`uv`) e os mesmos args (`run --directory <path>/apps/backend resume-matcher-mcp`).
+Cursor, Codex e outros clientes usam o mesmo comando (`uv`) e os mesmos args (`run --directory <path>/apps/backend cvka-mcp`).
 
 ### Observações
 
@@ -713,7 +713,7 @@ npm run dev -- -p 3001
 
 ### Gerenciamento do banco de dados
 
-O Resume Matcher usa o TinyDB (armazenamento em arquivos JSON). Todos os dados ficam em `apps/backend/data/`:
+O CVKA usa o TinyDB (armazenamento em arquivos JSON). Todos os dados ficam em `apps/backend/data/`:
 
 ```bash
 # Ver os arquivos do banco
@@ -815,7 +815,7 @@ Reinicie o backend depois, para que o Chromium reconheça o novo cache de fontes
 1. Verifique se o Ollama está rodando: `ollama list`
 2. Inicie o Ollama, se necessário: `ollama serve`
 3. Confirme que o modelo foi baixado: `ollama pull gemma3:4b`
-4. Está rodando o Resume Matcher no Docker? Veja [Usar o Ollama com Docker](#using-ollama-with-docker): a URL Base (Base URL) deve ser `http://host.docker.internal:11434` e, no Linux, o Ollama precisa escutar além de `127.0.0.1`.
+4. Está rodando o CVKA no Docker? Veja [Usar o Ollama com Docker](#using-ollama-with-docker): a URL Base (Base URL) deve ser `http://host.docker.internal:11434` e, no Linux, o Ollama precisa escutar além de `127.0.0.1`.
 
 ---
 
@@ -824,7 +824,7 @@ Reinicie o backend depois, para que o Chromium reconheça o novo cache de fontes
 ## Visão geral da estrutura do projeto
 
 ```
-Resume-Matcher/
+CVKA/
 ├── apps/
 │   ├── backend/                 # Backend Python FastAPI
 │   │   ├── app/
@@ -860,10 +860,10 @@ Resume-Matcher/
 
 Travou? Estas são as suas opções:
 
-- **Comunidade no Discord:** [dsc.gg/resume-matcher](https://dsc.gg/resume-matcher) - comunidade ativa para dúvidas e discussões
-- **GitHub Issues:** [Abra uma issue](https://github.com/srbhr/Resume-Matcher/issues) para bugs ou pedidos de funcionalidade
-- **Documentação:** navegue pela [documentação online](https://resumematcher.fyi/docs/) para guias detalhados
+- **221 Studio:** [221studio.pl](https://221studio.pl/)
+- **GitHub Issues:** [Abra uma issue](https://github.com/NikodemBoniecki/cvka/issues) para bugs ou pedidos de funcionalidade
+- **Documentação:** navegue pela [documentação online](https://221studio.pl/docs/) para guias detalhados
 
 ---
 
-Bons currículos! Se o Resume Matcher está sendo útil para você, considere [dar uma estrela no repositório](https://github.com/srbhr/Resume-Matcher) e [entrar no nosso Discord](https://dsc.gg/resume-matcher).
+Bons currículos! Se o CVKA está sendo útil para você, considere [dar uma estrela no repositório](https://github.com/NikodemBoniecki/cvka) e [entrar no nosso Discord](https://221studio.pl/).

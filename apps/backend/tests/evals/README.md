@@ -2,7 +2,7 @@
 
 Deterministic tests answer *"is the plumbing correct?"* They can't answer
 *"did this prompt edit make the tailored resume better or worse?"* — that needs
-**evals**. This directory holds the eval harness for the Resume-Matcher
+**evals**. This directory holds the eval harness for the CVKA
 backend, in two deliberately separate layers.
 
 ---

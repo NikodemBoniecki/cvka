@@ -52,22 +52,22 @@ vi.mock('@/hooks/use-regenerate-wizard', () => ({
 afterEach(cleanup);
 
 describe('builder community links', () => {
-  it('puts Join Discord and Star on GitHub in the header toolbar, with no footer bar', async () => {
+  it('puts the repository and studio links in the header toolbar, with no footer bar', async () => {
     const { ResumeBuilder } = await import('@/components/builder/resume-builder');
     const { container } = render(<ResumeBuilder />);
 
-    const discord = screen.getByRole('link', { name: 'community.joinDiscord' });
-    const star = screen.getByRole('link', { name: 'community.starOnGithub' });
-    expect(discord).toHaveAttribute('href', 'https://dsc.gg/resume-matcher');
-    expect(star).toHaveAttribute('href', 'https://github.com/srbhr/Resume-Matcher');
+    const studio = screen.getByRole('link', { name: 'community.studio' });
+    const repository = screen.getByRole('link', { name: 'community.repository' });
+    expect(studio).toHaveAttribute('href', 'https://221studio.pl/');
+    expect(repository).toHaveAttribute('href', 'https://github.com/NikodemBoniecki/cvka');
     // Quiet ghost actions inside the page header, not the resume canvas, and no new footer.
     const header = container.querySelector('header');
-    expect(header).toContainElement(discord);
-    expect(header).toContainElement(star);
-    expect(discord).toHaveClass('bg-transparent');
+    expect(header).toContainElement(studio);
+    expect(header).toContainElement(repository);
+    expect(studio).toHaveClass('bg-transparent');
     // Below 2xl the label collapses to an icon (still the accessible name) so the header stays one row.
-    expect(discord).toHaveAttribute('title', 'community.joinDiscord');
-    expect(screen.getByText('community.joinDiscord')).toHaveClass('max-2xl:sr-only');
+    expect(studio).toHaveAttribute('title', 'community.studio');
+    expect(screen.getByText('community.studio')).toHaveClass('max-2xl:sr-only');
     expect(container.querySelector('footer')).toBeNull();
   });
 });

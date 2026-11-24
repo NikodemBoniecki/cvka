@@ -1,7 +1,7 @@
 [project]
-name = "rm-backend"
+name = "cvka-backend"
 version = "1.4.0"
-description = "Resume Matcher Backend API"
+description = "CVKA Backend API"
 requires-python = ">=3.14"
 dependencies = [
     "fastapi==0.162.0",
@@ -27,8 +27,8 @@ dependencies = [
 
 [project.scripts]
 app = "app.main:main"
-resume-matcher-mcp = "app.mcp_server.server:main"
-resume-matcher = "app.mcp_server.cli:main"
+cvka-mcp = "app.mcp_server.server:main"
+cvka = "app.mcp_server.cli:main"
 
 [project.optional-dependencies]
 dev = [

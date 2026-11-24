@@ -40,7 +40,7 @@ def _require_loopback(request: Request) -> None:
     if not _is_loopback(request.client.host if request.client else None):
         raise HTTPException(
             status_code=403,
-            detail="Sign in with ChatGPT only works from the machine running Resume Matcher.",
+            detail="Sign in with ChatGPT only works from the machine running CVKA.",
         )
 
 

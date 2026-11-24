@@ -115,7 +115,7 @@ async function nextAgentCheck() {
   });
 }
 
-/** The agent saves a new version through the resume-matcher command. */
+/** The agent saves a new version through the cvka command. */
 function agentSaves(summary: string) {
   server.resume = { ...server.resume, summary };
 }

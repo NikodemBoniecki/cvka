@@ -52,7 +52,7 @@ RESOURCE = "https://api.openai.com/v1"
 #: First-time registration entrypoint. Never saved, never used for token exchange.
 DYNAMIC_CLIENT_ID = "dynamic_agent_client"
 #: Our app's name, sent unchanged on every first-time registration.
-AGENT_NAME = "Resume Matcher"
+AGENT_NAME = "CVKA"
 PLAN_SCOPE = "chatgpt.tokens.use.direct"
 SCOPES: tuple[str, ...] = (
     "openid",

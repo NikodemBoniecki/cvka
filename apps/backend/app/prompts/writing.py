@@ -1,6 +1,6 @@
 """Prompts for the writing critique, the bullet rewrite and keyword forcing.
 
-WRITING_RUBRIC is also copied verbatim into .claude/skills/resume-matcher/SKILL.md
+WRITING_RUBRIC is also copied verbatim into .claude/skills/cvka/SKILL.md
 (between the writing-rubric markers) so agent mode writes to the same standard;
 tests/unit/test_writing_rubric_parity.py keeps the two in sync.
 """

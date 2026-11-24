@@ -1,4 +1,4 @@
-"""Resume Matcher Backend - Lean & Local"""
+"""CVKA Backend - Lean & Local"""
 
 import os
 

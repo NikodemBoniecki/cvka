@@ -253,7 +253,7 @@ describe('settings page (Swiss sweep)', () => {
       screen.getByRole('link', { name: 'settings.llmConfiguration.agentGuideLink' })
     ).toHaveAttribute(
       'href',
-      expect.stringContaining('SETUP.md#use-resume-matcher-with-a-coding-agent')
+      expect.stringContaining('SETUP.md#use-cvka-with-a-coding-agent')
     );
 
     fireEvent.click(screen.getByRole('button', { name: 'common.save' }));
@@ -368,7 +368,7 @@ describe('settings page (Swiss sweep)', () => {
       within(dialog).getByRole('link', { name: 'settings.subscriptionRisk.mcpLink' })
     ).toHaveAttribute(
       'href',
-      expect.stringContaining('SETUP.md#use-resume-matcher-with-a-coding-agent')
+      expect.stringContaining('SETUP.md#use-cvka-with-a-coding-agent')
     );
     // Nothing switches until the user accepts.
     expect(within(providers).getByRole('radio', { name: 'OpenAI' })).toHaveAttribute(

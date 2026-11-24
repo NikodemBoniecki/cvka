@@ -22,7 +22,7 @@ SAMPLE_INTERVIEW_PREP = {
     ],
     "project_follow_ups": [
         {
-            "question": "What tradeoffs did you make in the resume matcher project?",
+            "question": "What tradeoffs did you make in the CVKA project?",
             "focus_area": "Project implementation",
             "suggested_answer_points": [
                 "Explain real project choices from the resume."

@@ -1,4 +1,4 @@
-"""Shared test fixtures for Resume Matcher backend tests."""
+"""Shared test fixtures for CVKA backend tests."""
 
 import copy
 import os
@@ -17,7 +17,7 @@ import pytest
 # Database during collection; a function fixture would be too late to protect
 # developer state from those imports.
 _ORIGINAL_DATA_DIR = os.environ.get("DATA_DIR")
-_TEST_DATA_DIR_CONTEXT = tempfile.TemporaryDirectory(prefix="resume-matcher-tests-")
+_TEST_DATA_DIR_CONTEXT = tempfile.TemporaryDirectory(prefix="cvka-tests-")
 _TEST_DATA_DIR = Path(_TEST_DATA_DIR_CONTEXT.name)
 os.environ["DATA_DIR"] = str(_TEST_DATA_DIR)
 # A developer DATABASE_URL must never reach the suite; TEST_DATABASE_URL opts in.

@@ -13,7 +13,7 @@ describe('SwissGrid', () => {
 
     const version = screen.getByText(`v${APP_VERSION}`);
     expect(version).toHaveClass('text-steel');
-    const brand = screen.getByText('Resume Matcher');
+    const brand = screen.getByText('CVKA');
     expect(version.parentElement).toBe(brand.parentElement);
     // The footer row sets the label face for the brand line and the version alike.
     expect(brand.closest('.font-mono')).toContainElement(version);

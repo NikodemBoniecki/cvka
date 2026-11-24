@@ -1,4 +1,4 @@
-# CLAUDE.md - Resume Matcher
+# CLAUDE.md - CVKA
 
 > **Context file for Claude Code.** Full documentation at [docs/agent/README.md](../docs/agent/README.md).
 
@@ -6,7 +6,7 @@
 
 ## Project Overview
 
-Resume Matcher is an AI-powered application for tailoring resumes to job descriptions, with a Kanban Application Tracker for managing the job-application pipeline.
+CVKA is an AI-powered application for tailoring resumes to job descriptions, with a Kanban Application Tracker for managing the job-application pipeline.
 
 | Layer | Stack |
 |-------|-------|

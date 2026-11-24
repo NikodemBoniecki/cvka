@@ -320,8 +320,8 @@ describe('dashboard tiles are keyboard-reachable', () => {
       section.compareDocumentPosition(firstTile) & Node.DOCUMENT_POSITION_FOLLOWING
     ).toBeTruthy();
 
-    // The visible "Resume Matcher" text next to the logo already names it.
-    expect(screen.queryByAltText('Resume Matcher')).toBeNull();
+    // The visible "CVKA" text next to the logo already names it.
+    expect(screen.queryByAltText('CVKA')).toBeNull();
   });
 
   it('makes the add-track tile a native button', async () => {

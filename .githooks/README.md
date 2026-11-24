@@ -1,6 +1,6 @@
 # Local git hooks (`.githooks/`)
 
-Version-controlled git hooks for Resume-Matcher. We **do not** run a
+Version-controlled git hooks for CVKA. We **do not** run a
 PR-triggered GitHub Actions test workflow (the repo gets a high volume of
 external contributor PRs, and CI would run on every one of them). Instead, the
 maintainer's local clone gates pushes with a `pre-push` hook — a "local CI" that

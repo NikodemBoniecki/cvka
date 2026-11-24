@@ -1,4 +1,4 @@
-# Resume Matcher Docker Image
+# CVKA Docker Image
 # Multi-stage build for optimized image size
 
 # ============================================

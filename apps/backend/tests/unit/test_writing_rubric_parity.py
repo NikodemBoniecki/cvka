@@ -6,7 +6,7 @@ from pathlib import Path
 from app.prompts.templates import COVER_LETTER_PROMPT
 from app.prompts.writing import WRITING_RUBRIC
 
-SKILL = Path(__file__).resolve().parents[4] / ".claude/skills/resume-matcher/SKILL.md"
+SKILL = Path(__file__).resolve().parents[4] / ".claude/skills/cvka/SKILL.md"
 
 
 def test_skill_rubric_matches_the_prompt_rubric() -> None:

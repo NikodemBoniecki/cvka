@@ -1,12 +1,12 @@
 ---
-name: resume-matcher
-description: Use Resume Matcher with no API key, with you doing the AI work. Sets up the app, creates a master resume, tailors it to job descriptions (pasted in chat or saved in jobs/), writes cover letters and outreach messages, and exports PDFs. Use when the user asks about resumes, CVs, job descriptions, tailoring, cover letters, or setting up or running Resume Matcher.
+name: cvka
+description: Use CVKA with no API key, with you doing the AI work. Sets up the app, creates a master resume, tailors it to job descriptions (pasted in chat or saved in jobs/), writes cover letters and outreach messages, and exports PDFs. Use when the user asks about resumes, CVs, job descriptions, tailoring, cover letters, or setting up or running CVKA.
 argument-hint: "[setup | tailor | <job description>]"
 ---
 
-# Resume Matcher, driven by you
+# CVKA, driven by you
 
-You are the AI. The `resume-matcher` command stores, validates, scores and renders what you write, in the same database as the web app, so everything you save appears at <http://localhost:3000>. The user makes small edits there.
+You are the AI. The `cvka` command stores, validates, scores and renders what you write, in the same database as the web app, so everything you save appears at <http://localhost:3000>. The user makes small edits there.
 
 Work in this order: **set up** (once), **master resume** (once), **tailor** (per job), **hand off** to the UI. Skip a step that is already done. Talk to the user in their language.
 
@@ -15,15 +15,15 @@ Work in this order: **set up** (once), **master resume** (once), **tailor** (per
 From the repository root:
 
 ```bash
-uv run --directory apps/backend resume-matcher <tool> [arguments]
+uv run --directory apps/backend cvka <tool> [arguments]
 ```
 
-- `resume-matcher --help` lists the tools; `resume-matcher <tool> --help` shows one tool's arguments as a JSON schema.
+- `cvka --help` lists the tools; `cvka <tool> --help` shows one tool's arguments as a JSON schema.
 - Arguments are either one JSON object (`'{"resume_id": "…"}'`, `@args.json`, or `-` for stdin) or fields: `key=value` (string), `key=@file` (string from a file), `key:=json` (any JSON value), `key:=@file.json` (JSON from a file).
 - **Use absolute paths.** `--directory` runs the command from `apps/backend`, so a relative path resolves from there.
 - The result is JSON on stdout. Exit code 1: the tool failed and stderr says why. Exit code 2: the command line was wrong.
 - Write argument files (large JSON such as a whole resume) to `jobs/.work/` in this repository (`mkdir -p jobs/.work` first). It is gitignored and inside every agent's sandbox.
-- To shorten it, define a shell function, not a variable (zsh does not split a command stored in a variable): `rmx() { uv run --directory "$PWD/apps/backend" resume-matcher "$@"; }`
+- To shorten it, define a shell function, not a variable (zsh does not split a command stored in a variable): `cvka_cli() { uv run --directory "$PWD/apps/backend" cvka "$@"; }`
 
 **Docker install:** run the same tools inside the container, from its backend folder so they use the app's data:
 
@@ -189,4 +189,4 @@ The app's AI buttons hand these prompts to you:
 - No tool deletes anything. `update_resume`, `set_*`, `set_job_keywords` and `update_application` overwrite what they target: read it first.
 - Change the app's settings only to switch on agent mode, and only after the user agrees.
 - The user's resume, job descriptions and exports stay out of git: `jobs/` and `apps/backend/data/` are gitignored. Never commit them.
-- Prefer MCP? The same tools run as an MCP server (`resume-matcher-mcp`); see [SETUP.md](../../../SETUP.md#use-resume-matcher-from-claude-code-or-claude-desktop-mcp).
+- Prefer MCP? The same tools run as an MCP server (`cvka-mcp`); see [SETUP.md](../../../SETUP.md#use-cvka-from-claude-code-or-claude-desktop-mcp).

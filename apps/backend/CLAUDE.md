@@ -1,6 +1,6 @@
 # CLAUDE.md - Backend (`apps/backend`)
 
-> FastAPI backend for Resume Matcher. This file goes **deeper on the backend**.
+> FastAPI backend for CVKA. This file goes **deeper on the backend**.
 > For project-wide context see the root [`.claude/CLAUDE.md`](../../.claude/CLAUDE.md) and [`docs/agent/README.md`](../../docs/agent/README.md).
 
 Stack: FastAPI 0.162 · Python **3.14+** · Pydantic v2 / pydantic-settings · SQLAlchemy 2 (async) + SQLite (`aiosqlite`) · LiteLLM (multi-provider AI) · markitdown (DOCX/PDF→Markdown) · Playwright/Chromium (PDF). Managed with **uv** (`pyproject.toml`, version `1.4.0`).
@@ -71,7 +71,7 @@ Prompts are **plain Python string constants** — no Jinja, no external prompt f
 | `app/prompts/templates.py` | Resume parse, keyword extraction, the 4 improve variants, diff prompt, skill-target plan, cover-letter / outreach / follow-up email / title, `RESUME_SCHEMA_EXAMPLE`, `CRITICAL_TRUTHFULNESS_RULES`, `LANGUAGE_NAMES` + `get_language_name()` |
 | `app/prompts/enrichment.py` | `ANALYZE_RESUME_PROMPT`, `ENHANCE_DESCRIPTION_PROMPT`, `REGENERATE_ITEM_PROMPT`, `REGENERATE_SKILLS_PROMPT` |
 | `app/prompts/refinement.py` | `KEYWORD_INJECTION_PROMPT`, `AI_PHRASE_BLACKLIST`, `AI_PHRASE_REPLACEMENTS` |
-| `app/prompts/writing.py` | `WRITING_RUBRIC` (copied verbatim into the resume-matcher SKILL.md; a test keeps them equal), `WRITING_CRITIQUE_PROMPT`, `WRITING_REWRITE_PROMPT`, `KEYWORD_PLACEMENT_PROMPT`, `FORCED_KEYWORDS_PREP_NOTE` |
+| `app/prompts/writing.py` | `WRITING_RUBRIC` (copied verbatim into the cvka SKILL.md; a test keeps them equal), `WRITING_CRITIQUE_PROMPT`, `WRITING_REWRITE_PROMPT`, `KEYWORD_PLACEMENT_PROMPT`, `FORCED_KEYWORDS_PREP_NOTE` |
 | `app/prompts/__init__.py` | Re-exports template constants; placeholder validation |
 
 **Loading / parameterization:** services `from app.prompts import ...` then call `PROMPT.format(**vars)`. So `{placeholder}` = a real format key, and any *literal* `{}` (e.g. JSON examples) **must be doubled `{{ }}`** — see `EXTRACT_KEYWORDS_PROMPT`, `DIFF_IMPROVE_PROMPT`, the enrichment prompts. `PARSE_RESUME_PROMPT` is the exception: it embeds the schema via `{schema}` so it does *not* double-brace.
@@ -80,7 +80,7 @@ Prompts are **plain Python string constants** — no Jinja, no external prompt f
 
 **Follow-up email (`FOLLOW_UP_EMAIL_PROMPT`):** inputs are `{application_context}` (Company, Role, and `Applied: N days ago` when the applied date is known), `{job_description}`, `{resume_data}` and `{output_language}`. It asks for a `Subject:` line and a 60-120 word body that restates interest, gives one evidence-backed match (with a real result when the resume has one), asks politely about the timeline, and signs off with the candidate's name. It greets a hiring contact only when the job description names one, and must not invent contacts, conversations, interviews, dates or metrics. Not user-editable. `services/cover_letter.py::generate_follow_up_email` builds it; the draft is returned to the tracker modal for the user to edit and copy, never saved.
 
-**Cover letter default (`COVER_LETTER_PROMPT`):** under one page, 200-300 words in 3-4 paragraphs: an opening hook tied to one detail of the job description, two or three evidence-backed matches from the resume (in the job's terminology), a company-fit paragraph grounded only in what the job description states, and a specific call to action. Tone and US/UK/AU/NZ conventions are inferred from the inputs; a named greeting only when the inputs name someone ("Dear Hiring Manager" otherwise). It must not invent experience, metrics, motivations or company facts. Agent mode follows the same shape (the resume-matcher SKILL.md "Cover letter" row; a test keeps the word range in sync). Adapted from the jezweb resume-cover-letter skill.
+**Cover letter default (`COVER_LETTER_PROMPT`):** under one page, 200-300 words in 3-4 paragraphs: an opening hook tied to one detail of the job description, two or three evidence-backed matches from the resume (in the job's terminology), a company-fit paragraph grounded only in what the job description states, and a specific call to action. Tone and US/UK/AU/NZ conventions are inferred from the inputs; a named greeting only when the inputs name someone ("Dear Hiring Manager" otherwise). It must not invent experience, metrics, motivations or company facts. Agent mode follows the same shape (the cvka SKILL.md "Cover letter" row; a test keeps the word range in sync). Adapted from the jezweb resume-cover-letter skill.
 
 **Custom feature prompts (user-editable):** cover-letter & outreach prompts can be overridden in `config.json` (`cover_letter_prompt`, `outreach_message_prompt`). On save (`PUT /config/feature-prompts`) they are validated by `validate_prompt_placeholders()` to contain all of `REQUIRED_FEATURE_PROMPT_PLACEHOLDERS` = `{job_description}`, `{resume_data}`, `{output_language}`; missing → HTTP 422. Empty string = "use default". At runtime `cover_letter.py::_resolve_feature_prompt` picks custom-or-default and falls back to the built-in default (with a warning) if a custom prompt fails `.format()`.
 
@@ -108,7 +108,7 @@ cd apps/backend
 uv sync                                              # install deps (creates .venv)
 uv run uvicorn app.main:app --reload --port 8000     # dev server on :8000
 uv run app                                           # console script (app.main:main, uses HOST/PORT/RELOAD)
-uv run resume-matcher-mcp                            # MCP server over stdio (see features/mcp-server.md)
+uv run cvka-mcp                            # MCP server over stdio (see features/mcp-server.md)
 uv run ruff check                                    # lint backend
 uv run ruff format <files>                           # format only the files you changed (not the whole backend)
 uv run playwright install chromium                   # one-time, required for PDF endpoints

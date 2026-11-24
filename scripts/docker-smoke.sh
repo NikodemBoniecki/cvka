@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Docker smoke test for Resume Matcher: builds the image (with the build cache),
+# Docker smoke test for CVKA: builds the image (with the build cache),
 # runs it, and checks that the app actually works inside the container.
 #
 #   ./scripts/docker-smoke.sh                  build + test
@@ -25,7 +25,7 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-TAG="resume-matcher:smoke"
+TAG="cvka:smoke"
 PORT="${SMOKE_PORT:-3100}"
 HEALTH_TIMEOUT="${SMOKE_HEALTH_TIMEOUT:-120}"
 BUILD=1
@@ -62,8 +62,8 @@ while [ $# -gt 0 ]; do
     shift
 done
 
-CONTAINER="resume-matcher-smoke-$$"
-VOLUME="resume-matcher-smoke-data-$$"
+CONTAINER="cvka-smoke-$$"
+VOLUME="cvka-smoke-data-$$"
 CONTAINER_CREATED=0
 
 cleanup() {

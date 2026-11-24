@@ -144,5 +144,5 @@ def keyed_digest(value: str) -> str:
     """
     _load_fernet()
     assert _secret is not None
-    signing_key = hashlib.sha256(b"resume-matcher:keyed-digest:" + _secret).digest()
+    signing_key = hashlib.sha256(b"cvka:keyed-digest:" + _secret).digest()
     return hmac.new(signing_key, value.encode("utf-8"), hashlib.sha256).hexdigest()

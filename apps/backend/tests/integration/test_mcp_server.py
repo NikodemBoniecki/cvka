@@ -712,7 +712,7 @@ def test_stdio_stdout_carries_only_protocol_messages(tmp_path: Path) -> None:
     assert lines, proc.stderr
     for line in lines:
         assert json.loads(line)["jsonrpc"] == "2.0"
-    assert json.loads(lines[0])["result"]["serverInfo"]["name"] == "resume-matcher"
+    assert json.loads(lines[0])["result"]["serverInfo"]["name"] == "cvka"
 
 
 async def test_parse_check_resume_renders_in_memory(

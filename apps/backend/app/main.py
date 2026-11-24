@@ -113,7 +113,7 @@ async def _shutdown() -> None:
 
 
 app = FastAPI(
-    title="Resume Matcher API",
+    title="CVKA API",
     description="AI-powered resume tailoring for job descriptions",
     version=__version__,
     lifespan=lifespan,
@@ -165,7 +165,7 @@ app.include_router(chatgpt_callback_router)
 async def root():
     """Root endpoint."""
     return {
-        "name": "Resume Matcher API",
+        "name": "CVKA API",
         "version": __version__,
         "docs": "/docs",
     }

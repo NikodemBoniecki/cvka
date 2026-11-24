@@ -1,4 +1,4 @@
-"""Resume Matcher MCP server over stdio. The calling agent is the LLM."""
+"""CVKA MCP server over stdio. The calling agent is the LLM."""
 
 import logging
 import sys
@@ -17,7 +17,7 @@ from app.scripts.migrate_tinydb_to_sqlite import migrate
 logger = logging.getLogger(__name__)
 
 INSTRUCTIONS = """\
-Resume Matcher is a deterministic resume editor, validator and renderer. You are \
+CVKA is a deterministic resume editor, validator and renderer. You are \
 the LLM: you write the content, these tools store, check and render it. Nothing \
 here deletes a resume or job, but update_resume, set_resume_title, \
 set_cover_letter, set_outreach_message, set_default_master, set_job_keywords and \
@@ -67,8 +67,8 @@ async def lifespan(_server: MCPServer) -> AsyncIterator[None]:
 
 def build_server() -> MCPServer:
     server = MCPServer(
-        "resume-matcher",
-        title="Resume Matcher",
+        "cvka",
+        title="CVKA",
         instructions=INSTRUCTIONS,
         version=__version__,
         lifespan=lifespan,

@@ -24,7 +24,7 @@ describe('Hero entrance', () => {
   it('links the Docs button to the docs section in a new tab', () => {
     render(<Hero />);
     const docs = screen.getByRole('link', { name: 'home.docs' });
-    expect(docs).toHaveAttribute('href', 'https://resumematcher.fyi/docs/');
+    expect(docs).toHaveAttribute('href', 'https://github.com/NikodemBoniecki/cvka/blob/main/SETUP.md');
     expect(docs).toHaveAttribute('target', '_blank');
     expect(docs).toHaveAttribute('rel', 'noopener noreferrer');
   });
@@ -32,15 +32,11 @@ describe('Hero entrance', () => {
   it('adds a quiet row of community links under the buttons, with Launch App still the only primary', () => {
     render(<Hero />);
     const launch = screen.getByRole('link', { name: 'home.launchApp' });
-    const follow = screen.getByRole('link', { name: 'community.follow' });
-    expect(follow).toHaveAttribute('href', 'https://github.com/srbhr');
-    expect(screen.getByRole('link', { name: 'community.sponsor' })).toHaveAttribute(
+    const follow = screen.getByRole('link', { name: 'community.repository' });
+    expect(follow).toHaveAttribute('href', 'https://github.com/NikodemBoniecki/cvka');
+    expect(screen.getByRole('link', { name: 'community.studio' })).toHaveAttribute(
       'href',
-      'https://github.com/sponsors/srbhr'
-    );
-    expect(screen.getByRole('link', { name: 'community.discord' })).toHaveAttribute(
-      'href',
-      'https://dsc.gg/resume-matcher'
+      'https://221studio.pl/'
     );
     // The row follows the button row, and its links are quiet text (steel, not a button fill).
     expect(launch.parentElement!.compareDocumentPosition(follow)).toBe(

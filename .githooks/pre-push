@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Local pre-push gate for Resume-Matcher — the "local CI" that replaces a
+# Local pre-push gate for CVKA — the "local CI" that replaces a
 # PR-triggered GitHub Actions workflow (we deliberately avoid CI on PRs because
 # the repo gets a high volume of external contributor PRs).
 #

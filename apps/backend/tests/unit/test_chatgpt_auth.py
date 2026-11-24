@@ -80,7 +80,7 @@ class TestStartLogin:
         assert url.startswith("https://auth.openai.com/api/accounts/authorize?")
         params = _query(url)
         assert params["client_id"] == "dynamic_agent_client"
-        assert params["agent_name_hint"] == "Resume Matcher"
+        assert params["agent_name_hint"] == "CVKA"
         assert params["response_type"] == "code"
         assert params["redirect_uri"] == "http://127.0.0.1:8000/auth/callback"
         assert params["scope"].split() == [

@@ -1,11 +1,11 @@
 ---
 name: monitor-e2e
-description: Run + judge the Resume-Matcher agentic end-to-end monitor. Drives the real app (master resume → 3–4 tailored variations → PDFs), captures an evidence bundle, then renders an evidence-cited verdict on output quality, flow/render integrity, and provider reality vs a committed baseline. Maintainer-only; makes real, billed LLM calls — do NOT run proactively.
+description: Run + judge the CVKA agentic end-to-end monitor. Drives the real app (master resume → 3–4 tailored variations → PDFs), captures an evidence bundle, then renders an evidence-cited verdict on output quality, flow/render integrity, and provider reality vs a committed baseline. Maintainer-only; makes real, billed LLM calls — do NOT run proactively.
 ---
 
 # monitor-e2e — agentic end-to-end monitor
 
-You drive Resume-Matcher end to end, then judge the result. You are a REPORT, never a gate: you never block anything, never modify app code, and never refresh the baseline.
+You drive CVKA end to end, then judge the result. You are a REPORT, never a gate: you never block anything, never modify app code, and never refresh the baseline.
 
 ## 0. Preconditions (refuse otherwise)
 - This makes REAL, BILLED LLM calls and boots servers. Only run when the maintainer explicitly asks.

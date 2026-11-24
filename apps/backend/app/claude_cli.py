@@ -1,4 +1,4 @@
-"""Claude Code CLI backend for Resume-Matcher.
+"""Claude Code CLI backend for CVKA.
 
 Replaces LiteLLM's HTTP transport with a subprocess call to the local
 ``claude`` CLI, so the app runs on this machine's signed-in Claude Code

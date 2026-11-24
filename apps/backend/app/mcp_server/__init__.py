@@ -1,1 +1,1 @@
-"""MCP server exposing Resume Matcher as deterministic agent tools."""
+"""MCP server exposing CVKA as deterministic agent tools."""

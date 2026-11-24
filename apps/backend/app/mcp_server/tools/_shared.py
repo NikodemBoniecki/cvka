@@ -261,7 +261,7 @@ def tailoring_report(
 
 def render_failed_message() -> str:
     return (
-        "PDF rendering failed. Make sure the Resume Matcher frontend is running "
+        "PDF rendering failed. Make sure the CVKA frontend is running "
         f"at {settings.frontend_base_url} and can reach the backend."
     )
 

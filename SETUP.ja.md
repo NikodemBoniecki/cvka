@@ -1,8 +1,8 @@
-# Resume Matcher セットアップガイド
+# CVKA セットアップガイド
 
 [English](SETUP.md) | [Español](SETUP.es.md) | [简体中文](SETUP.zh-CN.md) | [**日本語**](SETUP.ja.md) | [Português (BR)](SETUP.pt-BR.md)
 
-ようこそ！このガイドでは、ローカル環境で Resume Matcher をセットアップする手順を説明します。開発に参加したい方も、手元でアプリを動かしたい方も、この手順で始められます。
+ようこそ！このガイドでは、ローカル環境で CVKA をセットアップする手順を説明します。開発に参加したい方も、手元でアプリを動かしたい方も、この手順で始められます。
 
 ---
 
@@ -21,7 +21,7 @@
   - [オプション C: ChatGPT プラン（Sign in with ChatGPT）](#option-c-your-chatgpt-plan-sign-in-with-chatgpt)
 - [Docker デプロイ](#docker-deployment)
 - [アプリへのアクセス](#accessing-the-application)
-- [Claude Code / Claude Desktop から Resume Matcher を使う（MCP）](#use-resume-matcher-from-claude-code-or-claude-desktop-mcp)
+- [Claude Code / Claude Desktop から CVKA を使う（MCP）](#use-cvka-from-claude-code-or-claude-desktop-mcp)
 - [よく使うコマンド](#common-commands-reference)
 - [トラブルシューティング](#troubleshooting)
 - [プロジェクト構成](#project-structure-overview)
@@ -44,7 +44,7 @@
 
 ### uv のインストール（Python パッケージマネージャ）
 
-Resume Matcher は Python 依存関係の管理に `uv` を使用します。インストール方法：
+CVKA は Python 依存関係の管理に `uv` を使用します。インストール方法：
 
 ```bash
 # macOS/Linux
@@ -66,8 +66,8 @@ pip install uv
 
 ```bash
 # 1. リポジトリをクローン
-git clone https://github.com/srbhr/Resume-Matcher.git
-cd Resume-Matcher
+git clone https://github.com/NikodemBoniecki/cvka.git
+cd CVKA
 
 # 2. バックエンド起動（ターミナル 1）
 cd apps/backend
@@ -110,11 +110,11 @@ winget install --id astral-sh.uv -e
 Git でクローンします：
 
 ```powershell
-git clone https://github.com/srbhr/Resume-Matcher.git
-cd Resume-Matcher
+git clone https://github.com/NikodemBoniecki/cvka.git
+cd CVKA
 ```
 
-Git を使わない場合は、[リポジトリのページ](https://github.com/srbhr/Resume-Matcher) を開いて **Code → Download ZIP** をクリックし、ZIP を展開して、PowerShell で展開したフォルダへ `cd` します。
+Git を使わない場合は、[リポジトリのページ](https://github.com/NikodemBoniecki/cvka) を開いて **Code → Download ZIP** をクリックし、ZIP を展開して、PowerShell で展開したフォルダへ `cd` します。
 
 ### 3. バックエンドを起動（PowerShell ウィンドウ 1）
 
@@ -130,10 +130,10 @@ uv run app
 
 ### 4. フロントエンドを起動（PowerShell ウィンドウ 2）
 
-新しい PowerShell ウィンドウはホームフォルダで開くため、まず Resume Matcher をクローンまたは展開したフォルダへ移動します（パスはご自身のものに置き換えてください）：
+新しい PowerShell ウィンドウはホームフォルダで開くため、まず CVKA をクローンまたは展開したフォルダへ移動します（パスはご自身のものに置き換えてください）：
 
 ```powershell
-cd C:\path\to\Resume-Matcher
+cd C:\path\to\CVKA
 cd apps\frontend
 npm install
 npm run dev
@@ -141,7 +141,7 @@ npm run dev
 
 ブラウザで **<http://localhost:3000>** を開きます。
 
-> **PDF エクスポート:** Resume Matcher はヘッドレス Chromium で PDF を生成します。Chrome は自動で最新に保たれるため、インストール済みの Google Chrome を Chrome のサンドボックスを有効にして優先的に使います。Chrome がない場合は Playwright の Chromium（`apps\backend` で `uv run playwright install chromium` を実行してインストール）を、それもなければ Microsoft Edge を使います（Edge は Windows 11 に標準搭載です）。
+> **PDF エクスポート:** CVKA はヘッドレス Chromium で PDF を生成します。Chrome は自動で最新に保たれるため、インストール済みの Google Chrome を Chrome のサンドボックスを有効にして優先的に使います。Chrome がない場合は Playwright の Chromium（`apps\backend` で `uv run playwright install chromium` を実行してインストール）を、それもなければ Microsoft Edge を使います（Edge は Windows 11 に標準搭載です）。
 
 > **Docker を使いたい場合:** [Docker Desktop for Windows](https://docs.docker.com/desktop/setup/install/windows-install/) をインストールし、[Docker デプロイ](#docker-deployment) に従ってください。PowerShell で `PORT` などの変数を設定するには、`$env:PORT="4000"; docker compose up -d` を使います。[オプションの PostgreSQL 構成](#optional-postgresql) では、`$env:POSTGRES_PASSWORD=[guid]::NewGuid().ToString('N'); docker compose -f docker-compose.yml -f docker-compose.postgres.yml up -d` を実行します。Docker を使わない場合は、`apps\backend\.env` に `DATABASE_URL` を設定します。
 
@@ -156,8 +156,8 @@ npm run dev
 まずはコードを取得します：
 
 ```bash
-git clone https://github.com/srbhr/Resume-Matcher.git
-cd Resume-Matcher
+git clone https://github.com/NikodemBoniecki/cvka.git
+cd CVKA
 ```
 
 <a id="2-backend-setup"></a>
@@ -262,14 +262,14 @@ npm run dev
 - Local:        http://localhost:3000
 ```
 
-ブラウザで **<http://localhost:3000>** を開くと、Resume Matcher のダッシュボードが表示されます。
+ブラウザで **<http://localhost:3000>** を開くと、CVKA のダッシュボードが表示されます。
 
 ---
 
 <a id="configuring-your-ai-provider"></a>
 ## AI プロバイダの設定
 
-Resume Matcher は複数の AI プロバイダに対応しています。アプリ内の Settings ページ、またはバックエンドの `.env` を編集して設定できます。
+CVKA は複数の AI プロバイダに対応しています。アプリ内の Settings ページ、またはバックエンドの `.env` を編集して設定できます。
 
 <a id="option-a-cloud-providers"></a>
 ### オプション A: クラウドプロバイダ
@@ -334,12 +334,12 @@ OpenAI 公式の [Sign in with ChatGPT for open-source apps](https://developers.
 
 1. バックエンドとフロントエンドを起動し、**バックエンドと同じマシン上の**ブラウザで **Settings** を開きます。
 2. **ChatGPT plan** を選び、**Continue with ChatGPT** をクリックします。
-3. OpenAI でサインインし、Resume Matcher が ChatGPT プランを使うことを許可します。初回は OpenAI がアカウントにアプリを登録し、以降のサインインではその登録が再利用されます。
+3. OpenAI でサインインし、CVKA が ChatGPT プランを使うことを許可します。初回は OpenAI がアカウントにアプリを登録し、以降のサインインではその登録が再利用されます。
 4. Settings に戻ります。アカウントで利用できるモデルを選び、**Save** をクリックします。
 
-OpenAI はブラウザを `http://127.0.0.1:<port>/auth/callback` に戻します。`<port>` は Resume Matcher を開いたポート（既定は `3000`）です。フロントエンドがこのパスをバックエンドに転送し、バックエンドはこのコールバックを自身が動作しているマシンからのみ受け付けます。そのため、ブラウザは Resume Matcher を実行しているマシン上で動作している必要があり、`http://localhost:<port>` または `http://127.0.0.1:<port>` として開いてください。トークンは暗号化してバックエンドのデータディレクトリ（`chatgpt_credentials.enc`）に保存されます。**Disconnect** は OpenAI 側でセッションを取り消してトークンを削除し、**Manage usage** は ChatGPT の使用状況設定を開きます。
+OpenAI はブラウザを `http://127.0.0.1:<port>/auth/callback` に戻します。`<port>` は CVKA を開いたポート（既定は `3000`）です。フロントエンドがこのパスをバックエンドに転送し、バックエンドはこのコールバックを自身が動作しているマシンからのみ受け付けます。そのため、ブラウザは CVKA を実行しているマシン上で動作している必要があり、`http://localhost:<port>` または `http://127.0.0.1:<port>` として開いてください。トークンは暗号化してバックエンドのデータディレクトリ（`chatgpt_credentials.enc`）に保存されます。**Disconnect** は OpenAI 側でセッションを取り消してトークンを削除し、**Manage usage** は ChatGPT の使用状況設定を開きます。
 
-**Docker:** サインインは、ポート 3000 のみを公開する既定の構成で動作します。コンテナを実行しているマシン上で、Resume Matcher を `http://localhost:3000`（または公開した `PORT`）で開いてください。OpenAI は同じポートにブラウザを戻し、フロントエンドが `/auth/callback` をコンテナ内のバックエンドに転送します。OpenAI は `http://127.0.0.1` へのリダイレクトしか許可しないため、別のコンピューターやリバースプロキシのドメイン経由では動作しません。
+**Docker:** サインインは、ポート 3000 のみを公開する既定の構成で動作します。コンテナを実行しているマシン上で、CVKA を `http://localhost:3000`（または公開した `PORT`）で開いてください。OpenAI は同じポートにブラウザを戻し、フロントエンドが `/auth/callback` をコンテナ内のバックエンドに転送します。OpenAI は `http://127.0.0.1` へのリダイレクトしか許可しないため、別のコンピューターやリバースプロキシのドメイン経由では動作しません。
 
 同等の `.env`（サインインは引き続き Settings から行います）：
 
@@ -353,7 +353,7 @@ LLM_MODEL=gpt-6.1-sol  # Settings のアカウントのモデル一覧にある�
 <a id="docker-deployment"></a>
 ## Docker デプロイ
 
-コンテナで動かしたい場合、Resume Matcher は Docker に対応しています。
+コンテナで動かしたい場合、CVKA は Docker に対応しています。
 
 ### Docker Compose を使う（推奨）
 
@@ -373,7 +373,7 @@ docker-compose down
 
 SQLite が既定で、セットアップは不要です。バックアップが必要な場合や、自分で管理する別のサーバーにデータベースを置きたい場合は、代わりに PostgreSQL を使えます。
 
-> **セキュリティ:** Resume Matcher にはユーザーアカウントも認証もなく、PostgreSQL を使ってもそれらは追加されません。自分だけで使うか、信頼できるプライベートネットワーク内でのみ実行し、インターネットなどに公開しないでください。ローカル以外の用途では、最小権限のデータベースロールで接続してください（Compose ファイルの `resume` ユーザーはスーパーユーザーです）。
+> **セキュリティ:** CVKA にはユーザーアカウントも認証もなく、PostgreSQL を使ってもそれらは追加されません。自分だけで使うか、信頼できるプライベートネットワーク内でのみ実行し、インターネットなどに公開しないでください。ローカル以外の用途では、最小権限のデータベースロールで接続してください（Compose ファイルの `resume` ユーザーはスーパーユーザーです）。
 
 Docker Compose で起動するには：
 
@@ -432,17 +432,17 @@ docker compose -f docker-compose.yml -f docker-compose.postgres.yml up -d
 
 ---
 
-<a id="use-resume-matcher-from-claude-code-or-claude-desktop-mcp"></a>
-## Claude Code / Claude Desktop から Resume Matcher を使う（MCP）
+<a id="use-cvka-from-claude-code-or-claude-desktop-mcp"></a>
+## Claude Code / Claude Desktop から CVKA を使う（MCP）
 
-Resume Matcher には [MCP](https://modelcontextprotocol.io) サーバが付属しており、Claude Code、Claude Desktop、Cursor、Codex から直接操作できます。stdio で動作し、**LLM の API キーは不要**です。コンテンツは Claude が書き、Resume Matcher が保存・検証・採点・レンダリングを行います。Web アプリとデータベースを共有するため、Claude が保存した内容は UI にも表示されます。
+CVKA には [MCP](https://modelcontextprotocol.io) サーバが付属しており、Claude Code、Claude Desktop、Cursor、Codex から直接操作できます。stdio で動作し、**LLM の API キーは不要**です。コンテンツは Claude が書き、CVKA が保存・検証・採点・レンダリングを行います。Web アプリとデータベースを共有するため、Claude が保存した内容は UI にも表示されます。
 
 **前提:** ローカル（Docker 以外）のインストールが必要です。リポジトリをクローンして `cd apps/backend && uv sync` を実行してください（[バックエンドのセットアップ](#2-backend-setup) を参照）。
 
 ### Claude Code
 
 ```bash
-claude mcp add resume-matcher -- uv run --directory /abs/path/to/Resume-Matcher/apps/backend resume-matcher-mcp
+claude mcp add cvka -- uv run --directory /abs/path/to/CVKA/apps/backend cvka-mcp
 ```
 
 ### Claude Desktop
@@ -452,9 +452,9 @@ claude mcp add resume-matcher -- uv run --directory /abs/path/to/Resume-Matcher/
 ```json
 {
   "mcpServers": {
-    "resume-matcher": {
+    "cvka": {
       "command": "/absolute/path/to/uv",
-      "args": ["run", "--directory", "/abs/path/to/Resume-Matcher/apps/backend", "resume-matcher-mcp"]
+      "args": ["run", "--directory", "/abs/path/to/CVKA/apps/backend", "cvka-mcp"]
     }
   }
 }
@@ -464,7 +464,7 @@ claude mcp add resume-matcher -- uv run --directory /abs/path/to/Resume-Matcher/
 
 ### その他の MCP クライアント
 
-Cursor、Codex などのクライアントも同じコマンド（`uv`）と引数（`run --directory <path>/apps/backend resume-matcher-mcp`）を使います。
+Cursor、Codex などのクライアントも同じコマンド（`uv`）と引数（`run --directory <path>/apps/backend cvka-mcp`）を使います。
 
 ### 補足
 
@@ -530,7 +530,7 @@ npm run dev -- -p 3001
 
 ### データベース管理
 
-Resume Matcher は TinyDB（JSON ファイル保存）を使用します。データは `apps/backend/data/` にあります：
+CVKA は TinyDB（JSON ファイル保存）を使用します。データは `apps/backend/data/` にあります：
 
 ```bash
 # DB ファイルを見る
@@ -612,7 +612,7 @@ CORS_ORIGINS=["http://localhost:3001", "http://127.0.0.1:3001"]
 ## プロジェクト構成
 
 ```text
-Resume-Matcher/
+CVKA/
 ├─ apps/
 │  ├─ backend/                 # Python FastAPI backend
 │  │  ├─ app/
@@ -645,11 +645,11 @@ Resume-Matcher/
 
 困ったときは次を参照してください：
 
-- **Discord:** [dsc.gg/resume-matcher](https://dsc.gg/resume-matcher) - 質問・議論に活発です
-- **GitHub Issues:** [Issue を作成](https://github.com/srbhr/Resume-Matcher/issues)（バグ報告や要望）
-- **ドキュメント:** 詳細は[オンラインドキュメント](https://resumematcher.fyi/docs/)を参照
+- **221 Studio:** [221studio.pl](https://221studio.pl/)
+- **GitHub Issues:** [Issue を作成](https://github.com/NikodemBoniecki/cvka/issues)（バグ報告や要望）
+- **ドキュメント:** 詳細は[オンラインドキュメント](https://221studio.pl/docs/)を参照
 
 ---
 
-楽しい履歴書づくりを！Resume Matcher が役立ったら、[リポジトリに Star](https://github.com/srbhr/Resume-Matcher) と [Discord 参加](https://dsc.gg/resume-matcher) をぜひ。
+楽しい履歴書づくりを！CVKA が役立ったら、[リポジトリに Star](https://github.com/NikodemBoniecki/cvka) と [Discord 参加](https://221studio.pl/) をぜひ。
 

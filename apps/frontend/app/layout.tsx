@@ -73,9 +73,12 @@ const notoSansJP = Noto_Sans_JP({
 });
 
 export const metadata: Metadata = {
-  title: 'Resume Matcher',
-  description: 'Build your resume with Resume Matcher',
-  applicationName: 'Resume Matcher',
+  title: 'CVKA',
+  description: 'CVKA — narzędzia do CV od 221 Studio.',
+  applicationName: 'CVKA',
+  authors: [{ name: 'Nikodem Boniecki', url: 'https://221studio.pl/' }],
+  creator: '221 Studio',
+  publisher: '221 Studio',
   keywords: ['resume', 'matcher', 'job', 'application'],
 };
 

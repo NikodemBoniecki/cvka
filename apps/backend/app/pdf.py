@@ -440,13 +440,13 @@ async def _render_page_to_pdf(
     if response is not None and not response.ok:
         logger.warning(
             "Print page returned HTTP %d for %s; check that FRONTEND_BASE_URL "
-            "points at the running Resume Matcher frontend",
+            "points at the running CVKA frontend",
             response.status,
             _redact_draft_token(url),
         )
         raise PDFRenderError(
             f"The print page failed to load (HTTP {response.status}). "
-            "Check that FRONTEND_BASE_URL points at the running Resume Matcher frontend."
+            "Check that FRONTEND_BASE_URL points at the running CVKA frontend."
         )
     ready = await _await_before_deadline(
         page.wait_for_selector(
@@ -1189,7 +1189,7 @@ async def render_resume_pdf(
             raise PDFRenderTimeoutError(
                 "PDF rendering timed out: the print page loaded but never showed "
                 "its content. Check that FRONTEND_BASE_URL points at the running "
-                "Resume Matcher frontend."
+                "CVKA frontend."
             ) from error
         raise PDFRenderTimeoutError(
             "PDF rendering timed out. Please try again, or try a simpler resume."

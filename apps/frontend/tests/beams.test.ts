@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { BAYER, advanceTime, beamBrightness, litCells } from '@/lib/effects/beams';
 
 // Reference copy of the website's DitherField `beams` pattern
-// (Resume-Matcher-Website/.../DitherField.astro). The port must light exactly the same cells.
+// (CVKA-Website/.../DitherField.astro). The port must light exactly the same cells.
 function referenceBrightness(x: number, y: number, t: number): number {
   const across = (x + y) * 0.7071;
   const along = (x - y) * 0.7071;

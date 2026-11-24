@@ -24,7 +24,7 @@ export default function Hero() {
 
         <div className="hero-enter hero-enter-delay-2 flex flex-col gap-4 md:flex-row md:gap-12">
           <a
-            href="https://github.com/srbhr/Resume-Matcher"
+            href="https://github.com/NikodemBoniecki/cvka"
             target="_blank"
             rel="noopener noreferrer"
             className={buttonClass({ variant: 'outline', size: 'lg' })}
@@ -32,7 +32,7 @@ export default function Hero() {
             GitHub
           </a>
           <a
-            href="https://resumematcher.fyi/docs/"
+            href="https://github.com/NikodemBoniecki/cvka/blob/main/SETUP.md"
             target="_blank"
             rel="noopener noreferrer"
             className={buttonClass({ variant: 'outline', size: 'lg' })}

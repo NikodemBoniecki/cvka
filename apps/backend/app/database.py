@@ -1,4 +1,4 @@
-"""SQLAlchemy data layer for Resume Matcher (SQLite, or PostgreSQL via DATABASE_URL).
+"""SQLAlchemy data layer for CVKA (SQLite, or PostgreSQL via DATABASE_URL).
 
 This is a behavior-preserving replacement for the original TinyDB wrapper. The
 ``Database`` facade keeps the same method names/signatures and returns **plain
@@ -130,7 +130,7 @@ def _now() -> str:
 
 
 class Database:
-    """Async SQLAlchemy facade for resume matcher data."""
+    """Async SQLAlchemy facade for CVKA data."""
 
     def __init__(
         self,

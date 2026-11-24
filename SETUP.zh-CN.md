@@ -1,8 +1,8 @@
-# Resume Matcher 安装与配置指南
+# CVKA 安装与配置指南
 
 [English](SETUP.md) | [Español](SETUP.es.md) | [**简体中文**](SETUP.zh-CN.md) | [日本語](SETUP.ja.md) | [Português (BR)](SETUP.pt-BR.md)
 
-欢迎！本指南将带你在本地完成 Resume Matcher 的安装与配置。无论你是想参与开发，还是只想在本机运行应用，都可以按本文档完成上手。
+欢迎！本指南将带你在本地完成 CVKA 的安装与配置。无论你是想参与开发，还是只想在本机运行应用，都可以按本文档完成上手。
 
 ---
 
@@ -21,7 +21,7 @@
   - [选项 C：你的 ChatGPT 订阅（Sign in with ChatGPT）](#option-c-your-chatgpt-plan-sign-in-with-chatgpt)
 - [Docker 部署](#docker-deployment)
 - [访问应用](#accessing-the-application)
-- [在 Claude Code 或 Claude Desktop 中使用 Resume Matcher（MCP）](#use-resume-matcher-from-claude-code-or-claude-desktop-mcp)
+- [在 Claude Code 或 Claude Desktop 中使用 CVKA（MCP）](#use-cvka-from-claude-code-or-claude-desktop-mcp)
 - [常用命令速查](#common-commands-reference)
 - [故障排查](#troubleshooting)
 - [项目结构概览](#project-structure-overview)
@@ -44,7 +44,7 @@
 
 ### 安装 uv（Python 包管理器）
 
-Resume Matcher 使用 `uv` 来实现更快、更稳定的 Python 依赖管理。可通过以下方式安装：
+CVKA 使用 `uv` 来实现更快、更稳定的 Python 依赖管理。可通过以下方式安装：
 
 ```bash
 # macOS/Linux
@@ -66,8 +66,8 @@ pip install uv
 
 ```bash
 # 1. 克隆仓库
-git clone https://github.com/srbhr/Resume-Matcher.git
-cd Resume-Matcher
+git clone https://github.com/NikodemBoniecki/cvka.git
+cd CVKA
 
 # 2. 启动后端（终端 1）
 cd apps/backend
@@ -110,11 +110,11 @@ winget install --id astral-sh.uv -e
 可以使用 Git 克隆：
 
 ```powershell
-git clone https://github.com/srbhr/Resume-Matcher.git
-cd Resume-Matcher
+git clone https://github.com/NikodemBoniecki/cvka.git
+cd CVKA
 ```
 
-或者不使用 Git：打开 [仓库页面](https://github.com/srbhr/Resume-Matcher)，点击 **Code → Download ZIP**，解压 ZIP，然后在 PowerShell 中 `cd` 进入解压后的文件夹。
+或者不使用 Git：打开 [仓库页面](https://github.com/NikodemBoniecki/cvka)，点击 **Code → Download ZIP**，解压 ZIP，然后在 PowerShell 中 `cd` 进入解压后的文件夹。
 
 ### 3. 启动后端（PowerShell 窗口 1）
 
@@ -130,10 +130,10 @@ uv run app
 
 ### 4. 启动前端（PowerShell 窗口 2）
 
-新打开的 PowerShell 窗口位于你的主目录，因此请先切换到克隆或解压 Resume Matcher 的文件夹（将路径替换为你自己的）：
+新打开的 PowerShell 窗口位于你的主目录，因此请先切换到克隆或解压 CVKA 的文件夹（将路径替换为你自己的）：
 
 ```powershell
-cd C:\path\to\Resume-Matcher
+cd C:\path\to\CVKA
 cd apps\frontend
 npm install
 npm run dev
@@ -141,7 +141,7 @@ npm run dev
 
 在浏览器中打开 **<http://localhost:3000>**。
 
-> **PDF 导出：** Resume Matcher 使用无头 Chromium 渲染 PDF。由于 Chrome 会自动保持最新，后端优先使用已安装的 Google Chrome，并开启 Chrome 的沙箱。没有 Chrome 时使用 Playwright 的 Chromium（在 `apps\backend` 中运行 `uv run playwright install chromium` 安装），再没有则使用 Microsoft Edge（Windows 11 自带 Edge）。
+> **PDF 导出：** CVKA 使用无头 Chromium 渲染 PDF。由于 Chrome 会自动保持最新，后端优先使用已安装的 Google Chrome，并开启 Chrome 的沙箱。没有 Chrome 时使用 Playwright 的 Chromium（在 `apps\backend` 中运行 `uv run playwright install chromium` 安装），再没有则使用 Microsoft Edge（Windows 11 自带 Edge）。
 
 > **更喜欢 Docker？** 请安装 [Docker Desktop for Windows](https://docs.docker.com/desktop/setup/install/windows-install/)，并按照 [Docker 部署](#docker-deployment) 操作。要在 PowerShell 中设置 `PORT` 之类的变量，请使用 `$env:PORT="4000"; docker compose up -d`。对于 [可选的 PostgreSQL 配置](#optional-postgresql)，运行 `$env:POSTGRES_PASSWORD=[guid]::NewGuid().ToString('N'); docker compose -f docker-compose.yml -f docker-compose.postgres.yml up -d`；在 Docker 之外，请在 `apps\backend\.env` 中设置 `DATABASE_URL`。
 
@@ -156,8 +156,8 @@ npm run dev
 先把代码拉到本机：
 
 ```bash
-git clone https://github.com/srbhr/Resume-Matcher.git
-cd Resume-Matcher
+git clone https://github.com/NikodemBoniecki/cvka.git
+cd CVKA
 ```
 
 <a id="2-backend-setup"></a>
@@ -262,14 +262,14 @@ npm run dev
 - Local:        http://localhost:3000
 ```
 
-浏览器打开 **<http://localhost:3000>**，你应该能看到 Resume Matcher 的界面。
+浏览器打开 **<http://localhost:3000>**，你应该能看到 CVKA 的界面。
 
 ---
 
 <a id="configuring-your-ai-provider"></a>
 ## 配置 AI 提供商
 
-Resume Matcher 支持多种 AI 提供商。你可以在应用的 Settings 页面中配置，也可以直接编辑后端的 `.env` 文件。
+CVKA 支持多种 AI 提供商。你可以在应用的 Settings 页面中配置，也可以直接编辑后端的 `.env` 文件。
 
 <a id="option-a-cloud-providers"></a>
 ### 选项 A：云端提供商
@@ -334,12 +334,12 @@ ollama serve
 
 1. 启动后端和前端，然后在**与后端同一台机器上的**浏览器中打开 **Settings**。
 2. 选择 **ChatGPT plan**，点击 **Continue with ChatGPT**。
-3. 在 OpenAI 登录，并允许 Resume Matcher 使用你的 ChatGPT 订阅。首次使用时，OpenAI 会为你的账户注册该应用；之后的登录会复用该注册。
+3. 在 OpenAI 登录，并允许 CVKA 使用你的 ChatGPT 订阅。首次使用时，OpenAI 会为你的账户注册该应用；之后的登录会复用该注册。
 4. 你会回到 Settings。从你账户可用的模型中选择一个，然后点击 **Save**。
 
-OpenAI 会将浏览器重定向到 `http://127.0.0.1:<port>/auth/callback`，其中 `<port>` 是你打开 Resume Matcher 时使用的端口（默认为 `3000`）。前端会把该路径转发给后端，而后端只接受来自其所在机器的该回调。因此，浏览器必须运行在运行 Resume Matcher 的那台机器上，并且你应以 `http://localhost:<port>` 或 `http://127.0.0.1:<port>` 的形式打开它。令牌加密存储在后端数据目录中（`chatgpt_credentials.enc`）。**Disconnect** 会在 OpenAI 端撤销会话并删除令牌；**Manage usage** 会打开你的 ChatGPT 用量设置。
+OpenAI 会将浏览器重定向到 `http://127.0.0.1:<port>/auth/callback`，其中 `<port>` 是你打开 CVKA 时使用的端口（默认为 `3000`）。前端会把该路径转发给后端，而后端只接受来自其所在机器的该回调。因此，浏览器必须运行在运行 CVKA 的那台机器上，并且你应以 `http://localhost:<port>` 或 `http://127.0.0.1:<port>` 的形式打开它。令牌加密存储在后端数据目录中（`chatgpt_credentials.enc`）。**Disconnect** 会在 OpenAI 端撤销会话并删除令牌；**Manage usage** 会打开你的 ChatGPT 用量设置。
 
-**Docker：** 使用只发布 3000 端口的默认配置即可完成登录：请在运行容器的机器上，通过 `http://localhost:3000`（或你发布的 `PORT`）打开 Resume Matcher。OpenAI 会把浏览器带回同一个端口，前端再把 `/auth/callback` 转发给容器内的后端。从另一台电脑或通过反向代理域名访问时无法使用，因为 OpenAI 只允许 `http://127.0.0.1` 的重定向。
+**Docker：** 使用只发布 3000 端口的默认配置即可完成登录：请在运行容器的机器上，通过 `http://localhost:3000`（或你发布的 `PORT`）打开 CVKA。OpenAI 会把浏览器带回同一个端口，前端再把 `/auth/callback` 转发给容器内的后端。从另一台电脑或通过反向代理域名访问时无法使用，因为 OpenAI 只允许 `http://127.0.0.1` 的重定向。
 
 等效的 `.env`（仍需在 Settings 中登录）：
 
@@ -353,7 +353,7 @@ LLM_MODEL=gpt-6.1-sol  # 替换为 Settings 中你账户模型列表里的模型
 <a id="docker-deployment"></a>
 ## Docker 部署
 
-如果你更喜欢容器化部署，Resume Matcher 已提供 Docker 支持。
+如果你更喜欢容器化部署，CVKA 已提供 Docker 支持。
 
 ### 使用 Docker Compose（推荐）
 
@@ -373,7 +373,7 @@ docker-compose down
 
 SQLite 是默认选项，无需任何设置。如果需要备份，或想把数据库放在你自己掌控的另一台服务器上，可以改用 PostgreSQL。
 
-> **安全提示：** Resume Matcher 没有用户账户，也没有身份验证，PostgreSQL 同样不会增加这些功能。请仅供自己使用，或只在可信的私有网络中运行，切勿暴露到公网。除本地使用之外，请使用最小权限的数据库角色连接（Compose 文件中的 `resume` 用户是超级用户）。
+> **安全提示：** CVKA 没有用户账户，也没有身份验证，PostgreSQL 同样不会增加这些功能。请仅供自己使用，或只在可信的私有网络中运行，切勿暴露到公网。除本地使用之外，请使用最小权限的数据库角色连接（Compose 文件中的 `resume` 用户是超级用户）。
 
 使用 Docker Compose 启动：
 
@@ -432,17 +432,17 @@ docker compose -f docker-compose.yml -f docker-compose.postgres.yml up -d
 
 ---
 
-<a id="use-resume-matcher-from-claude-code-or-claude-desktop-mcp"></a>
-## 在 Claude Code 或 Claude Desktop 中使用 Resume Matcher（MCP）
+<a id="use-cvka-from-claude-code-or-claude-desktop-mcp"></a>
+## 在 Claude Code 或 Claude Desktop 中使用 CVKA（MCP）
 
-Resume Matcher 内置了一个 [MCP](https://modelcontextprotocol.io) 服务器，可让 Claude Code、Claude Desktop、Cursor 或 Codex 直接驱动它。它通过 stdio 运行，**无需 LLM API Key**：内容由 Claude 撰写，Resume Matcher 负责存储、校验、评分和渲染。它与 Web 应用共享同一个数据库，因此 Claude 保存的内容会显示在 UI 中。
+CVKA 内置了一个 [MCP](https://modelcontextprotocol.io) 服务器，可让 Claude Code、Claude Desktop、Cursor 或 Codex 直接驱动它。它通过 stdio 运行，**无需 LLM API Key**：内容由 Claude 撰写，CVKA 负责存储、校验、评分和渲染。它与 Web 应用共享同一个数据库，因此 Claude 保存的内容会显示在 UI 中。
 
 **前置条件：** 本地（非 Docker）安装。克隆仓库并运行 `cd apps/backend && uv sync`（参见 [后端配置](#2-backend-setup)）。
 
 ### Claude Code
 
 ```bash
-claude mcp add resume-matcher -- uv run --directory /abs/path/to/Resume-Matcher/apps/backend resume-matcher-mcp
+claude mcp add cvka -- uv run --directory /abs/path/to/CVKA/apps/backend cvka-mcp
 ```
 
 ### Claude Desktop
@@ -452,9 +452,9 @@ claude mcp add resume-matcher -- uv run --directory /abs/path/to/Resume-Matcher/
 ```json
 {
   "mcpServers": {
-    "resume-matcher": {
+    "cvka": {
       "command": "/absolute/path/to/uv",
-      "args": ["run", "--directory", "/abs/path/to/Resume-Matcher/apps/backend", "resume-matcher-mcp"]
+      "args": ["run", "--directory", "/abs/path/to/CVKA/apps/backend", "cvka-mcp"]
     }
   }
 }
@@ -464,7 +464,7 @@ claude mcp add resume-matcher -- uv run --directory /abs/path/to/Resume-Matcher/
 
 ### 其他 MCP 客户端
 
-Cursor、Codex 和其他客户端使用相同的命令（`uv`）和参数（`run --directory <path>/apps/backend resume-matcher-mcp`）。
+Cursor、Codex 和其他客户端使用相同的命令（`uv`）和参数（`run --directory <path>/apps/backend cvka-mcp`）。
 
 ### 注意事项
 
@@ -530,7 +530,7 @@ npm run dev -- -p 3001
 
 ### 数据库管理
 
-Resume Matcher 使用 TinyDB（JSON 文件存储）。数据位于 `apps/backend/data/`：
+CVKA 使用 TinyDB（JSON 文件存储）。数据位于 `apps/backend/data/`：
 
 ```bash
 # 查看数据库文件
@@ -612,7 +612,7 @@ CORS_ORIGINS=["http://localhost:3001", "http://127.0.0.1:3001"]
 ## 项目结构概览
 
 ```text
-Resume-Matcher/
+CVKA/
 ├─ apps/
 │  ├─ backend/                 # Python FastAPI backend
 │  │  ├─ app/
@@ -645,11 +645,11 @@ Resume-Matcher/
 
 如果遇到问题，可以从以下渠道获得支持：
 
-- **Discord 社区：** [dsc.gg/resume-matcher](https://dsc.gg/resume-matcher) - 提问与讨论都很活跃
-- **GitHub Issues：** [提交 Issue](https://github.com/srbhr/Resume-Matcher/issues) 反馈 bug 或提出需求
-- **项目文档：** 查看[在线文档](https://resumematcher.fyi/docs/)获取更详细的指南
+- **221 Studio:** [221studio.pl](https://221studio.pl/)
+- **GitHub Issues：** [提交 Issue](https://github.com/NikodemBoniecki/cvka/issues) 反馈 bug 或提出需求
+- **项目文档：** 查看[在线文档](https://221studio.pl/docs/)获取更详细的指南
 
 ---
 
-祝你简历制作顺利！如果 Resume Matcher 对你有帮助，欢迎 [给仓库点个 Star](https://github.com/srbhr/Resume-Matcher)，以及 [加入我们的 Discord](https://dsc.gg/resume-matcher)。
+祝你简历制作顺利！如果 CVKA 对你有帮助，欢迎 [给仓库点个 Star](https://github.com/NikodemBoniecki/cvka)，以及 [加入我们的 Discord](https://221studio.pl/)。
 

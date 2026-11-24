@@ -1114,7 +1114,7 @@ def get_router(config: LLMConfig | None = None) -> tuple[Router | None, LLMConfi
 
     if config.provider == AGENT_PROVIDER:
         raise AgentModeError(
-            "Agent mode is on: Resume Matcher makes no AI calls. "
+            "Agent mode is on: CVKA makes no AI calls. "
             "Ask your coding agent to do this instead."
         )
     if config.provider in ("claude_cli", "chatgpt"):

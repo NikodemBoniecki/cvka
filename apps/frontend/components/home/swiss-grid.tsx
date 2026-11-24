@@ -46,7 +46,7 @@ export const SwissGrid = ({
       <div className="p-4 bg-canvas flex flex-wrap justify-between items-center gap-4 font-mono text-xs text-primary border-t border-ink shrink-0 relative z-30">
         <div className="flex items-center gap-2">
           <Image src="/logo.svg" alt="" width={20} height={20} className="w-5 h-5" />
-          <span className="uppercase font-bold">Resume Matcher</span>
+          <span className="uppercase font-bold">CVKA</span>
           <span className="text-steel">v{APP_VERSION}</span>
         </div>
         <div className="flex flex-wrap items-center gap-4">

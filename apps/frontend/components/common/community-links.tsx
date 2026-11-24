@@ -1,7 +1,7 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { DiscordLogo, HandHeart, UserPlus, UsersThree } from '@phosphor-icons/react';
+import { Globe } from '@phosphor-icons/react';
 import { BrandIcon } from '@/components/ui/brand-icon';
 import { buttonClass } from '@/components/ui/button';
 import { COMMUNITY_LINKS, type CommunityLinkId } from '@/lib/constants/community-links';
@@ -14,11 +14,8 @@ import { cn } from '@/lib/utils';
  * guard as decorative; these are the functional stand-ins).
  */
 const ICONS: Record<CommunityLinkId, ReactNode> = {
-  follow: <UserPlus aria-hidden="true" className="size-4 shrink-0" />,
-  star: <BrandIcon name="github" className="size-4 shrink-0" />,
-  sponsor: <HandHeart aria-hidden="true" className="size-4 shrink-0" />,
-  contributors: <UsersThree aria-hidden="true" className="size-4 shrink-0" />,
-  discord: <DiscordLogo aria-hidden="true" className="size-4 shrink-0" />,
+  repository: <BrandIcon name="github" className="size-4 shrink-0" />,
+  studio: <Globe aria-hidden="true" className="size-4 shrink-0" />,
 };
 
 export type CommunityLinksVariant = 'hero' | 'strip' | 'builder' | 'settings' | 'about';
@@ -26,31 +23,24 @@ export type CommunityLinksVariant = 'hero' | 'strip' | 'builder' | 'settings' | 
 /** Which links each placement shows, in order, with the label key each one uses there. */
 const LAYOUTS: Record<CommunityLinksVariant, ReadonlyArray<readonly [CommunityLinkId, string]>> = {
   hero: [
-    ['follow', 'community.follow'],
-    ['sponsor', 'community.sponsor'],
-    ['discord', 'community.discord'],
+    ['repository', 'community.repository'],
+    ['studio', 'community.studio'],
   ],
   strip: [
-    ['follow', 'community.follow'],
-    ['star', 'community.star'],
-    ['sponsor', 'community.sponsor'],
-    ['discord', 'community.discord'],
-    ['contributors', 'community.contributors'],
+    ['repository', 'community.repository'],
+    ['studio', 'community.studio'],
   ],
   settings: [
-    ['sponsor', 'community.sponsorProject'],
-    ['discord', 'community.joinTheDiscord'],
+    ['repository', 'community.repository'],
+    ['studio', 'community.studio'],
   ],
   builder: [
-    ['discord', 'community.joinDiscord'],
-    ['star', 'community.starOnGithub'],
+    ['repository', 'community.repository'],
+    ['studio', 'community.studio'],
   ],
   about: [
-    ['follow', 'community.follow'],
-    ['star', 'community.starOnGithub'],
-    ['sponsor', 'community.sponsor'],
-    ['discord', 'community.joinDiscord'],
-    ['contributors', 'community.contributors'],
+    ['repository', 'community.repository'],
+    ['studio', 'community.studio'],
   ],
 };
 
@@ -78,7 +68,7 @@ const STYLES: Record<CommunityLinksVariant, { list: string; link: string; label?
   about: { list: 'gap-3', link: buttonClass({ variant: 'outline', size: 'sm' }) },
 };
 
-/** One external community link: icon, label, always a new tab. */
+/** An official project link: icon, label, always a new tab. */
 export function CommunityLink({
   id,
   className,
@@ -104,7 +94,7 @@ export function CommunityLink({
   );
 }
 
-/** The community and support links, in the shape each placement needs. */
+/** The official project links in the shape each placement needs. */
 export function CommunityLinks({
   variant,
   className,

@@ -43,7 +43,7 @@ export interface AgentPromptDialogProps {
 /**
  * In agent mode the app makes no AI calls. Each AI action opens this dialog with
  * a prompt for the user to paste into Claude Code, Codex, Cursor or Copilot,
- * which does the work through the resume-matcher command and saves it here.
+ * which does the work through the cvka command and saves it here.
  */
 export function AgentPromptDialog({
   task,

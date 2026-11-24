@@ -1,4 +1,4 @@
-"""resume-matcher CLI: argument parsing and calls through the MCP tools."""
+"""cvka CLI: argument parsing and calls through the MCP tools."""
 
 import io
 import json
