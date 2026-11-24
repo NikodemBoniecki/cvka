@@ -45,7 +45,9 @@ services:
       - LLM_API_KEY=${LLM_API_KEY:-}
       # Optional server-managed, ordered failover pool used when the "default"
       # provider is selected. Other provider selections use the user's key.
-      - LLM_FALLBACK_ORDER=${LLM_FALLBACK_ORDER:-gemini,groq,openrouter}
+      - LLM_FALLBACK_ORDER=${LLM_FALLBACK_ORDER:-ollama,gemini,groq,openrouter}
+      - OLLAMA_MODEL=${OLLAMA_MODEL:-hf.co/speakleash/Bielik-11B-v3.0-Instruct-GGUF:Q8_0}
+      - OLLAMA_API_BASE=${OLLAMA_API_BASE:-http://host.docker.internal:11434/v1}
       - GEMINI_API_KEY=${GEMINI_API_KEY:-}
       - GEMINI_MODEL=${GEMINI_MODEL:-gemini-3.8-flash}
       - GROQ_API_KEY=${GROQ_API_KEY:-}

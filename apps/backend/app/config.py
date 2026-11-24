@@ -313,7 +313,9 @@ class Settings(BaseSettings):
     llm_api_base: str | None = None  # For Ollama or custom endpoints
     # Optional server-managed OpenAI-compatible providers. These credentials are
     # supplied by the deployment operator and never stored in the user config.
-    llm_fallback_order: str = "gemini,groq,openrouter"
+    llm_fallback_order: str = "ollama,gemini,groq,openrouter"
+    ollama_model: str = "hf.co/speakleash/Bielik-11B-v3.0-Instruct-GGUF:Q8_0"
+    ollama_api_base: str = ""
     gemini_api_key: str = ""
     gemini_model: str = "gemini-3.8-flash"
     groq_api_key: str = ""

@@ -173,6 +173,15 @@ LLMConfig.model_rebuild()
 def _server_managed_deployments() -> list[LLMFallbackDeployment]:
     """Build the ordered shared-provider list from deployment environment."""
     providers: dict[str, tuple[str, str, str]] = {
+        # Ollama runs on the VPS host. The backend container reaches it through
+        # Docker's host-gateway alias and Ollama's OpenAI-compatible endpoint.
+        # Ollama ignores this placeholder API key; OpenAI-compatible clients
+        # require a non-empty value.
+        "ollama": (
+            "ollama",
+            settings.ollama_model,
+            settings.ollama_api_base,
+        ),
         "gemini": (
             settings.gemini_api_key,
             settings.gemini_model,
@@ -196,7 +205,7 @@ def _server_managed_deployments() -> list[LLMFallbackDeployment]:
         if configured is None:
             continue
         api_key, model, api_base = configured
-        if api_key.strip() and model.strip():
+        if api_key.strip() and model.strip() and api_base.strip():
             deployments.append(
                 LLMFallbackDeployment(
                     name=provider,
@@ -216,6 +225,7 @@ def _has_server_managed_credentials() -> bool:
             settings.gemini_api_key,
             settings.groq_api_key,
             settings.openrouter_api_key,
+            settings.ollama_api_base if settings.ollama_model.strip() else "",
         )
     )
 
