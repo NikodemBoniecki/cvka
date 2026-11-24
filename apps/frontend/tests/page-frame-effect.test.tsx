@@ -19,7 +19,7 @@ vi.mock('next/dynamic', () => ({
   },
 }));
 
-// Stand in for the two GL effects: only which one renders, and with what, matters here.
+// Stand in for the GL effects: only which one renders, and with what, matters here.
 vi.mock('@/components/effects/pixel-beams', () => ({
   PixelBeams: ({ className, intensity }: { className?: string; intensity?: string }) => (
     <div data-testid="pixel-beams" data-intensity={intensity} className={className} />
@@ -28,6 +28,11 @@ vi.mock('@/components/effects/pixel-beams', () => ({
 vi.mock('@/components/effects/retro-bitrate', () => ({
   RetroBitrate: ({ className, intensity }: { className?: string; intensity?: string }) => (
     <div data-testid="retro-bitrate" data-intensity={intensity} className={className} />
+  ),
+}));
+vi.mock('@/components/effects/fluid-waves', () => ({
+  FluidWaves: ({ className, intensity }: { className?: string; intensity?: string }) => (
+    <div data-testid="fluid-waves" data-intensity={intensity} className={className} />
   ),
 }));
 
@@ -40,21 +45,21 @@ const framed = (props: Parameters<typeof PageFrame>[0]) => (
 );
 
 describe('PageFrame effect prop', () => {
-  it('defaults to the quiet pixel beams, idle, fixed to one screen behind the frame', async () => {
+  it('defaults to cursor-reactive 221 waves, idle, fixed to one screen behind the frame', async () => {
     const { container } = render(framed({ children: <p>content</p> }));
-    const beams = await screen.findByTestId('pixel-beams');
-    expect(beams).toHaveAttribute('data-intensity', 'idle');
-    expect(beams).toHaveClass('fixed', 'inset-0', '-z-10', 'h-full', 'w-full', 'text-steel');
-    expect(beams.parentElement).toBe(container.firstChild);
+    const waves = await screen.findByTestId('fluid-waves');
+    expect(waves).toHaveAttribute('data-intensity', 'idle');
+    expect(waves).toHaveClass('fixed', 'inset-0', 'z-0', 'h-full', 'w-full');
+    expect(waves.parentElement).toBe(container.firstChild);
     expect(screen.queryByTestId('retro-bitrate')).toBeNull();
   });
 
-  it('effect="bitrate" renders Retro Bitrate instead of the beams, at the given intensity', async () => {
+  it('effect="bitrate" renders Retro Bitrate instead of the waves, at the given intensity', async () => {
     render(framed({ effect: 'bitrate', effectIntensity: 'active', children: <p>content</p> }));
     const bitrate = await screen.findByTestId('retro-bitrate');
     expect(bitrate).toHaveAttribute('data-intensity', 'active');
-    expect(bitrate).toHaveClass('fixed', 'inset-0', '-z-10', 'h-full', 'w-full');
-    expect(screen.queryByTestId('pixel-beams')).toBeNull();
+    expect(bitrate).toHaveClass('fixed', 'inset-0', 'z-0', 'h-full', 'w-full');
+    expect(screen.queryByTestId('fluid-waves')).toBeNull();
   });
 
   it('effect="bitrate" is idle unless told otherwise', async () => {
@@ -66,6 +71,7 @@ describe('PageFrame effect prop', () => {
     const { container } = render(framed({ effect: 'none', children: <p>content</p> }));
     await screen.findByText('content');
     expect(screen.queryByTestId('pixel-beams')).toBeNull();
+    expect(screen.queryByTestId('fluid-waves')).toBeNull();
     expect(screen.queryByTestId('retro-bitrate')).toBeNull();
     expect(container.firstChild).toHaveClass('bg-canvas');
   });
@@ -76,9 +82,9 @@ describe('PageFrame effect prop', () => {
     expect(screen.getByText('content').parentElement).toHaveClass('bg-canvas', 'border-ink');
   });
 
-  it('renders no effect of either kind when background effects are off', async () => {
+  it('renders no effect when background effects are off', async () => {
     localStorage.setItem('resume_matcher_effects', 'false');
-    for (const effect of ['beams', 'bitrate'] as const) {
+    for (const effect of ['waves', 'beams', 'bitrate'] as const) {
       const { container, unmount } = render(framed({ effect, children: <p>content</p> }));
       await screen.findByText('content');
       expect(container.querySelector('[data-testid]')).toBeNull();

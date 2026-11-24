@@ -35,13 +35,23 @@ services:
       - LOG_LLM=${LOG_LLM:-WARNING}
       #- LOG_LLM_FILE=${LOG_LLM_FILE:-}
       # LLM Configuration - configure via Settings UI or set env vars for explicit overrides
-      # Supported providers: openai, anthropic, openrouter, gemini, deepseek, ollama
+      # Supported providers: default (CVKA server pool), openai, anthropic,
+      # openrouter, gemini, deepseek, ollama
       # Defaults are defined in apps/backend/app/config.py
-      - LLM_PROVIDER=${LLM_PROVIDER:-openai}
+      - LLM_PROVIDER=${LLM_PROVIDER:-default}
       - LLM_MODEL=${LLM_MODEL:-}
       # Optional Docker Secret file path (same behavior as Postgres-style *_FILE)
       #- LLM_API_KEY_FILE=${LLM_API_KEY_FILE:-/run/secrets/llm_api_key}
       - LLM_API_KEY=${LLM_API_KEY:-}
+      # Optional server-managed, ordered failover pool used when the "default"
+      # provider is selected. Other provider selections use the user's key.
+      - LLM_FALLBACK_ORDER=${LLM_FALLBACK_ORDER:-gemini,groq,openrouter}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - GEMINI_MODEL=${GEMINI_MODEL:-gemini-3.8-flash}
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+      - GROQ_MODEL=${GROQ_MODEL:-openai/gpt-oss-120b}
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      - OPENROUTER_MODEL=${OPENROUTER_MODEL:-openrouter/free}
       # Ollama (or LM Studio, llama.cpp) running on this machine, outside Docker: inside
       # the container "localhost" is the container itself, so use host.docker.internal:
       # - LLM_API_BASE=http://host.docker.internal:11434

@@ -15,7 +15,7 @@ interface RichTextToolbarProps {
  * Rich Text Toolbar Component
  *
  * Swiss International Style formatting toolbar with B/I/U/Link buttons.
- * Active states shown with an ink fill (selection = ink; blue is for actions).
+ * Active states use the 221 orange fill with black text.
  */
 export const RichTextToolbar: React.FC<RichTextToolbarProps> = ({ editor, onLinkClick }) => {
   const tools = [
@@ -66,7 +66,7 @@ export const RichTextToolbar: React.FC<RichTextToolbarProps> = ({ editor, onLink
           title={`${tool.label} (${tool.shortcut})`}
           className={cn(
             tool.isActive
-              ? 'bg-ink text-white hover:bg-ink hover:text-white active:bg-ink active:text-white'
+              ? 'bg-primary text-on-accent hover:bg-primary hover:text-on-accent active:bg-primary active:text-on-accent'
               : 'hover:bg-panel-hover'
           )}
         >

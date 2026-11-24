@@ -400,6 +400,16 @@ class TestLanguageConfig:
         assert data["ui_language"] == "en"
         assert data["content_language"] == "es"
         assert "en" in data["supported_languages"]
+        assert "pl" in data["supported_languages"]
+
+    @patch("app.routers.config._load_config")
+    async def test_polish_is_the_default_language(self, mock_load, client):
+        mock_load.return_value = {}
+        async with client:
+            resp = await client.get("/api/v1/config/language")
+        assert resp.status_code == 200
+        assert resp.json()["ui_language"] == "pl"
+        assert resp.json()["content_language"] == "pl"
 
     @patch("app.routers.config._save_config")
     @patch("app.routers.config._load_config")

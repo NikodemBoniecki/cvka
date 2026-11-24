@@ -13,10 +13,10 @@ describe('settings community strip', () => {
     render(<SettingsSupportStrip />);
 
     expect(screen.getByText('community.settingsPrompt')).toBeInTheDocument();
-    const sponsor = screen.getByRole('link', { name: 'community.repository' });
-    const discord = screen.getByRole('link', { name: 'community.studio' });
-    expect(sponsor).toHaveAttribute('href', 'https://221studio.pl/');
-    expect(discord).toHaveAttribute('href', 'https://221studio.pl/');
+    const repository = screen.getByRole('link', { name: 'community.repository' });
+    const studio = screen.getByRole('link', { name: 'community.studio' });
+    expect(repository).toHaveAttribute('href', 'https://github.com/NikodemBoniecki/cvka');
+    expect(studio).toHaveAttribute('href', 'https://221studio.pl/');
     expect(screen.getAllByRole('link')).toHaveLength(2);
   });
 });
@@ -28,9 +28,6 @@ describe('settings About section', () => {
     expect(screen.getByRole('heading', { level: 2, name: 'community.aboutTitle' })).toBeVisible();
     expect(screen.getByText(`v${APP_VERSION}`)).toBeInTheDocument();
     const hrefs = screen.getAllByRole('link').map((link) => link.getAttribute('href'));
-    expect(hrefs).toEqual([
-      'https://github.com/NikodemBoniecki/cvka',
-      'https://221studio.pl/',
-    ]);
+    expect(hrefs).toEqual(['https://github.com/NikodemBoniecki/cvka', 'https://221studio.pl/']);
   });
 });

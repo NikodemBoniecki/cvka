@@ -118,7 +118,7 @@ class RegenerateRequest(BaseModel):
     instruction: str = Field(
         max_length=2000
     )  # User's feedback/instruction for improvement
-    output_language: str = "en"
+    output_language: str = "pl"
 
     @model_validator(mode="after")
     def _validate_source_budget(self) -> "RegenerateRequest":

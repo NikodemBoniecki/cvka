@@ -12,8 +12,13 @@ describe('RichTextToolbar', () => {
     render(<RichTextToolbar editor={editorWithActive('bold')} onLinkClick={vi.fn()} />);
     const bold = screen.getByRole('button', { name: 'Bold' });
     expect(bold).toHaveAttribute('aria-pressed', 'true');
-    expect(bold).toHaveClass('bg-ink', 'text-white', 'hover:bg-ink', 'active:bg-ink');
-    expect(bold).toHaveClass('active:text-white');
+    expect(bold).toHaveClass(
+      'bg-primary',
+      'text-on-accent',
+      'hover:bg-primary',
+      'active:bg-primary'
+    );
+    expect(bold).toHaveClass('active:text-on-accent');
   });
 
   it('gives inactive tools a visible hover on the panel toolbar', () => {
@@ -21,7 +26,7 @@ describe('RichTextToolbar', () => {
     const italic = screen.getByRole('button', { name: 'Italic' });
     expect(italic).toHaveAttribute('aria-pressed', 'false');
     expect(italic).toHaveClass('hover:bg-panel-hover');
-    expect(italic).not.toHaveClass('bg-ink');
+    expect(italic).not.toHaveClass('bg-primary');
   });
 
   it('uses the compact icon-sm button size', () => {

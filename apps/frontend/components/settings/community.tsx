@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { Info } from '@phosphor-icons/react';
+import { CvkaWordmark } from '@/components/common/cvka-wordmark';
 import { CommunityLinks } from '@/components/common/community-links';
 import { APP_VERSION } from '@/lib/config/version';
 import { useTranslations } from '@/lib/i18n';
@@ -34,8 +35,8 @@ export function SettingsAbout() {
       </div>
 
       <div className="flex items-center gap-2 font-mono text-xs text-primary">
-        <Image src="/logo.svg" alt="" width={20} height={20} className="w-5 h-5" />
-        <span className="uppercase font-bold">CVKA</span>
+        <Image src="/logo.svg" alt="221 Studio" width={42} height={20} className="h-5 w-auto" />
+        <CvkaWordmark />
         <span className="text-steel">v{APP_VERSION}</span>
       </div>
 

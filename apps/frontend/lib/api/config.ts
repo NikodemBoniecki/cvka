@@ -2,6 +2,7 @@ import { apiFetch } from './client';
 
 // Supported LLM providers
 export type LLMProvider =
+  | 'default'
   | 'openai'
   | 'openai_compatible'
   | 'azure_foundry'
@@ -194,8 +195,16 @@ export const PROVIDER_INFO: Record<
      * There is no key, model, endpoint or reasoning effort to configure.
      */
     agentMode?: boolean;
+    /** Uses the server-owned, ordered provider pool instead of a user key. */
+    serverManaged?: boolean;
   }
 > = {
+  default: {
+    name: 'CVKA (Default)',
+    defaultModel: 'server-managed',
+    requiresKey: false,
+    serverManaged: true,
+  },
   openai: { name: 'OpenAI', defaultModel: 'gpt-5-nano-2025-08-07', requiresKey: true },
   // OpenAI-compatible: llama.cpp, vLLM, LM Studio, and other servers that expose
   // the OpenAI Chat Completions API. Key is optional (most local servers don't
@@ -301,7 +310,7 @@ export async function updateFeatureConfig(config: FeatureConfigUpdate): Promise<
 }
 
 // Language configuration types
-export type SupportedLanguage = 'en' | 'es' | 'zh' | 'ja' | 'pt' | 'fr' | 'ko';
+export type SupportedLanguage = 'en' | 'es' | 'zh' | 'ja' | 'pt' | 'fr' | 'ko' | 'pl';
 
 export interface LanguageConfig {
   ui_language: SupportedLanguage;
@@ -483,7 +492,8 @@ export type ApiKeyProvider =
 // Map an LLM provider (the active-provider axis) to its key-store provider
 // name. Mirrors the backend `_PROVIDER_KEY_MAP` (gemini → google; the local
 // providers pass through). Keys are persisted under the key-store name.
-export function llmProviderToKeyProvider(provider: LLMProvider): ApiKeyProvider {
+export function llmProviderToKeyProvider(provider: LLMProvider): ApiKeyProvider | null {
+  if (provider === 'default') return null;
   if (provider === 'gemini') return 'google';
   return provider as ApiKeyProvider;
 }

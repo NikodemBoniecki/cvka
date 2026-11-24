@@ -120,6 +120,23 @@ _COPY: dict[str, dict[str, str]] = {
         "warning_education": "학력이 비어 있습니다. 의도한 경우에만 건너뛰세요.",
         "warning_skills": "기술이 비어 있습니다. 사용해 본 도구나 기술을 추가해 주세요.",
     },
+    "pl": {
+        "intro": "Cześć! Pomogę Ci przygotować główne CV. Jak masz na imię i jakiej pracy szukasz?",
+        "contact": "Jaki adres e-mail, numer telefonu lub linki (LinkedIn, GitHub, strona) mam uwzględnić?",
+        "summary": "Jak opisał(a)byś siebie zawodowo w jednym lub dwóch zdaniach?",
+        "workExperience": "Opowiedz o jednym stanowisku: nazwa roli, firma, daty, zakres obowiązków i mierzalne efekty.",
+        "internships": "Opowiedz o jednym stażu: rola, firma, daty, zakres pracy i jej rezultat.",
+        "education": "Opowiedz o swoim wykształceniu: szkoła, kierunek lub stopień, daty oraz wyróżnienia albo ważne przedmioty.",
+        "personalProjects": "Opowiedz o jednym projekcie: co zostało stworzone, dlaczego było ważne, użyte technologie i rezultaty.",
+        "skills": "Jakie narzędzia, technologie lub umiejętności chcesz umieścić w CV?",
+        "review": "Sprawdźmy zebrane informacje przed utworzeniem głównego CV.",
+        "next": "Co chcesz dodać dalej?",
+        "warning_name": "Dodaj imię i nazwisko — są wymagane do utworzenia CV.",
+        "warning_contact": "Dodaj co najmniej jedną formę kontaktu: e-mail, telefon lub link.",
+        "warning_experience": "Dodaj co najmniej jedno doświadczenie, staż lub projekt.",
+        "warning_education": "Sekcja wykształcenia jest pusta. Pomiń ją tylko, jeśli to zamierzone.",
+        "warning_skills": "Sekcja umiejętności jest pusta. Dodaj używane narzędzia lub technologie.",
+    },
 }
 
 

@@ -25,7 +25,7 @@ describe('SegmentedControl', () => {
     expect(screen.getByRole('radiogroup', { name: 'Page size' })).toBeInTheDocument();
     const a4 = screen.getByRole('radio', { name: 'A4' });
     expect(a4).toHaveAttribute('aria-checked', 'true');
-    expect(a4).toHaveClass('bg-ink', 'text-white');
+    expect(a4).toHaveClass('bg-primary', 'text-on-accent');
     expect(screen.getByRole('radio', { name: 'Letter' })).toHaveAttribute('tabindex', '-1');
   });
 

@@ -1038,6 +1038,9 @@
     },
     "llmConfiguration": {
       "selectedProvider": "SELECIONADO: {provider}",
+      "defaultProviderName": "Padrão (CVKA)",
+      "defaultProviderShortName": "Padrão",
+      "defaultProviderNote": "O CVKA usa a lista de provedores configurada neste servidor e muda para o próximo quando um deles fica indisponível. Para usar sua própria chave de API, selecione um provedor específico.",
       "claudeCliNote": "Executa a CLI do Claude Code instalada e conectada nesta máquina, então nenhuma chave de API é necessária aqui. O Claude Code ainda envia seus prompts à Anthropic pela sua conta.",
       "claudeCliDefaultModel": "Padrão do Claude Code",
       "claudeCliModelHint": "Cada alias usa o modelo mais recente da sua família. Seu plano Claude define quais você pode usar.",
@@ -1428,7 +1431,8 @@
     "created": {
       "title": "Currículo mestre criado",
       "description": "Seu currículo mestre foi criado. Abra-o para continuar editando."
-    }
+    },
+    "initialQuestion": "Olá, vou ajudar você a criar seu currículo mestre. Qual é o seu nome e que tipo de cargo você procura?"
   },
   "tracker": {
     "manage": "Gerenciar",

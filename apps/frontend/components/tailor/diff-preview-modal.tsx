@@ -165,7 +165,7 @@ export function DiffPreviewModal({
             {t('tailor.diffModal.subtitle')}
           </p>
           {heavyMode && (
-            <p className="mt-1 w-fit border border-ink bg-ink px-2 py-1 font-mono text-xs uppercase tracking-wider text-white">
+            <p className="mt-1 w-fit border border-ink bg-primary px-2 py-1 font-mono text-xs uppercase tracking-wider text-on-accent">
               {t('tailor.diffModal.heavyTag')}
             </p>
           )}
@@ -545,7 +545,7 @@ function ChangeItem({ change, highlight = [] }: ChangeItemProps) {
             <ins className="block text-sm text-ink-soft no-underline">
               {splitByKeywords(change.new_value, highlight).map((part, i) =>
                 part.match ? (
-                  <mark key={i} className="bg-primary px-1 text-white">
+                  <mark key={i} className="bg-primary px-1 text-on-accent">
                     {part.text}
                   </mark>
                 ) : (
@@ -608,7 +608,7 @@ function KeywordPlacementList({
       <ul className="space-y-2">
         {placements.map((placement) => (
           <li key={placement.keyword} className="flex flex-wrap items-baseline gap-2 text-sm">
-            <mark className="bg-primary px-1 font-mono text-xs text-white">
+            <mark className="bg-primary px-1 font-mono text-xs text-on-accent">
               {placement.keyword}
             </mark>
             <span className="text-ink">

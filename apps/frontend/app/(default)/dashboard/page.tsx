@@ -13,7 +13,6 @@ import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { Card, CardTitle, CardDescription } from '@/components/ui/card';
 import { StatusIndicator, type StatusTone } from '@/components/ui/status-indicator';
 import { DefaultBadge } from '@/components/common/default-badge';
-import { LlmSetupAlert } from '@/components/common/llm-setup-alert';
 import Link from 'next/link';
 import { useTranslations } from '@/lib/i18n';
 import { formatDate } from '@/lib/format-date';
@@ -41,36 +40,37 @@ type ProcessingStatus = 'pending' | 'processing' | 'ready' | 'failed' | 'loading
 // Stretched link: its ::after covers the whole tile, so the tile navigates by mouse and
 // keyboard. Tile action buttons sit above it (z-10) and stay outside the link.
 const TILE_LINK =
-  'after:absolute after:inset-0 focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-white';
+  'after:absolute after:inset-0 focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-brand-white';
 // Action tiles (initialize, add track) are one native button filling the Card.
 const TILE_BUTTON =
-  'flex flex-1 flex-col justify-between p-6 text-left md:p-8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white';
+  'flex flex-1 flex-col justify-between p-6 text-left md:p-8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-white';
 // Tile highlight (owner ruling, round 2): hover, or keyboard focus anywhere inside a tile, fills
-// the tile Hyper Blue with white text. There is no ink outline: Card interactive's
+// the tile 221 Orange with black text. There is no ink outline: Card interactive's
 // `hover:border-ink` is overridden here so the 2px border stays transparent, and its 1px press-in
 // is cancelled. Focus adds a 2px inset white ring on the link or button (a primary ring would
-// vanish on the fill). Inherited text turns white with the tile; anything that sets its own
-// colour (steel captions, the spinner, status squares, monogram frames) opts in below so it
-// stays AA on blue (white on primary is 6.7:1).
+// vanish on the fill). Inherited text turns black with the tile; anything that sets its own
+// colour (secondary captions, spinner, status squares, monogram frames) opts in below so it
+// stays readable on orange.
 const TILE_FILL =
-  'hover:border-transparent hover:translate-x-0 hover:translate-y-0 hover:bg-primary hover:text-white has-[:focus-visible]:z-20 has-[:focus-visible]:bg-primary has-[:focus-visible]:text-white';
-const TILE_WHITE = 'group-hover:text-white group-has-[:focus-visible]:text-white';
-const TILE_WHITE_BORDER = 'group-hover:border-white group-has-[:focus-visible]:border-white';
+  'hover:border-transparent hover:translate-x-0 hover:translate-y-0 hover:bg-primary hover:text-on-accent has-[:focus-visible]:z-20 has-[:focus-visible]:bg-primary has-[:focus-visible]:text-on-accent';
+const TILE_ON_ACCENT = 'group-hover:text-on-accent group-has-[:focus-visible]:text-on-accent';
+const TILE_WHITE_BORDER =
+  'group-hover:border-brand-white group-has-[:focus-visible]:border-brand-white';
 // StatusIndicator (components/ui) colours its square and label itself, so the tile reaches in.
 const TILE_STATUS =
-  'group-hover:[&>span:first-child]:bg-white group-hover:[&>span:last-child]:text-white group-has-[:focus-visible]:[&>span:first-child]:bg-white group-has-[:focus-visible]:[&>span:last-child]:text-white';
-// The ghost retry icon is ink: white on blue, and a darker blue (not panel) under the pointer.
-const TILE_GHOST_ICON = `${TILE_WHITE} group-hover:hover:bg-primary-hover group-hover:active:bg-primary-hover focus-visible:ring-white`;
+  'group-hover:[&>span:first-child]:bg-white group-hover:[&>span:last-child]:text-on-accent group-has-[:focus-visible]:[&>span:first-child]:bg-white group-has-[:focus-visible]:[&>span:last-child]:text-on-accent';
+// The ghost retry icon is ink: black on orange, and a darker orange (not panel) under the pointer.
+const TILE_GHOST_ICON = `${TILE_ON_ACCENT} group-hover:hover:bg-primary-hover group-hover:active:bg-primary-hover focus-visible:ring-brand-white`;
 // Tile action buttons (Set as default, Duplicate, Retry, Delete) float above the stretched link.
-// Focusing one fills its tile blue, where the Button primitive's primary ring would vanish.
-const TILE_ACTION = 'z-10 focus-visible:ring-white';
+// Focusing one fills its tile orange, where the Button primitive's primary ring would vanish.
+const TILE_ACTION = 'z-10 focus-visible:ring-brand-white';
 const STATUS_TONE: Record<ResumeListItem['processing_status'], StatusTone> = {
   ready: 'ready',
   processing: 'active',
   pending: 'neutral',
   failed: 'error',
 };
-// Monogram fills: brand tokens only, each AA with white text (lowest: steel, 5.19:1).
+// Monogram fills use only 221 Orange and warm white; black text stays readable on both.
 const MONOGRAM_FILLS = ['bg-primary', 'bg-ink', 'bg-success', 'bg-steel', 'bg-destructive'];
 const FILLER_FILLS = ['bg-panel', 'bg-panel-hover', 'bg-panel-hover', 'bg-panel'];
 
@@ -556,35 +556,23 @@ export default function DashboardPage() {
   // A failed load with nothing to show: the alert alone, no tiles (an empty account looks different).
   const emptyWithError =
     listError && !masterResumeId && otherMasters.length === 0 && tailoredResumes.length === 0;
-  const showLlmAlert = Boolean(masterResumeId) && !isLlmConfigured && !agentMode && !statusLoading;
 
   return (
     <SwissGrid
       banner={
-        (listError || showLlmAlert) && (
-          <>
-            {listError && (
-              <Alert tone="error" title={t('dashboard.errors.loadFailed')}>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  className="mt-3"
-                  onClick={() => void loadTailoredResumes()}
-                >
-                  <ArrowsClockwise aria-hidden="true" />
-                  {t('common.retry')}
-                </Button>
-              </Alert>
-            )}
-            {showLlmAlert && (
-              <LlmSetupAlert
-                titleKey="dashboard.llmNotConfiguredTitle"
-                messageKey="dashboard.llmNotConfiguredMessage"
-                actionKey="nav.settings"
-              />
-            )}
-          </>
+        listError && (
+          <Alert tone="error" title={t('dashboard.errors.loadFailed')}>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="mt-3"
+              onClick={() => void loadTailoredResumes()}
+            >
+              <ArrowsClockwise aria-hidden="true" />
+              {t('common.retry')}
+            </Button>
+          </Alert>
         )
       }
     >
@@ -600,21 +588,21 @@ export default function DashboardPage() {
               >
                 <Card
                   variant="interactive"
-                  className="aspect-square h-full border-dashed border-warning bg-warning-tint hover:border-transparent hover:translate-x-0 hover:translate-y-0 hover:bg-primary hover:text-white group-focus-visible/setup:z-20 group-focus-visible/setup:border-transparent group-focus-visible/setup:translate-x-0 group-focus-visible/setup:translate-y-0 group-focus-visible/setup:bg-primary group-focus-visible/setup:text-white group-focus-visible/setup:ring-2 group-focus-visible/setup:ring-inset group-focus-visible/setup:ring-white"
+                  className="aspect-square h-full border-dashed border-warning bg-warning-tint hover:border-transparent hover:translate-x-0 hover:translate-y-0 hover:bg-primary hover:text-on-accent group-focus-visible/setup:z-20 group-focus-visible/setup:border-transparent group-focus-visible/setup:translate-x-0 group-focus-visible/setup:translate-y-0 group-focus-visible/setup:bg-primary group-focus-visible/setup:text-on-accent group-focus-visible/setup:ring-2 group-focus-visible/setup:ring-inset group-focus-visible/setup:ring-brand-white"
                 >
                   <div className="flex-1 flex flex-col justify-between">
                     <Warning
                       aria-hidden="true"
-                      className="size-6 text-warning-text group-hover:text-white group-focus-visible/setup:text-white"
+                      className="size-6 text-warning-text group-hover:text-on-accent group-focus-visible/setup:text-on-accent"
                     />
                     <div>
-                      <CardTitle className="text-lg uppercase text-warning-text mb-2 group-hover:text-white group-focus-visible/setup:text-white">
+                      <CardTitle className="text-lg uppercase text-warning-text mb-2 group-hover:text-on-accent group-focus-visible/setup:text-on-accent">
                         {t('dashboard.setupRequiredTitle')}
                       </CardTitle>
-                      <CardDescription className="text-warning-text text-xs group-hover:text-white group-focus-visible/setup:text-white">
+                      <CardDescription className="text-warning-text text-xs group-hover:text-on-accent group-focus-visible/setup:text-on-accent">
                         {t('dashboard.setupRequiredMessage')}
                       </CardDescription>
-                      <div className="flex items-center gap-2 mt-4 text-warning-text group-hover:text-white group-focus-visible/setup:text-white">
+                      <div className="flex items-center gap-2 mt-4 text-warning-text group-hover:text-on-accent group-focus-visible/setup:text-on-accent">
                         <Gear aria-hidden="true" className="size-4" />
                         <span className="font-mono text-xs font-bold uppercase">
                           {t('nav.goToSettings')}
@@ -648,7 +636,7 @@ export default function DashboardPage() {
                     <span className="block font-serif text-xl font-bold uppercase leading-none tracking-tight">
                       {t('dashboard.initializeMasterResume')}
                     </span>
-                    <span className={cn('mt-2 block font-mono text-sm text-steel', TILE_WHITE)}>
+                    <span className={cn('mt-2 block font-mono text-sm text-steel', TILE_ON_ACCENT)}>
                       {'// '}
                       {t('dashboard.initializeSequence')}
                     </span>
@@ -663,7 +651,7 @@ export default function DashboardPage() {
                 <div className="flex justify-between items-start mb-6">
                   <div
                     className={cn(
-                      'size-12 border-2 border-ink bg-primary text-white flex items-center justify-center',
+                      'size-12 border-2 border-ink bg-primary text-on-accent flex items-center justify-center',
                       TILE_WHITE_BORDER
                     )}
                   >
@@ -710,7 +698,7 @@ export default function DashboardPage() {
                         className={cn(
                           'size-4 animate-spin',
                           statusDisplay.tone === 'active' ? 'text-primary' : 'text-steel',
-                          TILE_WHITE
+                          TILE_ON_ACCENT
                         )}
                       />
                     )}
@@ -761,7 +749,7 @@ export default function DashboardPage() {
                   <div className="flex justify-between items-start mb-6">
                     <div
                       className={cn(
-                        'size-12 border-2 border-ink bg-primary text-white flex items-center justify-center',
+                        'size-12 border-2 border-ink bg-primary text-on-accent flex items-center justify-center',
                         TILE_WHITE_BORDER
                       )}
                     >
@@ -828,7 +816,9 @@ export default function DashboardPage() {
                   <Plus aria-hidden="true" className="size-4 shrink-0" />
                   {t('dashboard.addMasterTrack')}
                 </span>
-                <span className={cn('block font-mono text-sm uppercase text-steel', TILE_WHITE)}>
+                <span
+                  className={cn('block font-mono text-sm uppercase text-steel', TILE_ON_ACCENT)}
+                >
                   {t('dashboard.masterLimitReached', { max: MAX_MASTER_RESUMES })}
                 </span>
               </button>
@@ -850,7 +840,7 @@ export default function DashboardPage() {
                   <div className="flex justify-between items-start mb-6">
                     <div
                       className={cn(
-                        'size-12 border-2 border-ink text-white flex items-center justify-center',
+                        'size-12 border-2 border-ink text-on-accent flex items-center justify-center',
                         TILE_WHITE_BORDER,
                         monogramFill
                       )}
@@ -876,7 +866,7 @@ export default function DashboardPage() {
                     </Link>
                   </CardTitle>
                   <CardDescription
-                    className={cn('mt-auto pt-4 uppercase tabular-nums', TILE_WHITE)}
+                    className={cn('mt-auto pt-4 uppercase tabular-nums', TILE_ON_ACCENT)}
                   >
                     {t('dashboard.edited', {
                       date: formatEditedDate(resume.updated_at || resume.created_at),
@@ -888,7 +878,7 @@ export default function DashboardPage() {
           })}
 
           {/* 5. Create Tailored Resume: not a highlight target and no stretched click area. The
-              blue + button is the only control, with the Button primitive's own press-in and ring. */}
+              orange + button is the only control, with the Button primitive's own press-in and ring. */}
           <Card className="aspect-square h-full">
             <div className="flex-1 flex flex-col items-center justify-center text-center h-full">
               <Button

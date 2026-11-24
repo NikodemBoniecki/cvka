@@ -22,7 +22,7 @@ App Router under `app/`. A `(default)` route group wraps the main app in provide
 | `/print/resumes/[id]` | `app/print/resumes/[id]/page.tsx` | **Server** | Print-only resume render for PDF (reads `searchParams` for template settings + `lang`) |
 | `/print/cover-letter/[id]` | `app/print/cover-letter/[id]/page.tsx` | **Server** | Print-only cover-letter render for PDF |
 
-`app/layout.tsx` (root) wires fonts (Space Grotesk for the label face, Noto Sans SC/KR/JP as CJK fallbacks for resume content), the `theme-color` viewport meta (`lib/theme-color.ts`, kept equal to Canvas by a test) and global CSS. `app/(default)/layout.tsx` nests providers: `StatusCacheProvider` → `LanguageProvider` → `ResumePreviewProvider` → `LocalizedErrorBoundary` → `MotionProvider` → `EffectsProvider` (whether the page background effect is on: default on, stored in localStorage, toggled in Settings; outside the provider effects are off, so `print/*` never shows one).
+`app/layout.tsx` (root) wires fonts (221 Supreme Variable for UI, JetBrains Mono for labels, Noto Sans SC/KR/JP as CJK fallbacks for resume content), the `theme-color` viewport meta (`lib/theme-color.ts`, kept equal to Canvas by a test) and global CSS. `app/(default)/layout.tsx` nests providers: `StatusCacheProvider` → `LanguageProvider` → `ResumePreviewProvider` → `LocalizedErrorBoundary` → `MotionProvider` → `EffectsProvider` (whether the page background effect is on: default on, stored in localStorage, toggled in Settings; outside the provider effects are off, so `print/*` never shows one).
 
 > Most pages are `'use client'`. The `print/*` pages are intentionally server components and fetch from the backend directly via `API_BASE` + `lib/i18n/server.ts` (`translate`). Do not add `'use client'` to them.
 
@@ -52,7 +52,7 @@ components/
   home/              # hero, swiss-grid
   settings/          # chatgpt-connection, community, subscription-risk-dialog
   effects/           # background-effect (client wrapper, renders nothing when off),
-                     #   dither-field (the canvas pixel-beams background)
+                     #   fluid-waves (221 cursor-reactive background), dither-field fallback
   common/            # error-boundary, resume_previewer_context, motion-provider,
                      #   motion-features, presence (FadePresence/FadeItem),
                      #   llm-setup-alert, default-badge
@@ -60,7 +60,8 @@ lib/
   api/               # backend client (see Data Flow)
   i18n/              # translation engine (see i18n)
   context/           # status-cache, language-context, effects-context
-  effects/           # beams.ts (pure frame maths for the pixel-beams background)
+  effects/           # beams.ts (pure frame maths for the optional pixel-beams background),
+                     #   shaders/fluid-waves.ts (cursor-reactive 221 background)
   motion.ts          # EASE_OUT_EXPO, DURATION, SPRING (the motion vocabulary)
   format-date.ts     # formatDate(value, locale) — the one date formatter
   theme-color.ts     # THEME_COLOR (= Canvas)
@@ -105,10 +106,10 @@ Two distinct settings, configured independently in Settings:
 - **UI language** — interface text, client-only (`uiLanguage`, localStorage).
 - **Content language** — language the LLM writes resumes/cover letters in (`contentLanguage`, persisted to backend).
 
-**Supported locales (source of truth = `i18n/config.ts`):** `en`, `es`, `zh`, `ja`, `pt`, `fr`, `ko` — seven (the `pt` file is `messages/pt-BR.json`, imported as `pt`). The `docs/agent/features/i18n.md` table may lag behind; trust the code.
+**Supported locales (source of truth = `i18n/config.ts`):** `en`, `es`, `zh`, `ja`, `pt`, `fr`, `ko`, `pl` — eight (the `pt` file is `messages/pt-BR.json`, imported as `pt`). The `docs/agent/features/i18n.md` table may lag behind; trust the code.
 
 Engine (no external i18n lib, plain JSON):
-- `i18n/config.ts` — `locales`, `defaultLocale='en'`, `localeNames`, `localeFlags`.
+- `i18n/config.ts` — `locales`, `defaultLocale='pl'`, `localeNames`, `localeFlags`.
 - `lib/i18n/messages.ts` — static-imports every locale JSON; the critical types live here.
 - `lib/i18n/translations.ts` — `useTranslations()` returns `{ t, messages, locale }`; `t('a.b.c', params)` does dot-path lookup + `{placeholder}` substitution. Missing key returns the key string (no throw).
 - `lib/i18n/server.ts` — `translate(locale, key, params)` for server/print pages.
@@ -134,29 +135,27 @@ See [i18n.md](../../docs/agent/features/i18n.md), [i18n-preparation.md](../../do
 
 All UI changes MUST follow the Swiss design system. Pack: [README](../../docs/portable/swiss-design-system/README.md) · [tokens](../../docs/portable/swiss-design-system/tokens.md) · [components](../../docs/portable/swiss-design-system/components.md) · [anti-patterns](../../docs/portable/swiss-design-system/anti-patterns.md) · [layouts](../../docs/portable/swiss-design-system/layouts.md). The rulebook is the pack plus the house conventions it now records; the rationale and decisions are in [the realignment spec](../../docs/superpowers/specs/2026-10-10-swiss-realignment-design.md).
 
-Tailwind v4, configured **in CSS** (`app/(default)/css/globals.css`: hex values on `:root` as `--sw-*`, mapped in `@theme inline`) — there is no `tailwind.config`. PostCSS uses `@tailwindcss/postcss`. Light theme only. Use semantic tokens only; raw hex, `rgba()` and Tailwind palette scales (`blue-700`, `gray-500`) are banned outside `globals.css`.
+Tailwind v4, configured **in CSS** (`app/(default)/css/globals.css`: hex values on `:root` as `--sw-*`, mapped in `@theme inline`) — there is no `tailwind.config`. PostCSS uses `@tailwindcss/postcss`. Black 221 theme only. Use semantic tokens only; raw hex, `rgba()` and Tailwind palette scales (`blue-700`, `gray-500`) are banned outside `globals.css`.
 
 | Token | Hex | Use |
 |-------|-----|-----|
-| `canvas` | `#F0F0E8` | Page background (`bg-canvas`) |
-| `white` | `#FFFFFF` | Elevated surfaces: cards, inputs, dialogs |
-| `ink` / `ink-soft` | `#000000` / `#3D424C` | Headings and borders / body text |
-| `steel` | `#696D75` | Secondary text, placeholders. Never on `panel` |
-| `paper`, `panel`, `panel-hover` | `#F5F5F0`, `#E5E5E0`, `#D8D8D2` | Sub-panel tint, secondary fills, hover fill |
-| `primary` (+`-hover`) | `#1D4ED8` | Hyper Blue: links, primary actions, focus |
-| `success` (+`-hover`) | `#127E3B` | Signal Green |
-| `destructive` (+`-hover`) | `#D61E21` | Alert Red |
-| `warning` (+`-hover`) | `#F97316` | Alert Orange fill. **Ink text only**; use `warning-text` (`#B44F02`) for orange labels and icons |
-| `info-tint`, `success-tint`, `warning-tint`, `destructive-tint` | `#EFF6FF`, `#F0FDF4`, `#FFF7ED`, `#FEF2F2` | Alert fills |
-| `highlight`, `overlay` | `#FFF085`, `rgb(0 0 0 / 0.5)` | Keyword `<mark>`; dialog backdrop |
+| `canvas` | `#000000` | 221 page background (`bg-canvas`) |
+| `brand-white` | `#FDF6F6` | Text, icon details and paper previews |
+| `ink` / `ink-soft` / `steel` | `#FDF6F6` | Headings, borders, body and secondary text on black |
+| `primary`, `success`, `warning` (+`-hover`) | `#FF751F` | Original 221 Orange for actions and status marks |
+| `on-accent` | `#000000` | Text on orange fills |
+| `destructive` (+`-hover`) | `#FDF6F6` | Destructive fill with black text |
+| `paper`, `panel`, `panel-hover`, alert tints | `#000000` | Black interface surfaces |
+| `highlight` | `#FF751F` | Keyword marks with black text |
+| `overlay` | `rgb(0 0 0 / 0.5)` | Dialog backdrop |
 
 Conventions:
 - **Geometry:** `rounded-none` everywhere. **1px ink borders** (`border border-ink`) on controls, fields, cards and dialogs; 2px on alerts and emphasised cards.
-- **Shadows are roles, always hard (never blurred):** *solid ink* for what floats or presses: `shadow-sw-sm` controls (via `Button`/`buttonClass`) · `shadow-sw-default` dropdown menus, listboxes, popovers, toasts · `shadow-sw-lg` dialogs and `PageFrame` · `shadow-sw-xl` home hero frame only · `shadow-sw-card` resume and cover-letter sheet only. *Translucent ink* for what is nested: `shadow-sw-nested` (4px, 15% ink, no blur) on every card, panel, box or section inside a `PageFrame` or a dialog (choice cards, stat boxes, form section boxes, toggle cards, tracker cards). Nothing nested keeps a solid shadow, and sibling boxes match, so a neighbour with no shadow gets the nested one too. `Card variant="raised"` and `ToggleSwitch variant="card"` already use it. No `shadow-md`, no `shadow-[…]`. Hover presses in (`hover:translate-x-px hover:translate-y-px hover:shadow-none`); nothing lifts. `tests/swiss-shadows.test.ts` pins the six tokens.
-- **Fonts, as rendered:** `font-sans` is Helvetica/Arial (body, `ink-soft`); `font-mono` is the label-face role and resolves to Space Grotesk, which is *not* a monospace; `font-serif` is Tailwind's default stack. No Geist. Type floor is `text-xs`; page H1 is `text-4xl md:text-5xl` serif bold uppercase; section headers are sentence case.
+- **Shadows are roles, always hard (never blurred):** *solid warm white* for what floats or presses: `shadow-sw-sm` controls (via `Button`/`buttonClass`) · `shadow-sw-default` dropdown menus, listboxes, popovers, toasts · `shadow-sw-lg` dialogs and `PageFrame` · `shadow-sw-xl` home hero frame only · `shadow-sw-card` resume and cover-letter sheet only. *Translucent warm white* for what is nested: `shadow-sw-nested` (4px, 15% warm white, no blur) on every card, panel, box or section inside a `PageFrame` or a dialog (choice cards, stat boxes, form section boxes, toggle cards, tracker cards). Nothing nested keeps a solid shadow, and sibling boxes match, so a neighbour with no shadow gets the nested one too. `Card variant="raised"` and `ToggleSwitch variant="card"` already use it. No `shadow-md`, no `shadow-[…]`. Hover presses in (`hover:translate-x-px hover:translate-y-px hover:shadow-none`); nothing lifts. `tests/swiss-shadows.test.ts` pins the six tokens.
+- **Fonts, as rendered:** UI body and display use 221 Supreme Variable; `font-mono` uses 221's JetBrains Mono. Resume documents keep their dedicated Noto font files and CJK fallbacks. Type floor is `text-xs`; page H1 is `text-4xl md:text-5xl` bold uppercase; section headers are sentence case.
 - **Spacing:** 4px scale: `1, 2, 3, 4, 6, 8, 12, 16`. No `5, 7, 9, 10, 11, 14`, no half-steps outside `components/ui/**`.
-- **Selection is ink, blue is action:** a selected segment, tab or switch is `bg-ink text-white`.
-- **Clickable tile highlight (owner decision, round 2):** a dashboard tile highlights on hover and keyboard focus with a full `bg-primary` fill and white text, and **no ink outline**. Keyboard focus keeps the fill and adds a 2px inset white ring (`focus-visible:ring-2 ring-inset ring-white`). It replaces the earlier white-lift tile treatment.
+- **Selection is orange:** a selected segment, tab or switch is `bg-primary text-on-accent`.
+- **Clickable tile highlight:** a dashboard tile highlights on hover and keyboard focus with a full `bg-primary` fill and black text. Keyboard focus adds a 2px inset warm-white ring (`focus-visible:ring-2 ring-inset ring-brand-white`).
 - **Use the primitives** in `components/ui/**` and don't restyle them at call sites. A `<Link>` that looks like a button takes `buttonClass({ variant, size })`, never a `<Button>` inside a `<Link>`. Pages use `PageFrame` (`width`: `narrow` = `max-w-4xl` for single-column form pages, `default` = `max-w-[86rem]`, `wide` = `max-w-[104rem]`) + `PageHeader` (builder and tracker use a compact single-row header on purpose); alerts are `Alert`; an outcome the user doesn't act on ("Resume downloaded") is a toast: `toast.success(…)` imported from `components/ui/toaster`, never from `sonner`, so toasts have one home (the mounted `Toaster` styles every toast in the shared sonner instance; a second `<Toaster />` from `sonner` would add another stack in sonner's default look). Choices and retryable errors stay `ConfirmDialog`; persistent status is `StatusIndicator` (`SpinnerGap` only for work in flight); panels open with `PanelHeader`; empty lists use `EmptyState`. Dates go through `formatDate(value, locale)`.
 - **Focus:** controls `focus-visible:ring-2 ring-primary ring-offset-2 ring-offset-canvas`; fields `focus-visible:border-primary ring-1 ring-primary`. Never a bare `focus:`.
 - **Legacy names:** don't use the shadcn-era `bg-background`, `steel-grey`, `paper-tint`, `muted-foreground`, `secondary`, `muted`; the guard's `legacy-token` rule flags them (renames are in the pack's anti-patterns).

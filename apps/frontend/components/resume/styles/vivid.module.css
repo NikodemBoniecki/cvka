@@ -6,7 +6,7 @@
 
   Colorful two-column "Awesome-CV" lineage: two-tone accent name, monospace title +
   circular-icon contact row, accent uppercase section headers, accent arrow bullets.
-  Reads the accent-color control (--resume-accent-primary, default blue).
+  Reads the accent-color control (--resume-accent-primary, default 221 Orange).
 
   PDF text layer: no small caps and no opacity on text, in either layout. Chromium
   draws small caps from the font's alternate glyphs, and on some fonts the PDF text

@@ -2,37 +2,42 @@
 
 @source "../../../{app,components,hooks,lib,messages}/**/*.{js,ts,jsx,tsx,mdx}";
 
-/* Swiss palette — the single source of colour (spec §4.1). Hex values (oklch in
+/* 221 Studio palette — black, the brand orange and warm white are the only
+   interface colours. Hex values (oklch in
    comments). tests/swiss-contrast.test.ts asserts WCAG 2.2 AA for every pairing
    the UI uses; run it after any change. */
 :root {
-  --sw-canvas: #f0f0e8;
-  --sw-white: #ffffff;
-  --sw-ink: #000000;
-  --sw-ink-soft: #3d424c; /* oklch(37.8% 0.018 264) body text (house) */
-  --sw-steel: #696d75; /* oklch(53.4% 0.013 264) secondary text, placeholders, hairlines. Never on panel. */
-  --sw-paper: #f5f5f0; /* sub-panel and header tint */
-  --sw-panel: #e5e5e0; /* secondary fills, dialog footer */
-  --sw-panel-hover: #d8d8d2;
-  --sw-primary: #1d4ed8; /* Hyper Blue */
-  --sw-primary-hover: #193cb8;
-  --sw-success: #127e3b;
-  --sw-success-hover: #016630;
-  --sw-destructive: #d61e21;
-  --sw-destructive-hover: #be0010;
-  --sw-warning: #f97316; /* fill, squares and borders only, always with ink text */
-  --sw-warning-hover: #eb5601;
-  --sw-warning-text: #b44f02;
-  --sw-info-tint: #eff6ff;
-  --sw-success-tint: #f0fdf4;
-  --sw-warning-tint: #fff7ed;
-  --sw-destructive-tint: #fef2f2;
-  --sw-highlight: #fff085; /* keyword <mark> only */
+  --sw-canvas: #000000;
+  --sw-white: #fdf6f6;
+  --sw-ink: #fdf6f6;
+  --sw-ink-soft: #fdf6f6;
+  --sw-steel: #fdf6f6;
+  --sw-paper: #000000;
+  --sw-panel: #000000;
+  --sw-panel-hover: #000000;
+  --sw-primary: #ff751f;
+  --sw-primary-hover: #ff751f;
+  --sw-success: #ff751f;
+  --sw-success-hover: #ff751f;
+  --sw-destructive: #fdf6f6;
+  --sw-destructive-hover: #fdf6f6;
+  --sw-warning: #ff751f;
+  --sw-warning-hover: #ff751f;
+  --sw-warning-text: #ff751f;
+  --sw-on-accent: #000000;
+  --sw-info-tint: #000000;
+  --sw-success-tint: #000000;
+  --sw-warning-tint: #000000;
+  --sw-destructive-tint: #000000;
+  --sw-highlight: #ff751f;
   --sw-overlay: rgb(0 0 0 / 0.5); /* dialog backdrop */
 }
 
 @theme inline {
   --color-canvas: var(--sw-canvas);
+  --color-white: var(--sw-canvas);
+  --color-brand-white: var(--sw-white);
+  --color-on-accent: var(--sw-on-accent);
   --color-ink: var(--sw-ink);
   --color-ink-soft: var(--sw-ink-soft);
   --color-steel: var(--sw-steel);
@@ -56,19 +61,22 @@
   --color-overlay: var(--sw-overlay);
 
   /* Hard offset shadows — never blurred. Roles (spec §4.3, owner amendment 2026-10-10):
-     solid ink for what floats or presses: sm = controls, default = menus,
+     solid warm white for what floats or presses: sm = controls, default = menus,
      lg = dialogs and page frame, xl = home hero, card = resume sheet.
-     nested = translucent ink for every card, panel or box inside a page or dialog. */
-  --shadow-sw-sm: 2px 2px 0px 0px #000000;
-  --shadow-sw-default: 4px 4px 0px 0px #000000;
-  --shadow-sw-card: 6px 6px 0px 0px #000000;
-  --shadow-sw-lg: 8px 8px 0px 0px #000000;
-  --shadow-sw-xl: 12px 12px 0px 0px #000000;
-  --shadow-sw-nested: 4px 4px 0px 0px rgb(0 0 0 / 0.15);
+     nested = translucent warm white for every card, panel or box inside a page or dialog. */
+  --shadow-sw-sm: 2px 2px 0px 0px #fdf6f6;
+  --shadow-sw-default: 4px 4px 0px 0px #fdf6f6;
+  --shadow-sw-card: 6px 6px 0px 0px #fdf6f6;
+  --shadow-sw-lg: 8px 8px 0px 0px #fdf6f6;
+  --shadow-sw-xl: 12px 12px 0px 0px #fdf6f6;
+  --shadow-sw-nested: 4px 4px 0px 0px rgb(253 246 246 / 0.15);
 
-  /* Fonts: exactly what rendered before the realignment (spec D3). */
-  --font-sans: Helvetica, Arial, sans-serif;
-  --font-mono: var(--font-space-grotesk), 'Space Grotesk', sans-serif;
+  /* 221 Studio type: Supreme for display/body, JetBrains Mono for labels. */
+  --font-supreme: var(--font-221-supreme), 'Supreme', sans-serif;
+  --font-jetbrains-mono: var(--font-jetbrains), 'JetBrains Mono', ui-monospace, monospace;
+  --font-sans: var(--font-supreme);
+  --font-serif: var(--font-supreme);
+  --font-mono: var(--font-jetbrains-mono);
 
   /* Motion (spec §7): one curve; the 100ms press tier is the default transition. */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -76,7 +84,7 @@
   --default-transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Light theme only. */
+/* 221 black theme. */
 
 @layer base {
   * {

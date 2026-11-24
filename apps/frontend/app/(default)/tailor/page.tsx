@@ -610,7 +610,7 @@ export default function TailorPage() {
               <span
                 className={cn(
                   'flex size-6 shrink-0 items-center justify-center border border-ink font-mono text-xs font-bold tabular-nums',
-                  current ? 'bg-ink text-white' : 'text-ink'
+                  current ? 'bg-primary text-on-accent' : 'text-ink'
                 )}
               >
                 {index + 1}

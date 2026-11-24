@@ -60,13 +60,13 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
           'relative inline-flex h-6 w-12 shrink-0 items-center border-2 border-ink transition-colors',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-canvas',
           'disabled:cursor-not-allowed',
-          checked ? 'bg-ink' : 'bg-panel'
+          checked ? 'bg-primary' : 'bg-canvas'
         )}
       >
         <span
           aria-hidden="true"
           className={cn(
-            'pointer-events-none block h-4 w-4 border border-ink bg-white transition-transform',
+            'pointer-events-none block h-4 w-4 border border-ink bg-brand-white transition-transform',
             checked ? 'translate-x-6' : 'translate-x-1'
           )}
         />

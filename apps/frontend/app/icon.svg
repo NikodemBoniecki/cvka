@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1430 1430">
+  <title>CVKA</title>
+  <g fill="#ffffff">
+    <path transform="translate(70.7 644) scale(.84 -.84)" d="M350 -10C497 -10 596 77 602 229H448C442 157 408 126 339 126C264 126 223 182 223 267V432C223 518 264 574 339 574C408 574 441 542 448 471H602C594 614 503 710 336 710C176 710 63 613 63 439V260C63 86 176 -10 350 -10Z"/>
+    <path transform="translate(804.9 644) scale(.84 -.84)" d="M414 0 643 700H478L332 199L184 700H12L241 0Z"/>
+  </g>
+  <g fill="#ff751f">
+    <path transform="translate(32.9 1374) scale(.84 -.84)" d="M471 0H665L412 394L659 700H479L246 399V700H90V0H246V187L311 267Z"/>
+    <path transform="translate(790.62 1374) scale(.84 -.84)" d="M500 0H670L428 700H261L19 0H184L222 123H462ZM419 259H263L341 510Z"/>
+  </g>
+</svg>

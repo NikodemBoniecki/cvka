@@ -78,7 +78,7 @@ def test_build_initial_state_has_intro_question() -> None:
     state = build_initial_wizard_state()
     assert state.step == "intro"
     assert state.current_question.section == "intro"
-    assert state.current_question.text.startswith("Hi")
+    assert state.current_question.text.startswith("Cześć!")
 
 
 def test_extract_intro_name_from_conversational_answer() -> None:
@@ -96,8 +96,12 @@ def test_merge_unique_skills_dedupes_case_insensitively_and_keeps_order() -> Non
 
 
 def test_section_prompt_falls_back_for_unknown_section() -> None:
-    assert section_prompt("workExperience").lower().startswith("tell me about one role")
-    assert section_prompt("totally-unknown") == "What would you like to add next?"
+    assert (
+        section_prompt("workExperience")
+        .lower()
+        .startswith("opowiedz o jednym stanowisku")
+    )
+    assert section_prompt("totally-unknown") == "Co chcesz dodać dalej?"
 
 
 def test_compute_progress_grows_with_questions_and_caps() -> None:
@@ -116,17 +120,17 @@ def test_review_warnings_identify_thin_resume() -> None:
     data = ResumeData()
     data.personalInfo.name = "James"
     warnings = build_review_warnings(data)
-    assert any("contact" in w.lower() for w in warnings)
-    assert any("experience" in w.lower() for w in warnings)
-    assert any("skills" in w.lower() for w in warnings)
+    assert any("kontakt" in w.lower() for w in warnings)
+    assert any("doświadczenie" in w.lower() for w in warnings)
+    assert any("umiejętności" in w.lower() for w in warnings)
     # Name is set, so there must be NO name warning.
-    assert not any("name" in w.lower() for w in warnings)
+    assert not any("imię" in w.lower() for w in warnings)
 
 
 def test_review_warnings_flag_missing_name() -> None:
     data = ResumeData()  # name is empty
     warnings = build_review_warnings(data)
-    assert any("name" in w.lower() for w in warnings)
+    assert any("imię" in w.lower() for w in warnings)
 
 
 _AI_EXPERIENCE_RESULT = {

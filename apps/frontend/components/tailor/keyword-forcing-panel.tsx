@@ -47,11 +47,13 @@ function Chip({
           'flex items-center gap-2 border border-ink px-2 py-1 font-mono text-xs transition-colors',
           'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-canvas',
           'disabled:cursor-not-allowed disabled:opacity-50',
-          selected ? 'bg-ink text-white' : 'bg-white text-ink hover:bg-panel'
+          selected ? 'bg-primary text-on-accent' : 'bg-white text-ink hover:bg-panel'
         )}
       >
         <span>{keyword}</span>
-        <span className={cn('uppercase tracking-wider', selected ? 'text-white' : 'text-ink-soft')}>
+        <span
+          className={cn('uppercase tracking-wider', selected ? 'text-on-accent' : 'text-ink-soft')}
+        >
           {actionLabel}
         </span>
       </button>

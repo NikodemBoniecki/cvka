@@ -47,7 +47,12 @@ export function CoverLetterPreview({
 
   return (
     <div
-      className={cn('bg-white border-2 border-ink', 'shadow-sw-card', 'overflow-hidden', className)}
+      className={cn(
+        'bg-brand-white text-black border-2 border-primary',
+        'shadow-sw-card',
+        'overflow-hidden',
+        className
+      )}
     >
       {/* Letter Content */}
       <div
@@ -57,11 +62,11 @@ export function CoverLetterPreview({
         }}
       >
         {/* Header - Personal Info */}
-        <header className="mb-8 border-b-2 border-ink pb-4">
+        <header className="mb-8 border-b-2 border-canvas pb-4">
           <h1 className="font-serif text-2xl font-bold tracking-tight">
             {personalInfo.name || t('coverLetter.preview.defaultName')}
           </h1>
-          <div className="mt-2 font-mono text-xs text-ink-soft flex flex-wrap gap-x-4 gap-y-1">
+          <div className="mt-2 font-mono text-xs text-black flex flex-wrap gap-x-4 gap-y-1">
             {personalInfo.email && <span>{personalInfo.email}</span>}
             {personalInfo.phone && <span>{personalInfo.phone}</span>}
             {personalInfo.location && <span>{personalInfo.location}</span>}
@@ -71,7 +76,7 @@ export function CoverLetterPreview({
 
         {/* Date */}
         <div className="mb-8">
-          <p className="font-mono text-sm text-ink-soft">{today}</p>
+          <p className="font-mono text-sm text-black">{today}</p>
         </div>
 
         {/* Body */}

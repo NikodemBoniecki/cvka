@@ -14,6 +14,7 @@ import pytest
 from httpx import ASGITransport, AsyncClient
 
 from app.main import app
+from app.routers import resumes as resumes_router
 from app.schemas.models import ResumeChange
 from app.services.improver import apply_diffs
 from app.services.progress import progress_events, tracked_progress
@@ -116,8 +117,9 @@ async def _preview(
 
 
 async def test_preview_rewrites_weak_bullet_and_confirm_accepts_it(
-    isolated_db: Any, sample_resume: dict[str, Any]
+    isolated_db: Any, sample_resume: dict[str, Any], monkeypatch: pytest.MonkeyPatch
 ) -> None:
+    monkeypatch.setattr(resumes_router, "get_content_language", lambda: "en")
     resume_id, job_id = await _master_and_job(sample_resume)
     llm = AsyncMock(
         side_effect=[
@@ -165,8 +167,9 @@ async def test_preview_rewrites_weak_bullet_and_confirm_accepts_it(
 
 
 async def test_light_nudge_critiques_without_rewriting(
-    isolated_db: Any, sample_resume: dict[str, Any]
+    isolated_db: Any, sample_resume: dict[str, Any], monkeypatch: pytest.MonkeyPatch
 ) -> None:
+    monkeypatch.setattr(resumes_router, "get_content_language", lambda: "en")
     resume_id, job_id = await _master_and_job(sample_resume)
     llm = AsyncMock(
         return_value={

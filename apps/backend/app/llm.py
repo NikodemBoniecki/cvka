@@ -11,7 +11,7 @@ from types import ModuleType
 from typing import TYPE_CHECKING, Any, Literal
 from urllib.parse import urlsplit, urlunsplit
 
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, Field, field_validator
 
 from app.ai_budget import remaining_timeout
 from app.ai_limits import validate_prompt_size
@@ -139,10 +139,15 @@ class LLMConfig(BaseModel):
 
     provider: str
     model: str
-    api_key: str
+    api_key: str = Field(repr=False)
     api_base: str | None = None
     api_version: str | None = None
     reasoning_effort: Literal["minimal", "low", "medium", "high"] | None = None
+    # Server-owned OpenAI-compatible deployments. ``primary`` is the first
+    # configured provider; these are ordered failovers used by the LiteLLM
+    # Router when the primary returns a retryable failure.
+    fallback_deployments: list["LLMFallbackDeployment"] = Field(default_factory=list)
+    server_managed: bool = False
     # False when the resolved key was withheld from the saved Base URL (see
     # saved_endpoint_accepts_key); no request is made with such a config.
     endpoint_confirmed: bool = True
@@ -151,6 +156,68 @@ class LLMConfig(BaseModel):
     @classmethod
     def _normalize_provider(cls, value: Any) -> Any:
         return normalize_provider(value)
+
+
+class LLMFallbackDeployment(BaseModel):
+    """One server-managed OpenAI-compatible provider deployment."""
+
+    name: str
+    model: str
+    api_key: str = Field(repr=False)
+    api_base: str
+
+
+LLMConfig.model_rebuild()
+
+
+def _server_managed_deployments() -> list[LLMFallbackDeployment]:
+    """Build the ordered shared-provider list from deployment environment."""
+    providers: dict[str, tuple[str, str, str]] = {
+        "gemini": (
+            settings.gemini_api_key,
+            settings.gemini_model,
+            "https://generativelanguage.googleapis.com/v1beta/openai",
+        ),
+        "groq": (
+            settings.groq_api_key,
+            settings.groq_model,
+            "https://api.groq.com/openai/v1",
+        ),
+        "openrouter": (
+            settings.openrouter_api_key,
+            settings.openrouter_model,
+            "https://openrouter.ai/api/v1",
+        ),
+    }
+    deployments: list[LLMFallbackDeployment] = []
+    for name in settings.llm_fallback_order.split(","):
+        provider = name.strip().lower()
+        configured = providers.get(provider)
+        if configured is None:
+            continue
+        api_key, model, api_base = configured
+        if api_key.strip() and model.strip():
+            deployments.append(
+                LLMFallbackDeployment(
+                    name=provider,
+                    model=model.strip(),
+                    api_key=api_key.strip(),
+                    api_base=api_base,
+                )
+            )
+    return deployments
+
+
+def _has_server_managed_credentials() -> bool:
+    """Whether an operator started configuring the shared provider pool."""
+    return any(
+        key.strip()
+        for key in (
+            settings.gemini_api_key,
+            settings.groq_api_key,
+            settings.openrouter_api_key,
+        )
+    )
 
 
 def _is_azure_openai_foundry_endpoint(
@@ -771,7 +838,7 @@ _PROVIDER_KEY_MAP: dict[str, str] = {
 # default), because the env var may hold a real paid-API key that would then
 # leak to a local/compatible endpoint the user set up expecting no auth.
 _PROVIDERS_WITHOUT_ENV_KEY_FALLBACK: frozenset[str] = frozenset(
-    {"openai_compatible", "ollama", "claude_cli", "chatgpt", "agent"}
+    {"default", "openai_compatible", "ollama", "claude_cli", "chatgpt", "agent"}
 )
 
 
@@ -879,6 +946,46 @@ def get_llm_config() -> LLMConfig:
     """
     stored = load_config_file()
     provider = stored.get("provider", settings.llm_provider)
+
+    # Older builds saved OpenAI as the initial provider even when the user had
+    # never configured a personal key. Move that implicit default to CVKA's
+    # server pool, while preserving an explicitly configured OpenAI provider.
+    if (
+        provider == "openai"
+        and _has_server_managed_credentials()
+        and not resolve_api_key(stored, "openai")
+        and not stored.get("api_base")
+    ):
+        provider = "default"
+        stored["provider"] = provider
+        try:
+            save_config_file(stored)
+        except Exception:
+            logging.warning(
+                "Failed to migrate an unconfigured OpenAI default", exc_info=True
+            )
+
+    if provider == "default":
+        server_deployments = _server_managed_deployments()
+        if not server_deployments:
+            if _has_server_managed_credentials():
+                raise ValueError(
+                    "Server-managed LLM credentials are set, but no provider is usable. "
+                    "Check LLM_FALLBACK_ORDER and provider model settings."
+                )
+            raise ValueError("The CVKA default provider pool is not configured.")
+        primary, *fallbacks = server_deployments
+        raw_re = stored.get("reasoning_effort", settings.reasoning_effort)
+        return LLMConfig(
+            provider="default",
+            model=primary.model,
+            api_key=primary.api_key,
+            api_base=primary.api_base,
+            reasoning_effort=raw_re if raw_re else None,
+            fallback_deployments=fallbacks,
+            server_managed=True,
+        )
+
     model = stored.get("model", settings.llm_model)
 
     # One-shot migration: preserve old gpt-5 reasoning_effort behavior for
@@ -949,6 +1056,16 @@ def get_model_name(config: LLMConfig) -> str:
     }
 
     prefix = provider_prefixes.get(config.provider, "")
+
+    if config.server_managed:
+        # Every shared deployment uses an OpenAI-compatible endpoint, even
+        # when its model slug contains a provider namespace (e.g.
+        # openrouter/free or openai/gpt-oss-120b).
+        # `openai/` is LiteLLM's transport prefix here. Keep it separate from
+        # the upstream model id: Groq's real id is `openai/gpt-oss-120b`, so
+        # LiteLLM must receive `openai/openai/gpt-oss-120b` to send that exact
+        # id in the request body.
+        return f"openai/{config.model}"
 
     if config.provider == "azure_foundry" and _is_azure_openai_foundry_endpoint(
         config.api_base, config.model
@@ -1053,7 +1170,14 @@ def _config_fingerprint(config: LLMConfig) -> str:
     The raw key is never stored in the fingerprint string.
     """
     key_hash = hash(config.api_key) if config.api_key else 0
-    return f"{config.provider}|{config.model}|{key_hash}|{config.api_base}|{config.api_version}"
+    fallbacks = ";".join(
+        f"{deployment.name}:{deployment.model}:{hash(deployment.api_key)}:{deployment.api_base}"
+        for deployment in config.fallback_deployments
+    )
+    return (
+        f"{config.provider}|{config.model}|{key_hash}|{config.api_base}|"
+        f"{config.api_version}|{config.server_managed}|{fallbacks}"
+    )
 
 
 def _build_router(config: LLMConfig) -> Router:
@@ -1071,28 +1195,45 @@ def _build_router(config: LLMConfig) -> Router:
     if api_version:
         litellm_params["api_version"] = api_version
 
+    model_list = [{"model_name": "primary", "litellm_params": litellm_params}]
+    fallback_names: list[str] = []
+    for index, deployment in enumerate(config.fallback_deployments, start=1):
+        fallback_name = f"fallback_{index}"
+        fallback_names.append(fallback_name)
+        model_list.append(
+            {
+                "model_name": fallback_name,
+                "litellm_params": {
+                    "model": f"openai/{deployment.model}",
+                    "api_key": deployment.api_key,
+                    "api_base": deployment.api_base,
+                },
+            }
+        )
+
     from litellm.router import RetryPolicy
 
+    retry_count = 0 if config.server_managed else 3
+    retry_policy = RetryPolicy(
+        AuthenticationErrorRetries=0,
+        BadRequestErrorRetries=0,
+        TimeoutErrorRetries=0 if config.server_managed else 2,
+        RateLimitErrorRetries=0 if config.server_managed else 3,
+        ContentPolicyViolationErrorRetries=0,
+        InternalServerErrorRetries=0 if config.server_managed else 2,
+    )
+
     return _policy_router_class()(
-        model_list=[
-            {
-                "model_name": "primary",
-                "litellm_params": litellm_params,
-            }
-        ],
-        num_retries=3,
-        retry_policy=RetryPolicy(
-            AuthenticationErrorRetries=0,
-            BadRequestErrorRetries=0,
-            TimeoutErrorRetries=2,
-            RateLimitErrorRetries=3,
-            ContentPolicyViolationErrorRetries=0,
-            InternalServerErrorRetries=2,
-        ),
-        # Cooldowns disabled: with a single deployment and no fallback,
-        # cooldowns would blackout the backend on transient failures.
-        # Re-enable when a fallback deployment is added.
-        disable_cooldowns=True,
+        model_list=model_list,
+        num_retries=retry_count,
+        retry_policy=retry_policy,
+        fallbacks=[{"primary": fallback_names}] if fallback_names else None,
+        # Shared providers are free to enter cooldown after one failed call,
+        # which would make the next provider unavailable to the same request.
+        # Keep cooldowns off for the ordered server pool so every request can
+        # immediately try each configured provider. With no shared pool,
+        # cooldowns are irrelevant and stay disabled as well.
+        disable_cooldowns=config.server_managed or not bool(fallback_names),
     )
 
 
@@ -1109,7 +1250,7 @@ def get_router(config: LLMConfig | None = None) -> tuple[Router | None, LLMConfi
     """
     global _router, _router_config_key
 
-    if config is None:
+    if config is None or (config.provider == "default" and not config.server_managed):
         config = get_llm_config()
 
     if config.provider == AGENT_PROVIDER:
@@ -1128,6 +1269,17 @@ def get_router(config: LLMConfig | None = None) -> tuple[Router | None, LLMConfi
             logging.info(
                 "LiteLLM Router rebuilt for %s/%s", config.provider, config.model
             )
+            if config.server_managed:
+                logging.info(
+                    "Server-managed LLM failover order: %s",
+                    ", ".join(
+                        ["primary"]
+                        + [
+                            deployment.name
+                            for deployment in config.fallback_deployments
+                        ]
+                    ),
+                )
         router = _router
 
     return router, config
@@ -1166,6 +1318,8 @@ async def check_llm_health(
     test_prompt: str | None = None,
 ) -> dict[str, Any]:
     """Check if the LLM provider is accessible and working."""
+    if config is not None and config.provider == "default":
+        config = get_llm_config()
     if config is None:
         config = get_llm_config()
 
@@ -1211,24 +1365,36 @@ async def check_llm_health(
     prompt = test_prompt or "Hi"
 
     try:
-        # Make a minimal test call with timeout
-        # Pass API key directly to avoid race conditions with global os.environ
+        # The shared server pool must be checked through the same Router as
+        # normal requests. Calling LiteLLM directly here only probes the first
+        # provider and incorrectly reports the pool as unhealthy when that
+        # provider is rate-limited, even if a later provider can answer.
+        transport: Any = _litellm()
+        request_model = model_name
+        if config.server_managed:
+            transport, config = get_router(config)
+            request_model = "primary"
+
+        # Make a minimal test call with timeout. Server-managed credentials
+        # and endpoints are already attached to Router deployments.
         kwargs: dict[str, Any] = {
-            "model": model_name,
+            "model": request_model,
             "messages": [{"role": "user", "content": prompt}],
-            **_output_token_kwarg(config, 64),
-            "api_key": _effective_api_key(config.provider, config.api_key),
-            "api_base": _normalize_api_base(
-                config.provider, config.api_base, config.model
-            ),
+            **_output_token_kwarg(config, 128 if config.server_managed else 64),
             "timeout": LLM_TIMEOUT_HEALTH_CHECK,
         }
+        if not config.server_managed:
+            # Pass personal API keys directly to avoid races with global env.
+            kwargs["api_key"] = _effective_api_key(config.provider, config.api_key)
+            kwargs["api_base"] = _normalize_api_base(
+                config.provider, config.api_base, config.model
+            )
         api_version = _azure_foundry_api_version(config)
         if api_version:
             kwargs["api_version"] = api_version
         _apply_reasoning_effort(config, kwargs, config.reasoning_effort, 64)
 
-        response = await _route_acompletion(config, _litellm(), **kwargs)
+        response = await _route_acompletion(config, transport, **kwargs)
         content = _extract_choice_text(response.choices[0])
         if not content:
             # LLM-003: Empty response (even after reasoning_content / thinking

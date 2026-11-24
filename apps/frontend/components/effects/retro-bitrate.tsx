@@ -14,7 +14,7 @@ const FPS = 30;
 // Its blocks are 41 px of pixelation, so 2x device pixels would only cost GPU time.
 const MAX_DPR = 1;
 
-// `level` is the share of faded-blue blocks among the greys: idle is mostly grey, active has more.
+// `level` is the share of faded-orange blocks among the greys: idle is mostly grey, active has more.
 const PROFILES: Record<EffectIntensity, IntensityProfile> = {
   idle: { speed: 0.3, level: 0.15 },
   active: { speed: 1, level: 0.85 },
@@ -24,10 +24,10 @@ const PROFILES: Record<EffectIntensity, IntensityProfile> = {
 const PIXELATED = '[image-rendering:pixelated]';
 
 /**
- * Retro Bitrate as a WebGL shader: bit-crushed blocks of grey and faded Hyper Blue on Canvas that
+ * Retro Bitrate as a WebGL shader: bit-crushed blocks of grey and faded 221 Orange on Canvas that
  * churn while AI is working. Fills its positioned parent, is inert and decorative, and renders
  * nothing when background effects are off or WebGL is unavailable. `intensity` `idle` (default)
- * is slow and mostly grey; `active` runs at the preset's own speed with more blue blocks.
+ * is slow and mostly grey; `active` runs at the preset's own speed with more orange blocks.
  */
 export function RetroBitrate({
   className,

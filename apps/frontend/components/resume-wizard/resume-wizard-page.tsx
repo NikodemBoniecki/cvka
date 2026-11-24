@@ -40,9 +40,16 @@ function firstGapSection(data: ResumeWizardState['resume_data']): ResumeWizardSe
 
 export function ResumeWizardPage() {
   const { t } = useTranslations();
+  const introQuestion = t('resumeWizard.initialQuestion');
   const router = useRouter();
   const { incrementResumes, setHasMasterResume } = useStatusCache();
-  const [state, setState] = useState<ResumeWizardState>(() => createInitialResumeWizardState());
+  const [state, setState] = useState<ResumeWizardState>(() => {
+    const initial = createInitialResumeWizardState();
+    return {
+      ...initial,
+      current_question: { ...initial.current_question, text: introQuestion },
+    };
+  });
   const [answer, setAnswer] = useState('');
   const [errorKey, setErrorKey] = useState<string | null>(null);
   // The server's own reason for a refused finalize (e.g. the master limit), shown verbatim.
@@ -60,10 +67,19 @@ export function ResumeWizardPage() {
       setState((current) => ({ ...current, step: 'complete' }));
     } else {
       const saved = readResumeWizardDraft();
-      if (saved) setState(saved);
+      if (saved) {
+        setState(
+          saved.step === 'intro' && saved.current_question.section === 'intro'
+            ? {
+                ...saved,
+                current_question: { ...saved.current_question, text: introQuestion },
+              }
+            : saved
+        );
+      }
     }
     setIsLoaded(true);
-  }, []);
+  }, [introQuestion]);
 
   useEffect(() => {
     if (!isLoaded || state.step === 'complete') return;

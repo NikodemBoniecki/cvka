@@ -12,11 +12,14 @@ const PixelBeams = dynamic(() => import('./pixel-beams').then((mod) => mod.Pixel
 const RetroBitrate = dynamic(() => import('./retro-bitrate').then((mod) => mod.RetroBitrate), {
   ssr: false,
 });
+const FluidWaves = dynamic(() => import('./fluid-waves').then((mod) => mod.FluidWaves), {
+  ssr: false,
+});
 
-/** `beams` is the quiet grey page background, `bitrate` the dark AI-working one, `none` neither. */
-export type BackgroundEffectKind = 'beams' | 'bitrate' | 'none';
+/** `waves` is the cursor-reactive 221 page background; `bitrate` marks AI work. */
+export type BackgroundEffectKind = 'beams' | 'bitrate' | 'waves' | 'none';
 
-const FIXED = 'fixed inset-0 -z-10 h-full w-full';
+const FIXED = 'fixed inset-0 z-0 h-full w-full';
 
 /**
  * The page background effect, behind its `relative isolate` parent. It is fixed to the viewport,
@@ -26,7 +29,7 @@ const FIXED = 'fixed inset-0 -z-10 h-full w-full';
  * Canvas.
  */
 export function BackgroundEffect({
-  effect = 'beams',
+  effect = 'waves',
   intensity = 'idle',
 }: {
   effect?: BackgroundEffectKind;
@@ -35,5 +38,6 @@ export function BackgroundEffect({
   const enabled = useEffectsEnabled();
   if (!enabled || effect === 'none') return null;
   if (effect === 'bitrate') return <RetroBitrate className={FIXED} intensity={intensity} />;
+  if (effect === 'waves') return <FluidWaves className={FIXED} intensity={intensity} />;
   return <PixelBeams className={`${FIXED} text-steel`} intensity={intensity} />;
 }

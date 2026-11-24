@@ -27,16 +27,16 @@ describe('ToggleSwitch', () => {
     expect(screen.getByRole('switch', { name: 'Inline' })).toHaveAttribute('aria-checked', 'true');
   });
 
-  it('fills the track with ink when on and the panel tone when off', () => {
+  it('uses the brand accent when on and the canvas tone when off', () => {
     const { rerender } = render(
       <ToggleSwitch checked onCheckedChange={vi.fn()} label="Show photo" />
     );
     const toggle = screen.getByRole('switch');
-    expect(toggle).toHaveClass('bg-ink');
-    expect(toggle).not.toHaveClass('bg-primary');
+    expect(toggle).toHaveClass('bg-primary');
+    expect(toggle).not.toHaveClass('bg-ink');
     rerender(<ToggleSwitch checked={false} onCheckedChange={vi.fn()} label="Show photo" />);
-    expect(screen.getByRole('switch')).toHaveClass('bg-panel');
-    expect(screen.getByRole('switch')).not.toHaveClass('bg-ink');
+    expect(screen.getByRole('switch')).toHaveClass('bg-canvas');
+    expect(screen.getByRole('switch')).not.toHaveClass('bg-panel');
   });
 });
 

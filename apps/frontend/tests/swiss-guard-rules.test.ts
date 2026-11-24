@@ -47,7 +47,7 @@ describe('Swiss guard rules', () => {
 
   it.each([
     '<div className="rounded-none shadow-sw-sm hover:shadow-none" />',
-    '<div className="bg-primary text-white border-ink p-3 gap-4 px-6 mt-12" />',
+    '<div className="bg-primary text-brand-white border-ink p-3 gap-4 px-6 mt-12" />',
     '/* bg-[#1D4ED8] rounded-lg */ <div />',
     '// shadow-md and #ffffff in a comment\n<div />',
     '<a href="https://github.com/NikodemBoniecki/cvka">x</a>',

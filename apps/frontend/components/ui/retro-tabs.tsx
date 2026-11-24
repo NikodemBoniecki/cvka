@@ -87,7 +87,7 @@ export const RetroTabs: React.FC<RetroTabsProps> = ({
             className={cn(
               '-mb-px border border-b-0 border-ink px-4 py-2 font-mono text-xs uppercase tracking-wider transition-colors',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-canvas',
-              isActive && 'border-b-white bg-white font-bold text-ink',
+              isActive && 'border-b-brand-white bg-white font-bold text-ink',
               !isActive &&
                 !tab.disabled &&
                 'bg-panel text-ink-soft hover:bg-panel-hover hover:text-ink',

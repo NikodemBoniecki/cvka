@@ -9,7 +9,7 @@ export type InputProps = React.InputHTMLAttributes<HTMLInputElement>;
  * Design Principles:
  * - Square corners (rounded-none) - Brutalist aesthetic
  * - Black border for high contrast
- * - Focus ring in Hyper Blue
+ * - Focus ring in 221 Orange
  */
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, type, ...props }, ref) => {

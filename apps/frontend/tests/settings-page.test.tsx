@@ -251,10 +251,7 @@ describe('settings page (Swiss sweep)', () => {
     expect(screen.getByText('settings.llmConfiguration.agentNote')).toBeInTheDocument();
     expect(
       screen.getByRole('link', { name: 'settings.llmConfiguration.agentGuideLink' })
-    ).toHaveAttribute(
-      'href',
-      expect.stringContaining('SETUP.md#use-cvka-with-a-coding-agent')
-    );
+    ).toHaveAttribute('href', expect.stringContaining('SETUP.md#use-cvka-with-a-coding-agent'));
 
     fireEvent.click(screen.getByRole('button', { name: 'common.save' }));
     await waitFor(() =>
@@ -366,10 +363,7 @@ describe('settings page (Swiss sweep)', () => {
     expect(dialog).toHaveTextContent('settings.subscriptionRisk.mcpTitle');
     expect(
       within(dialog).getByRole('link', { name: 'settings.subscriptionRisk.mcpLink' })
-    ).toHaveAttribute(
-      'href',
-      expect.stringContaining('SETUP.md#use-cvka-with-a-coding-agent')
-    );
+    ).toHaveAttribute('href', expect.stringContaining('SETUP.md#use-cvka-with-a-coding-agent'));
     // Nothing switches until the user accepts.
     expect(within(providers).getByRole('radio', { name: 'OpenAI' })).toHaveAttribute(
       'aria-checked',
@@ -537,10 +531,10 @@ describe('settings page (Swiss sweep)', () => {
       within(providers).getByRole('radio', { name: 'OpenAI-Compatible' }).querySelector('svg')
     ).toBeNull();
 
-    // The selected segment is ink with white text; the mark sits inside it and inherits that colour.
+    // The selected segment is orange with black text; the mark inherits that colour.
     expect(within(providers).getByRole('radio', { name: 'OpenAI' })).toHaveClass(
-      'bg-ink',
-      'text-white'
+      'bg-primary',
+      'text-on-accent'
     );
   });
 

@@ -121,17 +121,17 @@ const classAttr = (el: Element) => el.getAttribute('class') ?? '';
 const classes = (el: Element) => classAttr(el).split(/\s+/);
 
 /**
- * Owner ruling (round 2): hover or keyboard focus inside a tile fills it Hyper Blue and turns its
- * text white. There is no ink outline (Card interactive's hover:border-ink is overridden, so the
+ * Owner ruling (round 2): hover or keyboard focus inside a tile fills it 221 Orange and turns its
+ * text black. There is no ink outline (Card interactive's hover:border-ink is overridden, so the
  * border stays transparent) and no 1px press-in.
  */
-function expectBlueFillTile(card: HTMLElement): void {
+function expectOrangeFillTile(card: HTMLElement): void {
   expect(classes(card)).toEqual(
     expect.arrayContaining([
       'hover:bg-primary',
       'has-[:focus-visible]:bg-primary',
-      'hover:text-white',
-      'has-[:focus-visible]:text-white',
+      'hover:text-on-accent',
+      'has-[:focus-visible]:text-on-accent',
       'hover:border-transparent',
       'hover:translate-x-0',
       'hover:translate-y-0',
@@ -142,12 +142,13 @@ function expectBlueFillTile(card: HTMLElement): void {
   expect(card.className).not.toMatch(/bg-white/);
 }
 
-/** An element with its own colour flips to white through the tile's hover and focus state. */
+/** An element with its own colour flips to black through the tile's hover and focus state. */
 function expectTurnsWhite(el: Element, property: 'text' | 'border' = 'text'): void {
+  const colorRole = property === 'border' ? 'brand-white' : 'on-accent';
   expect(classes(el)).toEqual(
     expect.arrayContaining([
-      `group-hover:${property}-white`,
-      `group-has-[:focus-visible]:${property}-white`,
+      `group-hover:${property}-${colorRole}`,
+      `group-has-[:focus-visible]:${property}-${colorRole}`,
     ])
   );
   // The element may rest in primary, but the tile must never turn it primary.
@@ -159,17 +160,17 @@ function expectStatusTurnsWhite(label: HTMLElement): void {
   expect(classes(label.parentElement as HTMLElement)).toEqual(
     expect.arrayContaining([
       'group-hover:[&>span:first-child]:bg-white',
-      'group-hover:[&>span:last-child]:text-white',
+      'group-hover:[&>span:last-child]:text-on-accent',
       'group-has-[:focus-visible]:[&>span:first-child]:bg-white',
-      'group-has-[:focus-visible]:[&>span:last-child]:text-white',
+      'group-has-[:focus-visible]:[&>span:last-child]:text-on-accent',
     ])
   );
 }
 
-/** The focus ring is white: a primary ring would vanish on the blue fill. */
+/** The focus ring is warm white: a primary ring would vanish on the orange fill. */
 function expectWhiteRing(el: HTMLElement, prefix = ''): void {
   expect(classes(el)).toEqual(
-    expect.arrayContaining([`${prefix}ring-2`, `${prefix}ring-inset`, `${prefix}ring-white`])
+    expect.arrayContaining([`${prefix}ring-2`, `${prefix}ring-inset`, `${prefix}ring-brand-white`])
   );
   expect(classes(el)).not.toContain(`${prefix}ring-primary`);
 }
@@ -218,7 +219,7 @@ describe('dashboard tiles are keyboard-reachable', () => {
     for (const action of actions) expectActionAboveLink(action, link);
   });
 
-  it('keeps a white focus ring on every tile action button, which sits on the blue fill', async () => {
+  it('keeps a warm-white focus ring on every tile action button, which sits on the orange fill', async () => {
     api.get.mockResolvedValue(status('failed'));
     api.list.mockResolvedValue([
       { ...row('m1', true), is_default_master: true, processing_status: 'failed' as const },
@@ -237,7 +238,7 @@ describe('dashboard tiles are keyboard-reachable', () => {
     ];
     expect(actions).toHaveLength(5);
     for (const action of actions) {
-      expect(classes(action)).toContain('focus-visible:ring-white');
+      expect(classes(action)).toContain('focus-visible:ring-brand-white');
       expect(classes(action)).not.toContain('focus-visible:ring-primary');
     }
   });
@@ -341,7 +342,7 @@ describe('dashboard tiles are keyboard-reachable', () => {
   });
 });
 
-describe('dashboard tile highlight and the one blue action', () => {
+describe('dashboard tile highlight and the one orange action', () => {
   beforeEach(() => {
     localStorage.clear();
     vi.resetAllMocks();
@@ -349,7 +350,7 @@ describe('dashboard tile highlight and the one blue action', () => {
     api.get.mockResolvedValue(status());
   });
 
-  it('fills resume tiles Hyper Blue and turns their text, status and marks white', async () => {
+  it('fills resume tiles 221 Orange and turns their text, status and marks white', async () => {
     api.list.mockResolvedValue([
       { ...row('m1', true), is_default_master: true, title: 'DevRel' },
       { ...row('m2', true), title: 'Solutions Eng' },
@@ -365,7 +366,7 @@ describe('dashboard tile highlight and the one blue action', () => {
     ] as const) {
       const link = screen.getByRole('link', { name });
       const tile = link.closest('.group') as HTMLElement;
-      expectBlueFillTile(tile);
+      expectOrangeFillTile(tile);
       // The title inherits the tile's white, so it must not carry a colour of its own.
       expect(link.closest('h3')!.className).not.toMatch(/text-(?:primary|steel|ink|white)/);
       expectStatusTurnsWhite(within(tile).getByText(status));
@@ -382,7 +383,7 @@ describe('dashboard tile highlight and the one blue action', () => {
     expectTurnsWhite(within(tailored as HTMLElement).getByText(/dashboard\.edited/));
   });
 
-  it('keeps the add-track limit, spinner and retry icon readable on the blue fill', async () => {
+  it('keeps the add-track limit, spinner and retry icon readable on the orange fill', async () => {
     api.get.mockResolvedValue(status('processing'));
     api.list.mockResolvedValue([
       { ...row('m1', true), is_default_master: true, processing_status: 'processing' as const },
@@ -390,7 +391,7 @@ describe('dashboard tile highlight and the one blue action', () => {
     render(<DashboardPage />);
     const addTrack = await screen.findByRole('button', { name: 'dashboard.addMasterTrack' });
 
-    expectBlueFillTile(addTrack.closest('.group') as HTMLElement);
+    expectOrangeFillTile(addTrack.closest('.group') as HTMLElement);
     expectTurnsWhite(screen.getByText('dashboard.masterLimitReached'));
     expectWhiteRing(addTrack, 'focus-visible:');
 
@@ -403,18 +404,18 @@ describe('dashboard tile highlight and the one blue action', () => {
     expect(classes(retry)).toContain('group-hover:hover:bg-primary-hover');
   });
 
-  it('fills the initialize tile Hyper Blue, with its + square and caption turning white', async () => {
+  it('fills the initialize tile 221 Orange, with its + square and caption turning white', async () => {
     api.list.mockResolvedValue([]);
     render(<DashboardPage />);
     const tile = await screen.findByRole('button', { name: 'dashboard.initializeMasterResume' });
 
-    expectBlueFillTile(tile.closest('.group') as HTMLElement);
+    expectOrangeFillTile(tile.closest('.group') as HTMLElement);
     expectWhiteRing(tile, 'focus-visible:');
     expectTurnsWhite(tile.querySelector('svg')!.parentElement!, 'border');
     expectTurnsWhite(screen.getByText(/dashboard\.initializeSequence/));
   });
 
-  it('fills the setup tile Hyper Blue on hover and keyboard focus, with no outline', async () => {
+  it('fills the setup tile 221 Orange on hover and keyboard focus, with no outline', async () => {
     api.llmConfigured = false;
     api.list.mockResolvedValue([]);
     render(<DashboardPage />);
@@ -426,8 +427,8 @@ describe('dashboard tile highlight and the one blue action', () => {
       expect.arrayContaining([
         'hover:bg-primary',
         'group-focus-visible/setup:bg-primary',
-        'hover:text-white',
-        'group-focus-visible/setup:text-white',
+        'hover:text-on-accent',
+        'group-focus-visible/setup:text-on-accent',
         'hover:border-transparent',
         'group-focus-visible/setup:border-transparent',
         'hover:translate-x-0',
@@ -442,8 +443,8 @@ describe('dashboard tile highlight and the one blue action', () => {
       screen.getByText('nav.goToSettings').parentElement!,
       card.querySelector('svg')!,
     ]) {
-      expect(text.getAttribute('class')).toMatch(/group-hover:text-white/);
-      expect(text.getAttribute('class')).toMatch(/group-focus-visible\/setup:text-white/);
+      expect(text.getAttribute('class')).toMatch(/group-hover:text-on-accent/);
+      expect(text.getAttribute('class')).toMatch(/group-focus-visible\/setup:text-on-accent/);
     }
   });
 
@@ -466,7 +467,7 @@ describe('dashboard tile highlight and the one blue action', () => {
       ])
     );
     expect(classes(create)).not.toContain('hover:bg-white');
-    expect(classes(create)).not.toContain('focus-visible:ring-white');
+    expect(classes(create)).not.toContain('focus-visible:ring-brand-white');
     // No stretched click area: the button is not made static and has no ::after overlay.
     expect(classes(create)).not.toContain('static');
     expect(classAttr(create)).not.toMatch(/after:/);
@@ -484,7 +485,7 @@ describe('dashboard tile highlight and the one blue action', () => {
 
     // Not a TILE_FILL tile: nothing on it fills blue or turns text white on hover or focus.
     expect(classAttr(tile)).not.toMatch(
-      /hover:bg-primary|has-\[:focus-visible\]|hover:text-white|hover:border-transparent/
+      /hover:bg-primary|has-\[:focus-visible\]|hover:text-on-accent|hover:border-transparent/
     );
     // Not an interactive Card either: no group (so no group-hover recolouring) and no hand
     // cursor over the parts of the tile that do nothing.

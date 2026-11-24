@@ -38,6 +38,7 @@ pytestmark = pytest.mark.integration
 
 export_module = importlib.import_module("app.mcp_server.tools.export_resume_pdf")
 shared_module = importlib.import_module("app.mcp_server.tools._shared")
+verify_resume_module = importlib.import_module("app.mcp_server.tools.verify_resume")
 roundtrip_module = importlib.import_module("app.services.ats_parse.roundtrip")
 
 EXPECTED_TOOLS = {
@@ -884,6 +885,7 @@ async def test_verify_resume_flags_page_limit_and_writes_nothing(
 async def test_verify_resume_reports_weak_writing_with_paths(
     isolated_db: Database, monkeypatch: pytest.MonkeyPatch
 ) -> None:
+    monkeypatch.setattr(verify_resume_module, "get_content_language", lambda: "en")
     monkeypatch.setattr(
         shared_module, "render_resume_pdf", AsyncMock(return_value=_pdf(1))
     )

@@ -30,6 +30,14 @@ os.environ["DATABASE_SCHEMA"] = ""
 # ChatGPT origin-guard tests model a LAN deployment (192.168.1.5) that opted in.
 _ORIGINAL_ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS")
 os.environ["ALLOWED_HOSTS"] = "test,t,192.168.1.5,other"
+# Most tests exercise user-selected providers and mock every LLM boundary.
+# Keep the product's server-managed default from requiring real operator keys
+# during test collection, and make the fake key explicit for health/config paths.
+_ORIGINAL_LLM_ENV = {
+    key: os.environ.get(key) for key in ("LLM_PROVIDER", "LLM_API_KEY")
+}
+os.environ["LLM_PROVIDER"] = "openai"
+os.environ["LLM_API_KEY"] = "cvka-test-key"
 TEST_DATABASE_URL = os.environ.get("TEST_DATABASE_URL") or None
 
 import app.config as _config_module  # noqa: E402 - DATA_DIR must be set first
@@ -53,6 +61,11 @@ def pytest_unconfigure(config: pytest.Config) -> None:
     else:
         os.environ["ALLOWED_HOSTS"] = _ORIGINAL_ALLOWED_HOSTS
     for key, value in _ORIGINAL_DATABASE_ENV.items():
+        if value is None:
+            os.environ.pop(key, None)
+        else:
+            os.environ[key] = value
+    for key, value in _ORIGINAL_LLM_ENV.items():
         if value is None:
             os.environ.pop(key, None)
         else:

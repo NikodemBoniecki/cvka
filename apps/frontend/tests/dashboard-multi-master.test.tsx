@@ -229,7 +229,8 @@ describe('dashboard with several master resumes', () => {
     api.llmConfigured = false;
     api.list.mockResolvedValue([{ ...row('m1', true), is_default_master: true }]);
     render(<DashboardPage />);
-    expect(await screen.findByText('dashboard.llmNotConfiguredTitle')).toBeInTheDocument();
+    await screen.findByRole('button', { name: 'dashboard.createResume' });
+    expect(screen.queryByText('dashboard.llmNotConfiguredTitle')).not.toBeInTheDocument();
     expect(screen.queryByText(/dashboard.addMasterTrack/)).not.toBeInTheDocument();
   });
 

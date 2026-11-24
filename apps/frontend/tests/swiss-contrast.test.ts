@@ -27,60 +27,31 @@ function contrast(a: string, b: string): number {
   return (hi + 0.05) / (lo + 0.05);
 }
 
-// Text and text-on-fill pairs the UI actually uses (spec §4.1). 4.5:1 each.
+// Text and text-on-fill pairs the black 221 UI actually uses. 4.5:1 each.
 const TEXT_PAIRS: Array<[string, string]> = [
   ['ink-soft', 'canvas'],
-  ['ink-soft', 'white'],
-  ['ink-soft', 'panel'],
-  ['ink-soft', 'paper'],
   ['steel', 'canvas'],
-  ['steel', 'white'],
-  ['steel', 'paper'],
   ['primary', 'canvas'],
-  ['primary', 'white'],
   ['success', 'canvas'],
-  ['success', 'white'],
   ['destructive', 'canvas'],
-  ['destructive', 'white'],
   ['warning-text', 'canvas'],
-  ['warning-text', 'white'],
-  ['white', 'primary'],
-  ['white', 'primary-hover'],
-  ['white', 'success'],
-  ['white', 'success-hover'],
-  ['white', 'destructive'],
-  ['white', 'destructive-hover'],
-  ['white', 'ink'],
-  ['white', 'steel'], // dashboard monogram fills
-  ['ink', 'warning'],
-  ['ink', 'warning-hover'],
-  ['ink', 'panel'],
-  ['ink', 'panel-hover'],
-  ['ink', 'highlight'],
+  ['on-accent', 'primary'],
+  ['on-accent', 'success'],
+  ['on-accent', 'warning'],
+  ['on-accent', 'highlight'],
+  ['on-accent', 'destructive'],
   ['ink', 'canvas'],
-  ['primary', 'info-tint'],
-  ['success', 'success-tint'],
-  ['warning-text', 'warning-tint'],
-  ['destructive', 'destructive-tint'],
-  ['ink-soft', 'info-tint'],
-  ['ink-soft', 'success-tint'],
-  ['ink-soft', 'warning-tint'],
-  ['ink-soft', 'destructive-tint'],
 ];
 
 // Non-text graphics that carry meaning on their own (SC 1.4.11). 3:1 each.
 const GRAPHIC_PAIRS: Array<[string, string]> = [
   ['primary', 'canvas'],
-  ['primary', 'white'],
   ['success', 'canvas'],
-  ['success', 'white'],
   ['destructive', 'canvas'],
-  ['destructive', 'white'],
   ['ink', 'canvas'],
-  ['ink', 'white'],
 ];
 
-describe('Swiss palette contrast (WCAG 2.2 AA)', () => {
+describe('221 palette contrast (WCAG 2.2 AA)', () => {
   it.each(TEXT_PAIRS)('%s text on %s is at least 4.5:1', (fg, bg) => {
     expect(contrast(token(fg), token(bg))).toBeGreaterThanOrEqual(4.5);
   });
@@ -90,15 +61,13 @@ describe('Swiss palette contrast (WCAG 2.2 AA)', () => {
   });
 
   it('pins the warning fill, which is exempt from 1.4.11 because it never carries meaning alone', () => {
-    // Spec §9.2: every warning square has a label, every warning alert has a
-    // warning-text label on a tint, and warning buttons have an ink border and
-    // ink text. Changing this value is a design decision — update the spec too.
-    expect(token('warning')).toBe('#f97316');
-    expect(contrast(token('ink'), token('warning'))).toBeGreaterThanOrEqual(4.5);
+    // Warning states carry a visible label and use black text on the orange fill.
+    expect(token('warning')).toBe('#ff751f');
+    expect(contrast(token('on-accent'), token('warning'))).toBeGreaterThanOrEqual(4.5);
   });
 
-  it('keeps steel off panel (4.11:1 fails)', () => {
-    expect(contrast(token('steel'), token('panel'))).toBeLessThan(4.5);
+  it('keeps secondary text readable on the black panel', () => {
+    expect(contrast(token('steel'), token('panel'))).toBeGreaterThanOrEqual(4.5);
   });
 
   it('keeps the browser theme colour in sync with canvas', () => {

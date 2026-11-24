@@ -130,8 +130,8 @@ describe('Retro Bitrate parameters (from the shaders.com composition)', () => {
     ['DITHER_PIXEL', 'float', '3.0'],
     ['GRADIENT_START', 'vec2', 'vec2(0.67, 0.48)'],
     ['GRADIENT_END', 'vec2', 'vec2(0.89, 0.39)'],
-    ['BLUE_MIN', 'float', '0.15'],
-    ['BLUE_MAX', 'float', '0.3'],
+    ['ACCENT_MIN', 'float', '0.15'],
+    ['ACCENT_MAX', 'float', '0.3'],
   ])('%s is %s', (name, type, value) => {
     expect(RETRO_BITRATE_FRAGMENT).toContain(`const ${type} ${name} = ${value};`);
   });
@@ -140,7 +140,7 @@ describe('Retro Bitrate parameters (from the shaders.com composition)', () => {
     expect(RETRO_BITRATE_FRAGMENT).toContain('n * 2.0 * PI');
   });
 
-  it('is light: Canvas, grey Panel steps and faded Hyper Blue, with a plain-alpha dither', () => {
+  it('is light: Canvas, grey Panel steps and faded 221 Orange, with a plain-alpha dither', () => {
     expect(RETRO_BITRATE_TOKENS).toEqual({
       u_canvas: '--sw-canvas',
       u_panel: '--sw-panel',
@@ -148,7 +148,7 @@ describe('Retro Bitrate parameters (from the shaders.com composition)', () => {
       u_steel: '--sw-steel',
       u_primary: '--sw-primary',
     });
-    // The faded blue is computed from the tokens, never hard-coded.
+    // The faded orange is computed from the tokens, never hard-coded.
     expect(RETRO_BITRATE_FRAGMENT).toContain('mix(u_canvas, u_primary, k)');
     // Nothing is dark: no Ink uniform, no screen blend (it washes out on a light ground), and no
     // dome mask cutting a shape out of the field.
@@ -157,7 +157,7 @@ describe('Retro Bitrate parameters (from the shaders.com composition)', () => {
     expect(RETRO_BITRATE_FRAGMENT).not.toContain('CIRCLE');
   });
 
-  it('uses u_level as the share of blue blocks, not as a dim toward black', () => {
-    expect(RETRO_BITRATE_FRAGMENT).toMatch(/isBlue = step\([^;]*u_level[^;]*, b\);/);
+  it('uses u_level as the share of orange blocks, not as a dim toward black', () => {
+    expect(RETRO_BITRATE_FRAGMENT).toMatch(/isAccent = step\([^;]*u_level[^;]*, b\);/);
   });
 });

@@ -1998,7 +1998,7 @@ const ResumeBuilderContent = ({ agentMode = false }: ResumeBuilderProps) => {
                     </p>
                     {jobForcedKeywords.length > 0 && (
                       <p className="mt-2 text-sm text-ink-soft leading-relaxed">
-                        <mark className="bg-primary px-1 text-white">
+                        <mark className="bg-primary px-1 text-on-accent">
                           {t('builder.jdMatch.forcedColor')}
                         </mark>{' '}
                         {t('builder.jdMatch.forcedLegend')}

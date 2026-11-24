@@ -24,10 +24,11 @@ def _resume(sample_resume: dict[str, Any]) -> dict[str, Any]:
 async def test_check_scores_with_code_rules(
     isolated_db: Any, sample_resume: dict[str, Any]
 ) -> None:
-    async with _client() as client:
-        resp = await client.post(
-            "/api/v1/writing/check", json={"resume_data": _resume(sample_resume)}
-        )
+    with patch("app.routers.writing.get_content_language", return_value="en"):
+        async with _client() as client:
+            resp = await client.post(
+                "/api/v1/writing/check", json={"resume_data": _resume(sample_resume)}
+            )
     assert resp.status_code == 200
     body = resp.json()
     assert 0 <= body["score"] < 100
@@ -59,7 +60,10 @@ async def test_improve_returns_rewritten_data_and_changes(
             },
         ]
     )
-    with patch("app.services.writing_loop.complete_json", llm):
+    with (
+        patch("app.routers.writing.get_content_language", return_value="en"),
+        patch("app.services.writing_loop.complete_json", llm),
+    ):
         async with _client() as client:
             resp = await client.post(
                 "/api/v1/writing/improve",

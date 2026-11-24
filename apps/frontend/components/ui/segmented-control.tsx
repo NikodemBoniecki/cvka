@@ -97,7 +97,7 @@ export function SegmentedControl<T extends string>({
               'disabled:cursor-not-allowed disabled:opacity-50',
               size === 'sm' ? 'min-h-8 px-3 text-xs' : 'min-h-10 px-4 text-sm',
               variant === 'fill' &&
-                (selected ? 'bg-ink text-white' : 'bg-white text-ink hover:bg-panel'),
+                (selected ? 'bg-primary text-on-accent' : 'bg-white text-ink hover:bg-panel'),
               variant === 'outline' &&
                 cn(
                   'bg-white p-2 text-ink',

@@ -13,7 +13,14 @@ const incrementResumes = vi.fn();
 const setHasMasterResume = vi.fn();
 
 vi.mock('next/navigation', () => ({ useRouter: () => ({ push }) }));
-vi.mock('@/lib/i18n', () => ({ useTranslations: () => ({ t: (key: string) => key }) }));
+vi.mock('@/lib/i18n', () => ({
+  useTranslations: () => ({
+    t: (key: string) =>
+      key === 'resumeWizard.initialQuestion'
+        ? "Hi — I'll help you build your master resume. What's your name, and what kind of role are you going for?"
+        : key,
+  }),
+}));
 vi.mock('@/lib/context/status-cache', () => ({
   useStatusCache: () => ({ incrementResumes, setHasMasterResume }),
 }));

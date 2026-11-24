@@ -60,7 +60,7 @@ async def test_drafts_from_the_cards_job_resume_and_applied_date(
         company="ACME",
         role="Backend Engineer",
         days_since_applied=12,
-        language="en",
+        language="pl",
     )
 
 

@@ -1,0 +1,1646 @@
+{
+  "common": {
+    "save": "Zapisz",
+    "saving": "Zapisywanie…",
+    "saved": "Zapisano",
+    "cancel": "Anuluj",
+    "delete": "Usuń",
+    "edit": "Edytuj",
+    "download": "Pobierz",
+    "loading": "Wczytywanie…",
+    "uploading": "Przesyłanie…",
+    "checking": "Sprawdzanie…",
+    "processing": "Przetwarzanie…",
+    "generating": "Generowanie…",
+    "error": "Błąd",
+    "success": "Gotowe",
+    "confirm": "Potwierdź",
+    "back": "Wstecz",
+    "retry": "Ponów",
+    "next": "Dalej",
+    "continue": "Kontynuuj",
+    "finish": "Zakończ",
+    "optional": "Opcjonalnie",
+    "close": "Zamknij",
+    "notifications": "Powiadomienia",
+    "dismissNotification": "Zamknij powiadomienie",
+    "ok": "OK",
+    "search": "Szukaj",
+    "filter": "Filtruj",
+    "reset": "Resetuj",
+    "apply": "Zastosuj",
+    "selectOption": "Wybierz opcję…",
+    "unknown": "Nieznane",
+    "keysCleared": "Klucze API zostały usunięte",
+    "databaseReset": "Baza danych została zresetowana",
+    "popupBlocked": "Wyskakujące okno zostało zablokowane. Zezwól na wyskakujące okna lub otwórz ten adres ręcznie: {url}",
+    "resumeDeleted": "To CV zostało usunięte. Prześlij lub wybierz inne."
+  },
+  "home": {
+    "brandLine1": "CV",
+    "brandLine2": "KA",
+    "docs": "Instrukcja",
+    "launchApp": "Otwórz aplikację"
+  },
+  "community": {
+    "repository": "CVKA na GitHubie",
+    "studio": "221 Studio",
+    "follow": "Obserwuj 221 Studio",
+    "star": "Dodaj gwiazdkę",
+    "starOnGithub": "Dodaj gwiazdkę na GitHubie",
+    "sponsor": "Wesprzyj",
+    "discord": "Discord",
+    "joinDiscord": "Dołącz do Discorda",
+    "contributors": "Współtwórcy",
+    "settingsPrompt": "Podoba Ci się CVKA?",
+    "sponsorProject": "Wesprzyj projekt",
+    "joinTheDiscord": "Dołącz do Discorda",
+    "aboutTitle": "Informacje"
+  },
+  "nav": {
+    "dashboard": "Panel główny",
+    "builder": "Kreator CV",
+    "tailor": "Dopasuj CV",
+    "settings": "Ustawienia",
+    "backToDashboard": "Wróć do panelu",
+    "goToSettings": "Otwórz ustawienia",
+    "applicationTracker": "Śledzenie aplikacji",
+    "queue": "Kolejka dopasowywania"
+  },
+  "dashboard": {
+    "title": "Panel główny",
+    "subtitle": "Zarządzaj CV i aplikacjami o pracę",
+    "myResumes": "Moje CV",
+    "noResumes": "Nie masz jeszcze żadnego CV",
+    "noResumesDescription": "Prześlij pierwsze CV, aby rozpocząć",
+    "uploadResume": "Prześlij CV",
+    "createNew": "Utwórz nowe",
+    "lastModified": "Ostatnia zmiana",
+    "actions": "Akcje",
+    "preview": "Podgląd",
+    "viewResume": "Wyświetl CV",
+    "editResume": "Edytuj CV",
+    "deleteResume": "Usuń CV",
+    "downloadPdf": "Pobierz PDF",
+    "tailorResume": "Dopasuj do oferty",
+    "selectModule": "Wybierz moduł",
+    "modulesHeading": "Moduły CV",
+    "masterResume": "Główne CV",
+    "tailoredResume": "Dopasowane CV",
+    "initializeMasterResume": "Utwórz główne CV",
+    "initializeSequence": "Rozpocznij",
+    "refreshStatus": "Odśwież status",
+    "retryProcessing": "Ponów przetwarzanie",
+    "retryingProcessing": "Ponawianie…",
+    "deleteAndReupload": "Usuń i prześlij ponownie",
+    "processingFailedHint": "Nie udało się odczytać pliku. Spróbuj ponownie lub prześlij inny.",
+    "retrySuccess": "Przetwarzanie zakończone pomyślnie!",
+    "retryFailed": "Nie udało się ponowić. Spróbuj przesłać inny plik.",
+    "createResume": "Utwórz CV",
+    "edited": "Edytowano: {date}",
+    "statusLine": "STATUS: {status}",
+    "status": {
+      "checking": "Sprawdzanie…",
+      "processing": "Przetwarzanie…",
+      "ready": "Gotowe",
+      "failed": "Przetwarzanie nie powiodło się",
+      "pending": "Oczekuje"
+    },
+    "llmNotConfiguredTitle": "[ BRAK KONFIGURACJI LLM ]",
+    "llmNotConfiguredMessage": "> Brakuje kluczy API. Dopasowywanie CV jest wyłączone do czasu skonfigurowania ich w ustawieniach.",
+    "setupRequiredTitle": "[ WYMAGANA KONFIGURACJA ]",
+    "setupRequiredMessage": "> Skonfiguruj klucz API w ustawieniach, aby włączyć dopasowywanie CV.",
+    "uploadDialog": {
+      "success": "CV zostało przesłane.",
+      "successMaster": "CV przesłane i ustawione jako główne.",
+      "successMasterTrack": "CV dodane jako nowa ścieżka główna.",
+      "successMissingId": "Plik przesłano, ale nie otrzymano identyfikatora CV.",
+      "parsingFailed": "CV przesłano, ale AI nie odczytała danych. Nadal możesz dopasować je ręcznie.",
+      "failed": "Nie udało się przesłać pliku.",
+      "dropzoneTitle": "Kliknij lub przeciągnij plik",
+      "dropzoneSubtitle": "PDF, DOCX (maks. 4 MB)",
+      "tryDifferentFile": "Spróbuj z innym plikiem",
+      "parsingFailedKeepOpen": "AI nie odczytała danych. Spróbuj z innym plikiem lub zamknij to okno."
+    },
+    "errors": {
+      "loadFailed": "Nie udało się wczytać CV. Spróbuj ponownie.",
+      "deleteFailed": "Nie udało się usunąć CV. Dotychczasowe CV nadal jest dostępne."
+    },
+    "defaultBadge": "Domyślne",
+    "masterTrack": "Główna ścieżka",
+    "setDefault": "Ustaw jako domyślne",
+    "duplicate": "Duplikuj",
+    "addMasterTrack": "Dodaj główną ścieżkę",
+    "masterLimitReached": "Możesz mieć maksymalnie {max} głównych CV"
+  },
+  "builder": {
+    "panels": {
+      "nothingYet": "Jeszcze nic nie wygenerowano",
+      "preview": "Podgląd"
+    },
+    "title": "Kreator CV",
+    "copySuffix": "(Kopia)",
+    "editMode": "Tryb edycji",
+    "previewMode": "Tryb podglądu",
+    "createAndPreview": "Utwórz i wyświetl podgląd",
+    "unsavedDraft": "Niezapisany szkic",
+    "autoSave": {
+      "saving": "Synchronizowanie…",
+      "saved": "Wszystkie zmiany zapisane",
+      "localDraft": "Szkic zapisany lokalnie",
+      "saveNow": "Zapisz teraz",
+      "retrySave": "Ponów zapis",
+      "savedButton": "Zapisano",
+      "localDraftUnavailable": "Szkic lokalny niedostępny"
+    },
+    "agentUpdate": {
+      "applied": "Zaktualizowane przez Twojego agenta ds. kodowania",
+      "conflictTitle": "Twój agent kodujący zmienił to CV",
+      "conflictBody": "Masz niezapisane zmiany w tej samej części, dlatego automatyczne zapisywanie jest wstrzymane. Użyj wersji agenta, aby odrzucić niezapisane zmiany, lub zachowaj swoje zmiany, aby zapisać je zamiast zmian agenta.",
+      "useAgent": "Użyj wersji agenta",
+      "keepMine": "Zachowaj moje zmiany",
+      "chooseFirst": "Your coding agent changed this resume. Choose its version or keep your edits in the banner at the top, then try again."
+    },
+    "draftRecovery": {
+      "title": "Przywrócić lokalny szkic?",
+      "description": "Szkic w przeglądarce różni się od kopii na serwerze. Przywróć go, aby kontynuować edycję, albo użyj kopii z serwera i odrzuć szkic lokalny.",
+      "newDescription": "W tej przeglądarce znajduje się niezapisana wersja robocza CV. Przywróć go, aby kontynuować edycję, lub odrzuć go i zacznij od nowa.",
+      "restoreDraft": "Przywróć szkic",
+      "useServer": "Użyj kopii z serwera"
+    },
+    "leaveWithLocalDraft": {
+      "title": "Czy chcesz wyjść bez synchronizacji?",
+      "description": "Nie udało się jeszcze zsynchronizować najnowszych zmian z serwerem. Wersja robocza w przeglądarce lokalnej jest nadal zapisana, ale może nie być dostępna w innej przeglądarce lub na innym urządzeniu.",
+      "leave": "Opuść pulpit nawigacyjny",
+      "stay": "Kontynuuj edycję"
+    },
+    "personalInfo": "Dane osobowe",
+    "summary": "Podsumowanie",
+    "experience": "Doświadczenie",
+    "education": "Wykształcenie",
+    "skills": "Umiejętności",
+    "projects": "Projekty",
+    "certifications": "Certyfikaty",
+    "languages": "Języki",
+    "awards": "Nagrody",
+    "addSection": "Dodaj sekcję",
+    "removeSection": "Usuń sekcję",
+    "saveChanges": "Zapisz zmiany",
+    "discardChanges": "Odrzuć zmiany",
+    "placeholders": {
+      "summary": "Krótko opisz swoje doświadczenie zawodowe…"
+    },
+    "contentStats": {
+      "wordsChars": "{wordCount} słów / {charCount} znaków"
+    },
+    "additionalForm": {
+      "instructions": "Wpisuj kolejne pozycje w osobnych wierszach.",
+      "technicalSkillsHint": "Pogrupuj umiejętności w jednym wierszu, np. „Laboratorium: PCR, qPCR”. Wiersz zawierający tylko --- rozpoczyna nowy wiersz.",
+      "placeholders": {
+        "technicalSkills": "React\nTypeScript\nNode.js",
+        "languages": "Polski\nAngielski",
+        "certifications": "AWS Solution Architect\nGoogle Analytics",
+        "awards": "Employee of the Month\nHackathon Winner"
+      }
+    },
+    "customSections": {
+      "dialogTitle": "Dodaj własną sekcję",
+      "dialogDescription": "Dodaj sekcję CV z własną nazwą i typem.",
+      "sectionNameLabel": "Nazwa sekcji",
+      "sectionNamePlaceholder": "np. Publikacje, Wolontariat, Certyfikaty",
+      "sectionTypeLabel": "Typ sekcji",
+      "addCustomSectionButton": "Dodaj własną sekcję",
+      "sectionTypes": {
+        "textBlockLabel": "Text Block",
+        "textBlockDescription": "Single text area (like Summary)",
+        "itemListLabel": "Lista pozycji",
+        "itemListDescription": "Wiele pozycji ze szczegółami (takimi jak Doświadczenie)",
+        "stringListLabel": "Lista umiejętności",
+        "stringListDescription": "Prosta lista pozycji (np. Umiejętności)"
+      },
+      "contentLabel": "Treść",
+      "contentPlaceholder": "Wprowadź treść dla {name}...",
+      "defaultTextPlaceholder": "Wprowadź treść tekstową...",
+      "entryLabel": "Wpis",
+      "addEntryLabel": "Dodaj wpis",
+      "itemsLabel": "Pozycje",
+      "itemsPlaceholder": "Wprowadź pozycje, po jednej w wierszu",
+      "unknownSectionType": "Nieznany typ sekcji: {type}",
+      "unknownDefaultSection": "Nieznana domyślna sekcja: {section}"
+    },
+    "sectionHeader": {
+      "renameSection": "Zmień nazwę sekcji",
+      "customTag": "Własna",
+      "hiddenFromPdfTag": "Ukryta w PDF",
+      "hideSection": "Ukryj sekcję",
+      "showSection": "Pokaż sekcję",
+      "moveUp": "Przenieś wyżej",
+      "moveDown": "Przenieś niżej",
+      "deleteSection": "Usuń sekcję",
+      "duplicateSection": "Powiel sekcję",
+      "deleteTitle": "Usuń sekcję",
+      "deleteDescription": "Czy na pewno usunąć „{name}”? Tej operacji nie można cofnąć."
+    },
+    "previewTabs": {
+      "resume": "CV",
+      "coverLetter": "LIST MOTYWACYJNY",
+      "outreach": "WIADOMOŚĆ",
+      "jdMatch": "DOPASOWANIE DO OFERTY",
+      "interviewPrep": "PRZYGOTOWANIE DO ROZMOWY",
+      "atsCheck": "ANALIZA ATS",
+      "writing": "Tekst"
+    },
+    "pageSize": {
+      "usLetter": "US Letter"
+    },
+    "generatePrompt": {
+      "notAvailableTitle": "{title} Niedostępne",
+      "notAvailableDescription": "Aby wygenerować {title}, najpierw dostosuj swoje CV do opisu stanowiska.",
+      "goToDashboard": "Wróć do panelu",
+      "generateTitle": "Wygeneruj {title}",
+      "coverLetterDescription": "Wygeneruj spersonalizowany list motywacyjny na podstawie swojego CV i opisu stanowiska.",
+      "outreachDescription": "Wygeneruj zwięzłą wiadomość kontaktową na LinkedIn lub e-maila na podstawie swojego CV i opisu stanowiska.",
+      "generateButton": "Generate {title}",
+      "coverLetterFooter": "Wskazówka: aby uzyskać najlepsze wyniki, najpierw dostosuj dokumenty.",
+      "outreachFooter": "Wskazówka: niech będzie krótko i osobiście.",
+      "interviewPrepDescription": "Wygeneruj przygotowanie do rozmowy kwalifikacyjnej dostosowane do konkretnego stanowiska na podstawie Twojego spersonalizowanego CV i opisu stanowiska.",
+      "interviewPrepFooter": "Tip: use this after tailoring to prepare truthful, resume-grounded answers."
+    },
+    "regenerateDialog": {
+      "title": "Regenerate {title}?",
+      "description": "Spowoduje to zastąpienie Twojego obecnego {title} nowo wygenerowanym. Wszelkie wprowadzone przez Ciebie zmiany zostaną utracone."
+    },
+    "regenerate": {
+      "buttonLabel": "Wygeneruj ponownie z AI",
+      "selectDialog": {
+        "title": "Wybierz elementy do ponownego wygenerowania",
+        "subtitle": "Wybierz elementy CV do poprawy",
+        "experience": "Doświadczenie zawodowe",
+        "projects": "Projekty",
+        "skills": "Umiejętności techniczne",
+        "noItemsSelected": "Wybierz co najmniej jeden element",
+        "noItemsAvailable": "Brak elementów dostępnych do ponownego wygenerowania. Najpierw dodaj doświadczenie, projekty lub umiejętności.",
+        "itemCount": {
+          "one": "{count} element",
+          "other": "{count} elementy(-ów)"
+        },
+        "continueButton": "Dalej"
+      },
+      "instructionDialog": {
+        "title": "Co chcesz poprawić?",
+        "subtitle": "Opisz, co AI ma zmienić",
+        "defaultInstruction": "Ulepsz treść, używając bardziej zdecydowanych czasowników oznaczających działanie i podając wymierne efekty, jeśli są dostępne.",
+        "selectedItems": "Wybrane elementy",
+        "placeholder": "Example: Add more quantifiable metrics, emphasize leadership skills, use more action verbs...",
+        "hint": "Określ konkretnie, co Ci nie odpowiada",
+        "backButton": "Wstecz",
+        "generateButton": "Generuj"
+      },
+      "diffPreview": {
+        "title": "Podgląd zmian",
+        "subtitle": "Sprawdź wygenerowane zmiany przed ich zastosowaniem",
+        "expandItem": "Expand {item}",
+        "collapseItem": "Zwiń {item}",
+        "partialFailures": "Nie udało się ponownie wygenerować niektórych pozycji ({count}). Nadal możesz przejrzeć i zastosować te, które się powiodły.",
+        "changesCount": "Zmodyfikowano elementy: {count}",
+        "rejectButton": "Odrzuć i wygeneruj ponownie",
+        "acceptButton": "Zastosuj zmiany",
+        "originalLabel": "Oryginał",
+        "newLabel": "Nowa wersja",
+        "noContent": "Brak treści",
+        "applying": "Zapisywanie…",
+        "loading": "Generowanie poprawionej treści…",
+        "retryRefresh": "Ponów próbę odświeżenia",
+        "refreshing": "Odświeżanie…"
+      },
+      "errors": {
+        "generationFailed": "Nie udało się wygenerować treści. Spróbuj ponownie.",
+        "applyFailed": "Nie udało się zastosować zmian. Spróbuj ponownie.",
+        "resumeChanged": "Treść wznowienia uległa zmianie od czasu ponownego wygenerowania. Wygeneruj ponownie i spróbuj jeszcze raz.",
+        "noChangesToApply": "Brak zmian do zastosowania.",
+        "networkError": "Błąd sieci. Sprawdź połączenie.",
+        "refreshFailed": "Zmiany zostały zapisane, ale nie udało się odświeżyć życiorysu. Spróbuj odświeżyć ponownie."
+      }
+    },
+    "jdMatch": {
+      "yourResume": "Twoje CV",
+      "matchingKeywordsHighlighted": "(pasujące słowa kluczowe są wyróżnione)",
+      "jobDescriptionTitle": "Opis stanowiska",
+      "at": "at",
+      "atSeparator": "w",
+      "roleSeparator": "-",
+      "aboutTitle": "Informacje o JD Match",
+      "aboutDescription": "Ten widok pokazuje, na ile Twoje CV pasuje do opisu stanowiska. Słowa kluczowe z opisu stanowiska są wyróżnione na żółto w Twoim CV, co ułatwia sprawdzenie, które umiejętności i terminy zostały już uwzględnione.",
+      "highlightedKeywordsTitle": "Wyróżnione słowa kluczowe",
+      "highlightedKeywordsDescriptionTemplate": "Words highlighted in __COLOR__ appear in both the job description and your resume. A higher match rate suggests better alignment with the job requirements.",
+      "highlightedKeywordsDescriptionPrefix": "Słowa zaznaczone na",
+      "highlightColor": "na żółto",
+      "highlightedKeywordsDescriptionSuffix": "pojawiają się zarówno w opisie stanowiska, jak i w Twoim CV. Wyższy wskaźnik dopasowania sugeruje lepszą zgodność z wymaganiami stanowiska.",
+      "tipsTitle": "Wskazówki",
+      "tips": {
+        "items": {
+          "addMissingKeywords": "Skorzystaj z karty „CV”, aby dodać brakujące słowa kluczowe.",
+          "focusTechnicalSkills": "Skup się na umiejętnościach technicznych i narzędziach wymienionych w opisie stanowiska",
+          "matchActionVerbs": "Dopasuj czasowniki o znaczeniu czynnościowe z wymagań stanowiska"
+        }
+      },
+      "stats": {
+        "keywordsExtracted": "Wyodrębniono {count} słów kluczowych",
+        "jobKeywords": "{count} słowa kluczowe zadania",
+        "matchesFound": "Znaleziono dopasowania: {count}",
+        "keywordMatchLabel": "Dopasowanie słowa kluczowego:",
+        "wordOverlapLabel": "Zbieżność słów:"
+      },
+      "atsScore": {
+        "description": "Ocenia zapisany życiorys w odniesieniu do tego opisu stanowiska. Karta KONTROLA ATS sprawdza, w jaki sposób sam plik PDF jest analizowany.",
+        "loading": "Trwa ładowanie wyniku ATS…",
+        "notCalculated": "Wynik ATS nie został jeszcze obliczony dla tego CV.",
+        "noKeywords": "This job has no saved keywords, so there's nothing to score against. Tailor the resume again with an AI provider set up, or ask your coding agent to run set_job_keywords for this job.",
+        "loadFailed": "Nie udało się wczytać zapisanego wyniku ATS. Spróbuj ponownie obliczyć lub odśwież stronę.",
+        "lastCalculated": "Ostatnio obliczono: {date}",
+        "recalculate": "Przelicz ponownie",
+        "recalculating": "Trwa obliczanie…",
+        "saveFirst": "Zapisz zmiany, a następnie ponownie oblicz.",
+        "recalculateFailed": "Nie udało się obliczyć wyniku ATS. Jeśli to CV zostało dostosowane przed zapisaniem wyników, dostosuj je ponownie na stronie „Dostosuj CV”."
+      },
+      "forcedColor": "Niebieski",
+      "forcedLegend": "oznacza słowa kluczowe, które dodałeś(-aś) samodzielnie. Przygotuj się do rozmowy na ich temat."
+    },
+    "genericItemForm": {
+      "itemLabel": "Element",
+      "addItemLabel": "Dodaj {label}",
+      "fields": {
+        "title": "Tytuł",
+        "organization": "Organizacja",
+        "location": "Lokalizacja",
+        "years": "Lata",
+        "descriptionPoints": "Punkty opisu"
+      },
+      "actions": {
+        "addPoint": "Dodaj punkt",
+        "togglePointStyle": "Przełącz znacznik punktora",
+        "reorderPoint": "Przeciągnij, aby zmienić kolejność punktu"
+      },
+      "placeholders": {
+        "title": "Title",
+        "organization": "Organization",
+        "location": "Location",
+        "years": "Styczeń 2020 r. – obecnie",
+        "description": "Opisz swój wkład..."
+      },
+      "noEntries": "// BRAK WPISÓW {label}",
+      "addFirstItem": "Dodaj pierwszą etykietę {label}"
+    },
+    "forms": {
+      "experience": {
+        "addJob": "Dodaj stanowisko",
+        "addFirstJob": "Dodaj pierwsze stanowisko pracy",
+        "condense": {
+          "label": "Skróć (wcześniejsze stanowisko)",
+          "description": "Wyświetl jako jeden wiersz w sekcji „Wcześniejsze doświadczenie”. Punkty są ukryte."
+        },
+        "fields": {
+          "jobTitle": "Nazwa stanowiska",
+          "company": "Firma"
+        },
+        "placeholders": {
+          "jobTitle": "Starszy programista",
+          "company": "Tech Corp",
+          "location": "Zdalnie / Miasto",
+          "years": "Jan 2020 - Present",
+          "description": "Opisz swoje osiągnięcie..."
+        }
+      },
+      "education": {
+        "addSchool": "Dodaj szkołę",
+        "addFirstSchool": "Dodaj pierwszą szkołę",
+        "fields": {
+          "institution": "Instytucja",
+          "degree": "Stopień naukowy",
+          "description": "Opis",
+          "descriptionOptional": "Opis (opcjonalnie)"
+        },
+        "placeholders": {
+          "institution": "Nazwa uczelni",
+          "degree": "Licencjat nauk ścisłych",
+          "years": "Sierpień 2016 – maj 2020",
+          "description": "Dodatkowe informacje..."
+        }
+      },
+      "projects": {
+        "addProject": "Dodaj projekt",
+        "addFirstProject": "Dodaj pierwszy projekt",
+        "fields": {
+          "projectName": "Nazwa projektu",
+          "role": "Rola",
+          "website": "Strona internetowa"
+        },
+        "placeholders": {
+          "projectName": "CVKA",
+          "role": "Autor",
+          "years": "Marzec 2023",
+          "github": "github.com/username/project",
+          "website": "https://project-demo.com",
+          "description": "Szczegóły projektu..."
+        }
+      }
+    },
+    "formatting": {
+      "panelTitle": "Szablon i formatowanie",
+      "template": "Szablon",
+      "templates": {
+        "swissSingle": {
+          "name": "Pojedyncza kolumna",
+          "description": "Tradycyjny układ na pełną szerokość z maksymalnym zagęszczeniem treści"
+        },
+        "swissTwoColumn": {
+          "name": "Dwie kolumny",
+          "description": "Kolumna główna skoncentrowana na doświadczeniu z paskiem bocznym na umiejętności"
+        },
+        "modern": {
+          "name": "Nowoczesny",
+          "description": "Kolorowe akcenty z możliwością dostosowania kolorów motywu"
+        },
+        "modernTwoColumn": {
+          "name": "Nowoczesny układ dwukolumnowy",
+          "description": "Układ dwukolumnowy z nowoczesnymi kolorowymi akcentami i motywami"
+        },
+        "latex": {
+          "name": "LaTeX",
+          "description": "Klasyczny układ akademicki z czcionką szeryfową i nagłówkami sekcji w linii"
+        },
+        "clean": {
+          "name": "Czysty",
+          "description": "Minimalistyczny układ w czcionce bezszeryfowej z dużymi, stonowanymi nagłówkami sekcji"
+        },
+        "vivid": {
+          "name": "Żywy",
+          "description": "Kolorowy układ dwukolumnowy z wyróżnionymi nagłówkami i punktorami w postaci strzałek"
+        },
+        "vividSingle": {
+          "name": "Żywy układ jedno kolumnowy",
+          "description": "Kolorowy układ jednokolumnowy z wyróżnionymi nagłówkami i punktorami w postaci strzałek"
+        },
+        "modernDeedy": {
+          "name": "Nowoczesny Deedy",
+          "description": "Gęsty układ jednostronicowy w czcionce Lato z jasnoszarymi nagłówkami sekcji pisanymi wielkimi literami"
+        },
+        "deedy": {
+          "name": "Deedy",
+          "description": "Układ dwukolumnowy z nazwą w cienkiej linii, wąską lewą kolumną i jasnoszarymi nagłówkami"
+        }
+      },
+      "accentColor": "Kolor akcentu",
+      "accentColors": {
+        "blue": "Blue",
+        "green": "Zielony",
+        "orange": "Pomarańczowy",
+        "red": "Red"
+      },
+      "pageSize": "Rozmiar strony",
+      "margins": "Marginesy (mm)",
+      "margin": {
+        "top": "Top",
+        "bottom": "Dół",
+        "left": "Lewa strona",
+        "right": "Prawa strona"
+      },
+      "spacing": "Rozstaw",
+      "spacingSection": "Sekcja",
+      "spacingItems": "Items",
+      "spacingLines": "Linie",
+      "fontSize": "Rozmiar czcionki",
+      "baseFontSize": "Podstawa",
+      "headerScale": "Nagłówki",
+      "headerFontFamily": "Headers",
+      "bodyFontFamily": "Treść",
+      "fontNames": {
+        "serif": "Serif",
+        "sans": "Sans",
+        "mono": "Mono"
+      },
+      "options": "Opcje",
+      "compactMode": "Tryb kompaktowy",
+      "contactIcons": "Ikony kontaktów",
+      "effectiveOutput": "Moc użyteczna",
+      "effectiveMargins": "Marginesy (mm): G{top} D{bottom} L{left} P{right}",
+      "effectiveSectionGap": "Odstęp między sekcjami",
+      "effectiveItemGap": "Odstęp między elementami",
+      "effectiveLineHeight": "Wysokość wiersza",
+      "effectiveBaseFont": "Czcionka podstawowa",
+      "effectiveHeaderScale": "Skala nagłówka",
+      "effectiveHeaderFont": "Czcionka nagłówka",
+      "effectiveBodyFont": "Czcionka treści",
+      "compactHint": "Tryb kompaktowy zmniejsza odstępy i wysokość wierszy. Marginesy i podstawowy rozmiar czcionki pozostają niezmienione.",
+      "resetDefaults": "Przywróć ustawienia domyślne"
+    },
+    "personalInfoForm": {
+      "placeholders": {
+        "name": "Jan Kowalski",
+        "title": "Inżynier oprogramowania",
+        "email": "john@example.com",
+        "phone": "+1 (555) 000-0000",
+        "location": "Miasto, kraj",
+        "website": "portfolio.com",
+        "linkedin": "linkedin.com/in/john",
+        "github": "github.com/john"
+      }
+    },
+    "leftPanel": {
+      "editorPanel": "Panel edytora",
+      "coverLetterEditor": "Edytor listu motywacyjnego",
+      "outreachEditor": "Edytor wiadomości kontaktowych",
+      "jdMatchAnalysis": "Analiza dopasowania do opisu stanowiska",
+      "interviewPrep": "Przygotowanie do rozmowy kwalifikacyjnej",
+      "atsCheck": "Kontrola analizy ATS",
+      "writing": "Pisanie"
+    },
+    "alerts": {
+      "saveNotAvailable": "Opcja „Zapisz” jest dostępna tylko podczas edytowania istniejącego CV.",
+      "saveFailed": "Nie udało się zapisać CV. Spróbuj ponownie.",
+      "autoSaveFailed": "Nie udało się zsynchronizować. Wersja robocza jest bezpiecznie zapisana lokalnie.",
+      "formattingSaveFailed": "Nie udało się zapisać formatowania. Zmień je ponownie, aby spróbować jeszcze raz.",
+      "loadFailed": "Nie udało się załadować tego CV z serwera. Odśwież, aby spróbować ponownie – edycja jest wyłączona, aby zapisana kopia nie została nadpisana.",
+      "coverLetterSaveSuccess": "List motywacyjny został zapisany",
+      "outreachSaveSuccess": "Wiadomość kontaktowa została zapisana",
+      "downloadSuccess": "Życiorys pobrany",
+      "reloadFailed": "Zastosowano zmiany, ale nie udało się ponownie załadować CV. Odśwież stronę.",
+      "downloadNotAvailable": "Pobieranie jest dostępne tylko w przypadku zapisanych życiorysów.",
+      "downloadFailed": "Nie udało się pobrać CV. Spróbuj ponownie.",
+      "coverLetterSaveFailed": "Nie udało się zapisać listu motywacyjnego. Spróbuj ponownie.",
+      "coverLetterDownloadRequiresResume": "Aby pobrać list motywacyjny, najpierw zapisz CV.",
+      "coverLetterMissing": "Brak dostępnego listu motywacyjnego. Włącz tworzenie listów motywacyjnych w Ustawieniach i dostosuj CV.",
+      "coverLetterDownloadFailed": "Failed to download cover letter: {error}",
+      "outreachSaveFailed": "Nie udało się zapisać wiadomości informacyjnej. Spróbuj ponownie.",
+      "coverLetterGenerateFailed": "Nie udało się wygenerować listu motywacyjnego: {error}",
+      "outreachGenerateFailed": "Nie udało się wygenerować wiadomości kontaktowej: {error}",
+      "interviewPrepGenerateFailed": "Nie udało się wygenerować przygotowania do rozmowy kwalifikacyjnej: {error}"
+    },
+    "leaveWithoutDraft": {
+      "title": "Czy chcesz wyjść z niezapisanymi zmianami?",
+      "description": "Nie udało się zsynchronizować Twoich ostatnich zmian z serwerem ani zapisać ich w tej przeglądarce. Jeśli teraz wyjdziesz, te zmiany mogą zostać utracone.",
+      "leave": "Wyjdź mimo to",
+      "stay": "Keep Editing"
+    },
+    "atsCheck": {
+      "aboutTitle": "Co sprawdza analiza ATS",
+      "aboutDescription": "Wyświetlamy Twoje CV przy użyciu aktualnego szablonu i ustawień, a następnie odczytujemy je w taki sam sposób, jak robi to zwykły ekstraktor tekstu ATS. Nie jest zaangażowana żadna sztuczna inteligencja.",
+      "roundTripTitle": "Pełny cykl",
+      "roundTripDescription": "Porównuje wyodrębniony tekst z danymi z Twojego CV. Mierzy, jak wiernie ten render jest odczytywany, a nie dokładność konkretnego systemu ATS.",
+      "tipsTitle": "Wskazówki",
+      "tips": {
+        "items": {
+          "singleColumn": "Szablony jednokolumnowe są odczytywane we właściwej kolejności.",
+          "standardHeadings": "Zachowaj standardowe nazwy sekcji, takie jak Doświadczenie, Wykształcenie i Umiejętności.",
+          "contactInBody": "Umieść dane kontaktowe w głównej treści CV."
+        }
+      },
+      "templateLabel": "Szablon: {template}",
+      "runButton": "URUCHOM ANALIZĘ",
+      "rerunButton": "URUCHOM PONOWNIE",
+      "running": "SPRAWDZANIE...",
+      "emptyState": "Przeprowadź kontrolę, aby sprawdzić, w jaki sposób system ATS odczytuje to CV z użyciem bieżącego szablonu.",
+      "saveFirst": "Aby przeprowadzić sprawdzenie, najpierw zapisz CV.",
+      "unsavedNotice": "Niezapisane zmiany nie są uwzględniane. Kontrola wykorzystuje ostatnią zapisaną wersję.",
+      "error": "Kontrola nie powiodła się. Upewnij się, że działają backend i frontend, a następnie spróbuj ponownie.",
+      "parseability": "Możliwość analizy składniowej",
+      "content": "Treść",
+      "extractability": {
+        "full": "Ekstrakcja tekstu: pełna",
+        "partial": "Ekstrakcja tekstu: częściowa",
+        "none": "Ekstrakcja tekstu: brak"
+      },
+      "status": {
+        "pass": "ZALICZONO",
+        "warn": "OSTRZEŻENIE",
+        "fail": "NIEPOWODZENIE"
+      },
+      "checksTitle": "Kontrole",
+      "contentRecall": "Przywołanie treści",
+      "orderFidelity": "Kolejność odczytu",
+      "allFieldsFound": "Wszystkie pola znaleziono w odczytanym tekście.",
+      "fieldsTruncated": "CV zawiera więcej pól, niż obejmuje analiza. Sprawdzono tylko pierwsze z nich; pozostałe nie są uwzględnione.",
+      "fieldStatus": {
+        "found": "Znaleziono",
+        "garbled": "Nieczytelne",
+        "missing": "Brak",
+        "hidden": "Ukryte"
+      },
+      "previewTitle": "Odczytany tekst",
+      "sectionKinds": {
+        "experience": "Doświadczenie",
+        "education": "Wykształcenie",
+        "skills": "Umiejętności"
+      },
+      "checks": {
+        "text_layer": {
+          "title": "Tekst możliwy do zaznaczenia",
+          "pass": "Odczytano {characters} znaków.",
+          "fail": "Brak tekstu do zaznaczenia. Plik wygląda na skan lub sam obraz, więc system ATS niczego nie odczyta."
+        },
+        "garbled_glyphs": {
+          "title": "Kodowanie znaków",
+          "pass": "Nie znaleziono nieczytelnych znaków.",
+          "warn": "Nie udało się odczytać {count} znaków.",
+          "fail": "Nie udało się odczytać {count} znaków, więc tekst będzie nieczytelny dla systemu ATS."
+        },
+        "text_coverage": {
+          "title": "Tekst a obrazy",
+          "pass": "Każda strona zawiera tekst.",
+          "warn": "Strony {pages} zawierają głównie obrazy.",
+          "fail": "Każda strona zawiera głównie obrazy."
+        },
+        "multi_column": {
+          "title": "Kolejność odczytu",
+          "pass": "Tekst jest ułożony w jednej kolumnie.",
+          "fail": "Na stronach {pages} wykryto dwie kolumny. Wiele systemów ATS może odczytać je w złej kolejności.",
+          "templateHint": "Ten szablon ma dwie kolumny. Do aplikacji obsługiwanych przez ATS wybierz szablon jednokolumnowy."
+        },
+        "tables": {
+          "title": "Tabele",
+          "pass": "Nie znaleziono tabel.",
+          "warn": "Znaleziono tabele: {count}. Niektóre systemy ATS spłaszczają lub pomijają ich komórki."
+        },
+        "text_boxes": {
+          "title": "Pola tekstowe",
+          "pass": "Nie znaleziono pól tekstowych.",
+          "warn": "Znaleziono pola tekstowe, które niektóre systemy ATS pomijają.",
+          "fail": "W polach tekstowych znajduje się {characters} znaków, które wiele systemów ATS pomija."
+        },
+        "header_footer_content": {
+          "title": "Nagłówki i stopki",
+          "pass": "W nagłówkach i stopkach nie ma istotnych informacji.",
+          "warn": "Część treści znajduje się w nagłówku lub stopce, które niektóre systemy ATS ignorują.",
+          "fail": "Dane kontaktowe znajdują się wyłącznie w nagłówku lub stopce, które wiele systemów ATS ignoruje."
+        },
+        "images": {
+          "title": "Obrazy",
+          "pass": "Nie znaleziono obrazów.",
+          "warn": "Znaleziono obrazy: {count}. System ATS nie odczyta tekstu umieszczonego na obrazie."
+        },
+        "page_count": {
+          "title": "Długość",
+          "pass": "Liczba stron: {pages}.",
+          "warn": "Liczba stron: {pages}. Rozważ skrócenie CV do dwóch stron."
+        },
+        "contact_info": {
+          "title": "Dane kontaktowe",
+          "pass": "Adres e-mail i telefon znaleziono na początku CV.",
+          "warn": "Dane kontaktowe są niepełne lub pojawiają się późno w tekście.",
+          "fail": "W odczytanym tekście nie znaleziono adresu e-mail."
+        },
+        "section_headings": {
+          "title": "Nagłówki sekcji",
+          "pass": "Znalezione standardowe sekcje: {found}.",
+          "warn": "Brakuje standardowej sekcji: {missing}.",
+          "fail": "Brakuje standardowych sekcji: {missing}. Użyj nazw takich jak Doświadczenie, Wykształcenie i Umiejętności."
+        },
+        "dates": {
+          "title": "Daty",
+          "pass": "W datach znaleziono okres: {years} lat.",
+          "warn": "Nie znaleziono rozpoznawalnych dat."
+        }
+      }
+    },
+    "writing": {
+      "aboutTitle": "Ocena tekstu",
+      "aboutDescription": "Stałe reguły sprawdzają każdy punkt i podsumowanie: pauzy em, słabe początki, pierwszą osobę, sztampowe zwroty, długie zdania i brak liczb. Funkcja poprawia słabsze zdania bez dodawania ani pomijania faktów.",
+      "improve": "Popraw tekst",
+      "improving": "Poprawianie…",
+      "needsProvider": "Skonfiguruj dostawcę AI w ustawieniach, aby poprawiać tekst.",
+      "error": "Nie udało się poprawić tekstu. Spróbuj ponownie.",
+      "changedMeanwhile": "CV zmieniło się podczas poprawiania. Uruchom poprawę tekstu ponownie.",
+      "reviewTitle": "Proponowane zmiany",
+      "noChanges": "Nie ma zmian do wprowadzenia: wszystkie wiersze spełniają zasady albo poprawki zmieniłyby fakty.",
+      "applyNote": "Zastosowane zmiany pojawią się w edytorze i zapiszą jak każda inna edycja.",
+      "discard": "Odrzuć",
+      "applyChanges": "Zastosuj zmiany",
+      "checkError": "Nie udało się ocenić tekstu."
+    }
+  },
+  "enrichment": {
+    "title": "Ulepsz CV",
+    "loading": {
+      "analyzingTitle": "Analizowanie CV…",
+      "analyzingDescription": "Wyszukiwanie miejsc, które warto uzupełnić",
+      "generatingTitle": "Przygotowywanie ulepszonych opisów…",
+      "generatingDescription": "Poprawianie CV na podstawie Twoich odpowiedzi",
+      "applyingTitle": "Zapisywanie zmian…",
+      "applyingDescription": "Aktualizowanie głównego CV"
+    },
+    "questionProgress": "Pytanie {current} z {total}",
+    "itemType": {
+      "experience": "Doświadczenie",
+      "project": "Projekt"
+    },
+    "shortcutHint": "Shift+Enter wstawia nowy wiersz, Cmd/Ctrl+Enter kontynuuje",
+    "preview": {
+      "title": "Sprawdź nowe treści",
+      "description": "Sprawdź nowe punkty, które zostaną dodane do CV",
+      "applyButton": "Dodaj do CV",
+      "keepingLabel": "Pozostaje",
+      "addingLabel": "Dodawane",
+      "existingCount": "({count} istniejące)",
+      "newCount": "({count} nowe)",
+      "noExistingDescription": "Brak dotychczasowego opisu",
+      "partialFailure": "Nie udało się ulepszyć niektórych pozycji",
+      "partialFailureDescription": "Wskazane pozycje pozostaną bez zmian. Możesz zapisać udane poprawki i wrócić do pozostałych później."
+    },
+    "complete": {
+      "title": "CV zostało ulepszone!",
+      "updatedCountSingular": "Zaktualizowano {count} pozycję",
+      "updatedCountPlural": "Zaktualizowano pozycje: {count}",
+      "updatedFallback": "Opisy w Twoim CV zostały ulepszone",
+      "doneButton": "Gotowe",
+      "refreshFailedTitle": "Zapisano — odśwież widok",
+      "refreshFailed": "Zmiany zostały zapisane, ale nie udało się odświeżyć widoku. Ponów, aby zobaczyć aktualne CV.",
+      "retryRefresh": "Ponów odświeżanie",
+      "refreshing": "Odświeżanie CV…"
+    },
+    "noImprovements": {
+      "title": "Twoje CV wygląda dobrze!",
+      "defaultDescription": "Nie znaleźliśmy elementów wymagających poprawy. Opisy doświadczenia i projektów są już szczegółowe."
+    },
+    "error": {
+      "title": "Coś poszło nie tak",
+      "unexpected": "Wystąpił nieoczekiwany błąd",
+      "answerRequired": "Odpowiedz na co najmniej jedno pytanie, aby przygotować poprawki."
+    }
+  },
+  "tailor": {
+    "title": "Dopasuj CV",
+    "subtitle": "Dopasuj CV do konkretnej oferty pracy",
+    "heroTitle": "Dopasuj CV do oferty",
+    "selectResume": "Wybierz CV",
+    "pasteJobDescription": "Wklej opis stanowiska",
+    "pasteJobDescriptionBelow": "Wklej opis stanowiska poniżej",
+    "jobDescriptionPlaceholder": "Wklej tutaj opis stanowiska…",
+    "promptLabel": "Intensywność dopasowania",
+    "promptDescription": "Wybierz, jak mocno dopasować CV do treści oferty.",
+    "promptOptions": {
+      "nudge": {
+        "label": "Lekkie dopasowanie",
+        "description": "Drobne zmiany dopasowujące istniejące doświadczenie."
+      },
+      "keywords": {
+        "label": "Dopasuj słowa kluczowe",
+        "description": "Dodaj odpowiednie słowa kluczowe bez zmiany roli ani zakresu obowiązków."
+      },
+      "full": {
+        "label": "Pełne dopasowanie",
+        "description": "Dokładne dopasowanie CV na podstawie opisu stanowiska."
+      },
+      "heavy": {
+        "label": "Gruntowne przepisanie",
+        "description": "Przepisuje każdy punkt i podsumowanie. Duże zmiany zwiększają ryzyko nieścisłości — sprawdź każdą linijkę."
+      }
+    },
+    "length": {
+      "pageLimitLabel": "Limit stron",
+      "pageLimitDescription": "W miarę możliwości usuwa najmniej istotne punkty, aby zmieścić CV. Bez limitu nie dopasowuje liczby stron.",
+      "pageLimitOptions": {
+        "1": "1 strona",
+        "2": "2 strony",
+        "3": "3 strony",
+        "none": "Bez limitu"
+      },
+      "bulletsLabel": "Punkty na stanowisko",
+      "bulletsDescription": "Liczba najistotniejszych punktów zachowanych dla każdej pracy lub projektu.",
+      "bulletOptions": {
+        "3": "Maks. 3",
+        "5": "Maks. 5",
+        "all": "Wszystkie"
+      }
+    },
+    "analyzeJob": "Analizuj ofertę",
+    "generateTailored": "Wygeneruj dopasowane CV",
+    "setupRequiredTitle": "[ WYMAGANA KONFIGURACJA ]",
+    "noApiKeyMessage": "> Nie skonfigurowano klucza API. Dopasowanie CV wymaga dostawcy LLM.",
+    "configureApiKey": "Skonfiguruj klucz API",
+    "configureApiKeyFirst": "Najpierw skonfiguruj klucz API",
+    "charactersCount": "{count} znaków",
+    "matchScore": "Wynik dopasowania",
+    "suggestions": "Sugestie",
+    "keywords": "Słowa kluczowe do uwzględnienia",
+    "footerTagline": "SILNIK OPTYMALIZACJI WSPOMAGANY AI",
+    "diffModal": {
+      "title": "Sprawdź dopasowanie AI",
+      "subtitle": "Dokładnie sprawdź zmiany, aby upewnić się, że nie dodano nieprawdziwych informacji.",
+      "summary": "Podsumowanie zmian",
+      "skillsAdded": "Dodane umiejętności",
+      "skillsRemoved": "Usunięte umiejętności",
+      "descriptionsModified": "Zmienione opisy",
+      "certificationsAdded": "Dodane certyfikaty",
+      "highRiskChanges": "Zmiany wysokiego ryzyka",
+      "warningTitle": "Wykryto zmiany wysokiego ryzyka: {count}",
+      "warningMessage": "Potwierdź, że te informacje są w oryginalnym CV lub wynikają z opisanych doświadczeń.",
+      "summaryChanges": "Zmiany w podsumowaniu",
+      "skillChanges": "Zmiany w umiejętnościach",
+      "descriptionChanges": "Zmiany w opisie doświadczenia",
+      "experienceChanges": "Zmiany w doświadczeniu",
+      "educationChanges": "Zmiany w wykształceniu",
+      "projectChanges": "Zmiany w projektach",
+      "certificationChanges": "Zmiany w certyfikatach",
+      "languageChanges": "Zmiany w językach",
+      "awardChanges": "Zmiany w nagrodach",
+      "rejectButton": "Odrzuć i wygeneruj ponownie",
+      "confirmButton": "Potwierdź i zapisz",
+      "heavyTag": "Gruntownie przepisano"
+    },
+    "atsScore": {
+      "title": "Szczegóły wyniku ATS",
+      "keywordMatch": "Dopasowanie słów kluczowych",
+      "skillsCoverage": "Pokrycie umiejętności",
+      "titleMatch": "Dopasowanie stanowiska",
+      "sectionCompleteness": "Kompletność sekcji",
+      "dateConsistency": "Spójność dat",
+      "missingKeywords": "Brakujące słowa kluczowe",
+      "injectableKeywords": "Można bezpiecznie dodać (są w głównym CV)",
+      "recommendations": "Zalecenia",
+      "twoColumnWarning": "Układ dwukolumnowy: wiele systemów ATS odczytuje kolumny w złej kolejności. Przed zatwierdzeniem wybierz jednokolumnowy szablon w kreatorze.",
+      "was": "wcześniej: {score}"
+    },
+    "regenerateDialog": {
+      "title": "Ponownie dopasować CV?",
+      "description": "Bieżący podgląd zostanie odrzucony i powstanie nowy wynik dopasowania AI.",
+      "confirmLabel": "Wygeneruj ponownie"
+    },
+    "missingDiffDialog": {
+      "title": "Nie można obliczyć zmian",
+      "description": "Nie udało się porównać tego CV. Może się tak zdarzyć w starszych plikach bez uporządkowanych danych. Możesz zapisać dopasowane CV albo anulować i wrócić do niego później.",
+      "confirmLabel": "Kontynuuj bez porównania"
+    },
+    "errors": {
+      "jobDescriptionTooShort": "Opis stanowiska jest za krótki. Dodaj więcej szczegółów i spróbuj ponownie.",
+      "apiKeyError": "Klucz API nie działa. Sprawdź go w ustawieniach.",
+      "rateLimit": "Osiągnięto limit zapytań. Odczekaj około minuty i spróbuj ponownie.",
+      "timeout": "Podgląd CV przekroczył limit czasu ({minutes} min). Spróbuj skrócić opis stanowiska lub uprościć prompt.",
+      "failedToGenerate": "Nie udało się wygenerować CV. Sprawdź klucz API w ustawieniach i spróbuj ponownie.",
+      "failedToPreview": "Nie udało się wyświetlić podglądu. Sprawdź klucz API w ustawieniach i spróbuj ponownie.",
+      "failedToConfirm": "Nie udało się zastosować zmian. Spróbuj ponownie.",
+      "previewUnavailable": "Podgląd wygasł lub źródłowe CV uległo zmianie. Wygeneruj nowy podgląd przed zapisaniem."
+    },
+    "selectResumeDescription": "Punkty zostaną pobrane z tego głównego CV.",
+    "tailoringLabel": "Dopasowanie:",
+    "jobDescriptionHint": "Wklej pełną ofertę pracy, wraz z obowiązkami i wymaganiami (co najmniej 50 znaków).",
+    "steps": {
+      "label": "Jak działa dopasowanie",
+      "paste": "Wklej opis stanowiska",
+      "generate": "Wygeneruj podgląd",
+      "review": "Sprawdź zmiany i zapisz"
+    },
+    "selectionSummary": "Zachowano {kept} z {total} punktów (maks. {max} na stanowisko lub projekt)",
+    "selectionSummaryAll": "Zachowano {kept} z {total} punktów",
+    "pageFit": {
+      "fits": "Mieści się w limicie stron",
+      "trimmed": "Usunięto jeszcze {count} punktów, aby zmieścić się w limicie",
+      "over": "Przekroczono limit stron; zachowano wszystkie wybrane punkty",
+      "unavailable": "Nie można sprawdzić liczby stron",
+      "finalOver": "Po przeredagowaniu CV może przekroczyć limit stron",
+      "notRechecked": "Nie sprawdzono ponownie liczby stron po przeredagowaniu"
+    },
+    "heavyWarning": "Gruntowne przepisanie wprowadza większe zmiany i może przypisać Ci coś, czego nie robiłeś(-aś). Sprawdź każdą linijkę przed zapisem.",
+    "progress": {
+      "title": "Pracujemy nad Twoim CV",
+      "elapsed": "{seconds} s",
+      "slow": "To nadal trwa. Niektóre modele potrzebują kilku minut. Lista odświeża się automatycznie.",
+      "steps": {
+        "keywords": "Czytanie oferty",
+        "select": "Wybór najlepszych punktów",
+        "plan": "Planowanie prezentacji umiejętności",
+        "tailor": "Dopasowywanie CV",
+        "refine": "Dodawanie słów kluczowych i sprawdzanie faktów",
+        "critique": "Ocena tekstu",
+        "rewrite": "Poprawianie słabszych zdań",
+        "verify": "Weryfikacja i przygotowanie podglądu"
+      },
+      "state": {
+        "done": "gotowe",
+        "current": "w toku",
+        "pending": "oczekuje"
+      }
+    },
+    "writingScore": {
+      "title": "Jakość tekstu",
+      "scoreNote": "Wynik opiera się na stałych regułach i jest taki sam dla każdego dostawcy AI.",
+      "beforeAfter": "wcześniej: {before}",
+      "rewritten": "Przepisano wiersze: {count}",
+      "rejected": "Odrzucono przeredagowane wersje zmieniające fakty: {count}",
+      "noFindings": "Nie znaleziono problemów z tekstem.",
+      "findingsTitle": "Wiersze do sprawdzenia",
+      "notesTitle": "Uwagi recenzenta",
+      "severity": {
+        "hard": "Popraw",
+        "soft": "Rozważ"
+      },
+      "rules": {
+        "em_dash": "Pauza em",
+        "weak_opener": "Słaby początek",
+        "no_outcome": "Brak rezultatu",
+        "first_person": "Pierwsza osoba",
+        "ai_phrase": "Sztampowe sformułowanie",
+        "repeated_opener": "Powtarzający się początek",
+        "long_bullet": "Zbyt długi punkt",
+        "no_metric": "Brak liczby"
+      }
+    },
+    "forceKeywords": {
+      "title": "Dodaj brakujące słowa kluczowe",
+      "description": "Wybierz słowa kluczowe z oferty do uwzględnienia w CV. Każde trafi do umiejętności i maksymalnie dwóch pasujących punktów.",
+      "supported": "Występują w głównym CV",
+      "unsupported": "Nie występują w głównym CV",
+      "apply": "Zastosuj",
+      "haveThis": "Mam tę umiejętność",
+      "attestNote": "Zaznacz „Mam tę umiejętność” tylko wtedy, gdy naprawdę ją posiadasz. Przygotuj się na pytania podczas rozmowy.",
+      "addToMaster": "Dodaj potwierdzone umiejętności także do głównego CV",
+      "applyButton": "Zastosuj słowa kluczowe: {count}",
+      "applying": "Dodawanie słów kluczowych…",
+      "placementsTitle": "Miejsca dodania słów kluczowych",
+      "where": {
+        "summary": "Podsumowanie",
+        "skills": "Umiejętności",
+        "bullet": "{entry}, wiersz {line}"
+      },
+      "nowhere": "Nie udało się dodać",
+      "error": "Nie udało się dodać słów kluczowych. Spróbuj ponownie.",
+      "scoreChange": "Wynik ATS: {before} → {after}",
+      "limitReached": "Do jednego CV możesz dodać maksymalnie {max} słów kluczowych."
+    }
+  },
+  "settings": {
+    "title": "Ustawienia",
+    "subtitle": "Skonfiguruj swoje preferencje",
+    "aiProvider": "Dostawca AI",
+    "aiProviderDescription": "Wybierz dostawcę AI do analizy CV",
+    "apiKey": "Klucz API",
+    "apiKeyPlaceholder": "Wpisz klucz API",
+    "saveApiKey": "Zapisz klucz API",
+    "contentLanguage": "Język treści",
+    "contentLanguageDescription": "Język generowanych treści (CV, listy motywacyjne)",
+    "uiLanguage": "Język interfejsu",
+    "uiLanguageDescription": "Język interfejsu użytkownika",
+    "languageTitle": "Język",
+    "display": {
+      "title": "Wygląd",
+      "backgroundEffects": "Efekty tła",
+      "backgroundEffectsDescription": "Animowane tła stron i pracy AI. Wyłącz, aby używać statycznego tła."
+    },
+    "theme": "Motyw",
+    "themeDescription": "Wybierz motyw kolorystyczny",
+    "lightMode": "Jasny",
+    "darkMode": "Ciemny",
+    "systemMode": "Zgodny z systemem",
+    "dangerZone": "Strefa niebezpieczna",
+    "clearApiKeys": "Usuń klucze API",
+    "clearApiKeysDescription": "Usuwa wszystkie zapisane klucze API. Tej operacji nie można cofnąć.",
+    "resetDatabase": "Zresetuj bazę danych",
+    "resetDatabaseDescription": "Usuwa wszystkie dane, w tym CV, oferty pracy i wygenerowane treści. Tej operacji nie można cofnąć.",
+    "llmConfigurationTitle": "Konfiguracja LLM",
+    "providerLabel": "Dostawca",
+    "statusCards": {
+      "llm": "LLM",
+      "database": "Baza danych",
+      "resumes": "CV",
+      "jobs": "Oferty pracy",
+      "improvements": "Ulepszenia",
+      "masterResume": "Główne CV"
+    },
+    "statusValues": {
+      "healthy": "Działa poprawnie",
+      "offline": "Niedostępny",
+      "connected": "Połączono",
+      "configured": "Skonfigurowano",
+      "notSet": "Nie ustawiono"
+    },
+    "apiKeyMenu": {
+      "buttonLabel": "API LLM",
+      "title": "Klucz API OpenAI",
+      "description": "Dodaj klucz, aby włączyć modele OpenAI.",
+      "savedMessage": "Klucz API zapisany.",
+      "loadError": "Nie udało się wczytać klucza API",
+      "updateError": "Nie udało się zaktualizować klucza API"
+    },
+    "setupRequired": {
+      "title": "[ WYMAGANA KONFIGURACJA ]",
+      "description": "> Nie skonfigurowano klucza API. Dodaj klucz dostawcy LLM poniżej, aby włączyć dopasowywanie CV."
+    },
+    "systemStatus": {
+      "title": "Status systemu",
+      "refresh": "Odśwież",
+      "unableToConnect": "Nie można połączyć się z serwerem",
+      "expectedAt": "Oczekiwany o: {apiUrl}",
+      "lastFetched": {
+        "never": "Nigdy",
+        "justNow": "Przed chwilą",
+        "minutesAgo": "{minutes} min temu",
+        "hoursAgo": "{hours} godz. temu"
+      }
+    },
+    "llmConfiguration": {
+      "selectedProvider": "WYBRANO: {provider}",
+      "defaultProviderName": "Domyślny (CVKA)",
+      "defaultProviderShortName": "Domyślnie",
+      "defaultProviderNote": "CVKA korzysta z puli dostawców skonfigurowanej na tym serwerze i przełącza się na kolejnego, gdy jeden jest niedostępny. Aby użyć własnego klucza API, wybierz konkretnego dostawcę.",
+      "claudeCliNote": "Uruchamia interfejs wiersza poleceń Claude Code zainstalowany i zalogowany na tym komputerze, więc w tym miejscu nie jest potrzebny klucz API. Claude Code nadal wysyła Twoje monity do Anthropic za pośrednictwem Twojego konta.",
+      "claudeCliDefaultModel": "Claude Code – ustawienie domyślne",
+      "claudeCliModelHint": "Każdy alias korzysta z najnowszego modelu w swojej rodzinie. To, z których możesz korzystać, zależy od Twojego planu Claude.",
+      "claudeCliName": "Subskrypcja Claude (za pośrednictwem Claude Code)",
+      "claudeCliShortName": "Plan Claude",
+      "claudeCliWarningTitle": "Korzystaj na własne ryzyko",
+      "claudeCliWarning": "Anthropic nie zezwala aplikacjom zewnętrznym na kierowanie zapytań przez plany Claude Free, Pro lub Max. Ta opcja może zostać uznana za takie użycie. Anthropic może zareagować bez uprzedzenia; aby mieć pewny dostęp, użyj klucza API Anthropic. CVKA nie widzi ani nie zapisuje Twoich danych logowania do Claude: uruchamia lokalny Claude Code CLI, do którego logujesz się poleceniem `claude auth login`. Zapytania wliczają się do limitów planu Claude, a Anthropic może rozliczyć je z puli kredytów.",
+      "communityBuilt": "Funkcja stworzona przez społeczność.",
+      "chatgptName": "Plan ChatGPT (zaloguj się za pomocą ChatGPT)",
+      "agentShortName": "Agent kodujący",
+      "agentName": "Twój agent kodowania (Claude Code, Codex, Cursor lub Copilot)",
+      "agentNoteTitle": "Klucz API nie jest potrzebny",
+      "agentNote": "Twój agent kodujący wykonuje pracę związaną ze sztuczną inteligencją: czyta Twoje CV i opisy stanowisk, tworzy dostosowane wersje i zapisuje je tutaj za pomocą polecenia cvka. Aplikacja nie wykonuje samodzielnie żadnych wywołań sztucznej inteligencji, więc jej przyciski AI wyświetlają monit, który możesz wkleić do swojego agenta.",
+      "agentGuideLink": "Przewodnik konfiguracji agenta",
+      "chatgptShortName": "Plan ChatGPT",
+      "chatgptWarningTitle": "Podgląd",
+      "chatgptWarning": "Ta opcja korzysta z oficjalnego logowania OpenAI przez ChatGPT dla aplikacji open source. Jest w wersji zapoznawczej i może się zmienić. Działa z planami ChatGPT Plus i Pro. Zapytania są wysyłane z Twojego komputera bezpośrednio do OpenAI, a tokeny logowania są na nim szyfrowane. Użycie wlicza się do limitów planu ChatGPT: w Plus limit pięciogodzinny jest współdzielony z innymi aplikacjami, a Pro nie ma limitu pięciogodzinnego. Aby mieć pewny dostęp, użyj klucza API OpenAI.",
+      "modelLabel": "Model",
+      "defaultModel": "DOMYŚLNIE: {model}",
+      "apiKeyLabel": "Klucz API",
+      "apiKeyOptionalForOllama": "(opcjonalnie dla Ollamy)",
+      "apiKeyOptional": "(opcjonalnie)",
+      "apiKeyPlaceholder": "sk-...",
+      "apiKeyNotRequiredPlaceholder": "Nie jest wymagane w przypadku modeli lokalnych",
+      "apiKeyOptionalPlaceholder": "Pozostaw puste, jeśli Twój serwer nie ma uwierzytelniania",
+      "leaveBlankToKeepExistingKey": "POZOSTAW PUSTE, ABY ZACHOWAĆ ISTNIEJĄCY KLUCZ",
+      "baseUrlLabel": "Podstawowy adres URL (opcjonalnie)",
+      "baseUrlPlaceholder": "e.g. https://api.openai.com/v1",
+      "baseUrlDescription": "Zastąp podstawowy adres URL interfejsu API, aby użyć punktu końcowego serwera proxy/agregatora. Pozostaw puste, aby użyć wartości domyślnej dostawcy.",
+      "azureBaseUrlLabel": "Punkt końcowy Azure AI Foundry",
+      "azureBaseUrlDescription": "Wklej punkt końcowy z Foundry. Wdrożenia GPT mogą korzystać z katalogu głównego usługi lub adresu /openai/v1/responses; modele Azure AI Inference mogą korzystać z punktu końcowego /models.",
+      "ollamaServerUrl": "Adres URL serwera Ollama",
+      "ollamaServerUrlPlaceholder": "http://localhost:11434",
+      "reasoningEffortLabel": "Poziom wnioskowania",
+      "reasoningEffortAuto": "Automatyczny",
+      "reasoningEffortAutoDesc": "Nie wysyłaj reasoning_effort – domyślnie dla maksymalnej kompatybilności",
+      "reasoningEffortMinimal": "Minimalny",
+      "reasoningEffortLow": "Niski",
+      "reasoningEffortMedium": "Średni",
+      "reasoningEffortHigh": "Wysoki",
+      "reasoningEffortDescription": "Dotyczy tylko modeli zdolnych do rozumowania (rodzina gpt-5, Claude 3.7+, DeepSeek R1, OpenAI o1/o3). Nieobsługiwani dostawcy automatycznie odrzucają tę wartość.",
+      "testConnection": "Testuj połączenie",
+      "errorPrefix": "BŁĄD: {error}",
+      "connectionSuccessful": "POŁĄCZENIE DZIAŁA",
+      "connectionFailed": "NIE UDAŁO SIĘ POŁĄCZYĆ",
+      "connectionDetails": "Dostawca: {provider} | Model: {model}",
+      "testPromptLabel": "PROMPT TESTOWY",
+      "modelOutputLabel": "WYNIK MODELU",
+      "reasoningContentLabel": "MYŚLENIE MODELOWE",
+      "errorDetailLabel": "SZCZEGÓŁY BŁĘDU",
+      "healthErrors": {
+        "api_key_missing": "Klucz API nie jest skonfigurowany. Dodaj klucz w Ustawieniach.",
+        "health_check_failed": "Kontrola stanu zakończona niepowodzeniem.",
+        "duplicate_v1_path": "Kontrola stanu zakończona niepowodzeniem. Podstawowy adres URL może zawierać zduplikowaną ścieżkę /v1.",
+        "not_found_404": "Kontrola stanu zakończona niepowodzeniem. 404 Nie znaleziono – sprawdź, czy podstawowy adres URL jest zgodny z dostawcą.",
+        "html_response": "Kontrola stanu zakończona niepowodzeniem. Podstawowy adres URL zwrócił kod HTML; może to być adres URL konsoli lub nieobsługiwana ścieżka bramki.",
+        "claude_cli_not_found": "Nie znaleziono Claude Code CLI. Zainstaluj Claude Code i uruchom `claude auth login`.",
+        "chatgpt_not_connected": "Nie zalogowano do ChatGPT. Wybierz plan ChatGPT w ustawieniach i zaloguj się.",
+        "chatgpt_usage_limit": "Osiągnięto limit wykorzystania Twojego planu ChatGPT dla tej aplikacji. Sprawdź to w ustawieniach ChatGPT w sekcji „Wykorzystanie”.",
+        "chatgpt_not_eligible": "Korzystanie z planu ChatGPT nie jest dostępne dla tego konta. Wymagany jest plan ChatGPT Plus lub Pro; w przeciwnym razie użyj klucza API OpenAI.",
+        "api_key_required_for_endpoint": "Ten klucz API jest zapisany dla innego punktu końcowego. Wprowadź klucz, aby przetestować go pod kątem tego podstawowego adresu URL.",
+        "loopback_in_container": "Nie można połączyć się z serwerem modelu. W Dockerze localhost oznacza sam kontener. Ustaw adres bazowy na http://host.docker.internal:11434 lub port serwera."
+      },
+      "healthWarnings": {
+        "empty_content": "LLM zwrócił pustą treść dla kontroli stanu."
+      }
+    },
+    "chatgpt": {
+      "continue": "Kontynuuj w ChatGPT",
+      "checking": "Sprawdzanie",
+      "connected": "Połączono",
+      "notConnected": "Nie połączono",
+      "disconnect": "Rozłącz",
+      "manageUsage": "Zarządzaj użyciem",
+      "disconnected": "Rozłączono z ChatGPT.",
+      "revocationUnconfirmed": "Wylogowano na tym komputerze, ale OpenAI nie potwierdziło zakończenia sesji. Możesz też odłączyć CVKA w ustawieniach ChatGPT.",
+      "returnConnected": "Połączono z planem ChatGPT. Wybierz model i zapisz.",
+      "returnCancelled": "Logowanie do ChatGPT zostało anulowane.",
+      "returnError": "Nie udało się zalogować do ChatGPT. Spróbuj ponownie.",
+      "planDeclined": "Korzystanie z planu ChatGPT nie było dozwolone. Kontynuuj korzystanie z ChatGPT i wyraź zgodę lub użyj klucza API OpenAI.",
+      "sameMachineOnly": "Zaloguj się z przeglądarki na komputerze, na którym działa CVKA.",
+      "signInFailed": "Nie udało się rozpocząć logowania do ChatGPT. Spróbuj ponownie.",
+      "disconnectFailed": "Nie udało się rozłączyć ChatGPT. Spróbuj ponownie.",
+      "statusFailed": "Nie udało się sprawdzić połączenia z ChatGPT.",
+      "modelsFailed": "Nie udało się załadować Twoich modeli ChatGPT. Zamiast tego wprowadź nazwę modelu.",
+      "modelHint": "Po zalogowaniu lista modeli zostanie pobrana z Twojego konta ChatGPT.",
+      "connectToSave": "Zaloguj się za pomocą ChatGPT, aby zapisać tego dostawcę."
+    },
+    "subscriptionRisk": {
+      "claudeCli": {
+        "title": "Chcesz skorzystać tutaj ze swojego planu Claude?",
+        "risk": "Anthropic nie zezwala aplikacjom innych firm na kierowanie zapytań przez plany Claude Free, Pro lub Max. CVKA uruchamia Twój własny interfejs wiersza poleceń Claude Code i nigdy nie widzi Twoich danych uwierzytelniających, ale Anthropic może nadal traktować to jako korzystanie przez stronę trzecią i może podjąć działania wobec Twojego konta bez uprzedzenia.",
+        "usage": "Zapytania wliczają się do limitów planu Claude. Ta funkcja społecznościowa może przestać działać, jeśli Anthropic zmieni Claude Code lub swoje zasady."
+      },
+      "chatgpt": {
+        "title": "Chcesz skorzystać tutaj ze swojego planu ChatGPT?",
+        "risk": "Ta opcja używa logowania OpenAI przez ChatGPT dla aplikacji open source. Jest w wersji zapoznawczej, więc OpenAI może ją zmienić lub wycofać. Działa z planami ChatGPT Plus i Pro.",
+        "usage": "Zapytania wliczają się do limitów planu ChatGPT, współdzielonych z innymi używanymi aplikacjami. Ta funkcja jest rozwijana przez społeczność."
+      },
+      "mcpTitle": "Zalecane: pozwól swojemu agentowi kodującemu wykonać pracę",
+      "mcpBody": "Używasz Claude Code, Codex, Cursor lub Copilota? Wybierz tryb agenta. Agent wykonuje pracę AI w swojej aplikacji, a CVKA zapisuje, sprawdza i renderuje wynik. Klucz API nie jest potrzebny.",
+      "mcpLink": "Instrukcja konfiguracji agenta",
+      "alternative": "Wolisz gwarantowany dostęp? Wróć i użyj klucza API lub modelu lokalnego, takiego jak Ollama.",
+      "back": "Nie, wróć",
+      "accept": "Tak, akceptuję ryzyko"
+    },
+    "contentGeneration": {
+      "title": "Generowanie treści",
+      "description": "Włącz generowanie dodatkowych treści podczas dostosowywania CV. Po włączeniu tej opcji te dokumenty będą automatycznie generowane razem z dostosowanym CV.",
+      "coverLetter": {
+        "label": "List motywacyjny",
+        "description": "Wygeneruj dopasowany list motywacyjny wraz z CV"
+      },
+      "outreachMessage": {
+        "label": "Wiadomość networkingowa",
+        "description": "Wygeneruj wiadomość networkingową na LinkedIn lub e-maila"
+      },
+      "customPromptLabel": "Niestandardowy monit (opcjonalnie)",
+      "customPromptHelp": "Prompt musi zawierać te znaczniki (każdy w nawiasach klamrowych): job_description, resume_data, output_language. Zostaw puste, aby użyć domyślnego promptu.",
+      "customPromptResetButton": "Przywróć ustawienia domyślne",
+      "customPromptErrorMissing": "Brak wymaganych znaczników: {missing}",
+      "interviewPrep": {
+        "label": "Przygotowanie do rozmowy",
+        "description": "Automatyczne generowanie materiałów do przygotowania się do rozmowy kwalifikacyjnej wraz z zapisanymi dostosowanymi CV"
+      }
+    },
+    "promptSettings": {
+      "title": "Ustawienia promptów",
+      "description": "Wybierz domyślny monit używany do dostosowywania CV.",
+      "defaultLabel": "Domyślny prompt dopasowujący CV"
+    },
+    "footer": {
+      "status": {
+        "checking": "Sprawdzanie...",
+        "ready": "STATUS: GOTOWE",
+        "setupRequired": "STATUS: WYMAGANA KONFIGURACJA",
+        "offline": "STATUS: NIEDOSTĘPNY"
+      }
+    },
+    "errors": {
+      "unableToConnectBackend": "Nie można połączyć się z serwerem. Upewnij się, że działa.",
+      "apiKeyRequired": "W przypadku wybranego dostawcy wymagany jest klucz API.",
+      "baseUrlRequired": "Dostawca {provider} wymaga podstawowego adresu URL.",
+      "unknownProvider": "Z zaplecza zwrócono nieznanego dostawcę: {provider}",
+      "unableToSaveConfiguration": "Nie można zapisać konfiguracji",
+      "failedToClearApiKeys": "Nie udało się usunąć kluczy API. Spróbuj ponownie.",
+      "failedToResetDatabase": "Nie udało się zresetować bazy danych. Spróbuj ponownie.",
+      "apiKeyRequiredForEndpoint": "Wprowadź ponownie klucz API, aby użyć go z tym podstawowym adresem URL lub dostawcą."
+    },
+    "apiKeys": {
+      "savedTitle": "Zapisane klucze API",
+      "deleteAria": "Usuń klucz {provider}",
+      "deleteConfirmTitle": "Usunąć klucz API?",
+      "deleteConfirmDescription": "Usunąć zapisany klucz API dostawcy {provider}? Możesz go dodać ponownie później."
+    }
+  },
+  "resumeViewer": {
+    "resumeNotFound": "Nie znaleziono CV",
+    "loading": "Wczytywanie CV…",
+    "useTailorFeature": "Dopasuj CV do oferty",
+    "retryProcessing": "Ponów przetwarzanie",
+    "deleteAndStartOver": "Usuń i zacznij od nowa",
+    "returnToDashboard": "Wróć do panelu",
+    "enhanceResume": "Ulepsz CV",
+    "downloadResume": "Pobierz CV",
+    "deletedTitle": "CV usunięte",
+    "deletedDescriptionMaster": "Główne CV zostało trwale usunięte z systemu.",
+    "deletedDescriptionRegular": "CV zostało trwale usunięte z systemu.",
+    "deleteFailedTitle": "Nie udało się usunąć",
+    "errors": {
+      "processingFailed": "Nie udało się odczytać CV. Ponów przetwarzanie albo usuń je i prześlij inny plik.",
+      "stillProcessing": "CV jest nadal przetwarzane. Odczekaj kilka sekund i odśwież stronę.",
+      "notProcessedYet": "CV nie zostało jeszcze przetworzone. Użyj funkcji dopasowania, aby utworzyć uporządkowane CV.",
+      "noDataAvailable": "Brak danych CV.",
+      "failedToLoad": "Nie udało się wczytać danych CV.",
+      "failedToDelete": "Nie udało się usunąć CV. Spróbuj ponownie.",
+      "failedToDownload": "Nie udało się pobrać CV. Spróbuj ponownie.",
+      "failedToRename": "Nie udało się zmienić nazwy CV. Spróbuj ponownie."
+    },
+    "titlePlaceholder": "Wpisz nazwę CV…",
+    "downloadFailedTitle": "Nie udało się pobrać",
+    "renameFailedTitle": "Nie udało się zmienić nazwy",
+    "renameTitle": "Zmień nazwę CV",
+    "defaultBadge": "Główne CV — domyślne",
+    "setDefault": "Ustaw jako główne CV",
+    "setDefaultSuccess": "To CV jest teraz domyślnym źródłem dopasowania.",
+    "setDefaultError": "Nie udało się ustawić tego CV jako domyślnego. Spróbuj ponownie.",
+    "duplicate": "Utwórz kopię",
+    "duplicateError": "Nie udało się utworzyć kopii CV. Spróbuj ponownie."
+  },
+  "preview": {
+    "margins": "Marginesy",
+    "calculating": "Obliczanie…",
+    "pageBreak": "Podział strony",
+    "pageCountSingular": "{count} strona",
+    "pageCountPlural": "{count} stron",
+    "pageOfTotal": "Strona {page} z {total}",
+    "zoomIn": "Powiększ",
+    "zoomOut": "Pomniejsz"
+  },
+  "resume": {
+    "personalInfo": {
+      "name": "Imię i nazwisko",
+      "title": "Nazwa stanowiska",
+      "email": "E-mail",
+      "phone": "Telefon",
+      "location": "Lokalizacja",
+      "website": "Strona internetowa",
+      "linkedin": "LinkedIn",
+      "github": "GitHub"
+    },
+    "sections": {
+      "personalInfo": "Dane osobowe",
+      "summary": "Podsumowanie",
+      "experience": "Doświadczenie",
+      "earlierExperience": "Wcześniejsze doświadczenie",
+      "education": "Wykształcenie",
+      "projects": "Projekty",
+      "skills": "Umiejętności",
+      "skillsOnly": "Umiejętności",
+      "certifications": "Certyfikaty",
+      "languages": "Języki",
+      "awards": "Nagrody",
+      "links": "Linki"
+    },
+    "defaults": {
+      "name": "Twoje imię i nazwisko"
+    },
+    "additional": {
+      "technicalSkills": "Umiejętności techniczne"
+    },
+    "additionalLabels": {
+      "technicalSkills": "Umiejętności techniczne",
+      "languages": "Języki",
+      "certifications": "Certyfikaty",
+      "awards": "Nagrody"
+    }
+  },
+  "coverLetter": {
+    "title": "List motywacyjny",
+    "generate": "Wygeneruj list motywacyjny",
+    "regenerate": "Wygeneruj ponownie",
+    "copyToClipboard": "Kopiuj do schowka",
+    "copied": "Skopiowano!",
+    "editor": {
+      "placeholder": "List motywacyjny pojawi się tutaj po dopasowaniu CV z włączonym generowaniem listu.",
+      "tip": "WSKAZÓWKA: List zwykle mieści się na jednej stronie i ma 200–300 słów. Edytuj go, aby nadać mu osobisty charakter."
+    },
+    "preview": {
+      "defaultName": "Twoje imię i nazwisko",
+      "emptyTitle": "Brak treści listu motywacyjnego.",
+      "emptyDescription": "Włącz generowanie listu w ustawieniach, a następnie dopasuj CV."
+    },
+    "print": {
+      "emptyContent": "Brak treści listu motywacyjnego."
+    }
+  },
+  "outreach": {
+    "title": "Wiadomość kontaktowa",
+    "generate": "Generate Outreach Message",
+    "regenerate": "Regenerate",
+    "copy": "Copy",
+    "copyToClipboard": "Kopiuj do schowka",
+    "copied": "Skopiowano!",
+    "editor": {
+      "placeholder": "Wiadomość kontaktowa pojawi się tutaj po dopasowaniu CV z włączonym jej generowaniem.",
+      "tip": "WSKAZÓWKA: Pisz krótko (100–150 słów). Skopiuj wiadomość do LinkedIn lub e-maila."
+    },
+    "preview": {
+      "channels": {
+        "linkedin": "LinkedIn",
+        "email": "Email"
+      },
+      "howToUseTitle": "Jak użyć:",
+      "steps": {
+        "step1": "1. Skopiuj wiadomość przyciskiem powyżej",
+        "step2": "2. Otwórz LinkedIn lub pocztę e-mail",
+        "step3": "3. Wklej wiadomość i dostosuj ją do siebie",
+        "step4": "4. Wyślij do rekrutera lub osoby prowadzącej rekrutację"
+      },
+      "emptyTitle": "Brak wiadomości kontaktowej.",
+      "emptyDescription": "Włącz generowanie wiadomości w ustawieniach, a następnie dopasuj CV."
+    }
+  },
+  "errors": {
+    "generic": "Coś poszło nie tak. Spróbuj ponownie.",
+    "networkError": "Błąd sieci. Sprawdź połączenie.",
+    "unauthorized": "Zaloguj się, aby kontynuować.",
+    "notFound": "Nie znaleziono żądanego zasobu.",
+    "validationError": "Niektóre pola wymagają poprawy. Sprawdź wyróżnione pola i spróbuj ponownie.",
+    "boundary": {
+      "title": "Wystąpił błąd",
+      "description": "Wystąpił nieoczekiwany problem. Odśwież stronę — jeśli problem się powtarza, daj nam znać.",
+      "tryAgain": "Spróbuj ponownie",
+      "reloadPage": "Odśwież stronę"
+    }
+  },
+  "a11y": {
+    "removeItem": "Usuń pozycję",
+    "duplicateItem": "Powiel pozycję",
+    "removeDescription": "Usuń ten wiersz",
+    "removeFile": "Usuń plik"
+  },
+  "confirmations": {
+    "deleteResume": "Usunąć to CV?",
+    "deleteResumeDescription": "CV zostanie trwale usunięte.",
+    "deleteMasterResumeTitle": "Usuń główne CV",
+    "deleteMasterResumeDescription": "Główne CV zostanie trwale usunięte.",
+    "deleteResumeFromSystemDescription": "CV zostanie trwale usunięte z systemu.",
+    "deleteResumeConfirmLabel": "Usuń CV",
+    "keepResumeCancelLabel": "Zachowaj CV",
+    "discardChanges": "Odrzucić niezapisane zmiany?",
+    "discardChangesDescription": "Utracisz wszystkie niezapisane zmiany.",
+    "clearApiKeys": "Usunąć wszystkie klucze API?",
+    "clearApiKeysDescription": "Przed ponownym użyciem funkcji AI trzeba będzie wpisać je jeszcze raz.",
+    "resetDatabase": "Zresetować wszystkie dane?",
+    "resetDatabaseDescription": "Ta operacja trwale usuwa wszystkie CV, oferty pracy i wygenerowane dokumenty."
+  },
+  "resumeWizard": {
+    "title": "Kreator CV",
+    "answerLabel": "Twoja odpowiedź",
+    "keepAddingPrompt": "Co chcesz dodać lub zmienić?",
+    "readyHint": "Masz już podstawy dobrego CV — możesz je sprawdzić i zakończyć w dowolnym momencie.",
+    "sections": {
+      "intro": "Na początek",
+      "contact": "Dane kontaktowe",
+      "summary": "Podsumowanie zawodowe",
+      "workExperience": "Doświadczenie zawodowe",
+      "internships": "Staż",
+      "education": "Wykształcenie",
+      "personalProjects": "Projekty",
+      "skills": "Umiejętności",
+      "review": "Sprawdź"
+    },
+    "actions": {
+      "continue": "Dalej",
+      "skip": "Pomiń",
+      "back": "Wstecz",
+      "review": "Sprawdź i zakończ",
+      "create": "Utwórz główne CV",
+      "keepAdding": "Dodaj więcej",
+      "backToDashboard": "Wróć do panelu",
+      "openCreated": "Otwórz utworzone CV",
+      "retryDraftBackup": "Ponów lokalny zapis",
+      "stay": "Zostań tutaj",
+      "leaveWithoutSaving": "Wyjdź bez zapisywania"
+    },
+    "preview": {
+      "label": "Podgląd na żywo",
+      "empty": "Twoje CV pojawi się tutaj w trakcie uzupełniania.",
+      "unnamed": "CV bez nazwy",
+      "experience": "Doświadczenie",
+      "education": "Wykształcenie",
+      "projects": "Projekty",
+      "skills": "Umiejętności",
+      "inferredSkill": "wnioskowane"
+    },
+    "errors": {
+      "turnFailed": "Kreator nie zapisał tej odpowiedzi. Spróbuj ponownie.",
+      "finalizeFailed": "Kreator nie utworzył głównego CV. Spróbuj ponownie.",
+      "createdNavigationFailed": "Główne CV zostało utworzone, ale nie udało się otworzyć go automatycznie. Przejdź dalej przyciskiem poniżej."
+    },
+    "draftStorageUnavailable": {
+      "title": "Lokalny szkic niedostępny",
+      "description": "Najnowszy postęp kreatora jest tylko w tej karcie. Zapisz lokalną kopię przed wyjściem lub odświeżeniem strony."
+    },
+    "leaveWithoutDraft": {
+      "title": "Wyjść bez lokalnej kopii?",
+      "description": "Najnowszy postęp zostanie utracony, jeśli wyjdziesz lub odświeżysz stronę przed zapisaniem lokalnej kopii."
+    },
+    "entry": {
+      "kicker": "Tworzenie głównego CV",
+      "title": "Wybierz sposób rozpoczęcia",
+      "description": "Utwórz główne CV z istniejącego pliku albo przygotuj je krok po kroku z pomocą AI.",
+      "upload": {
+        "kicker": "Mam już plik",
+        "title": "Prześlij CV",
+        "description": "Prześlij PDF lub DOCX, a CVKA odczyta dane i utworzy profil.",
+        "action": "Prześlij CV"
+      },
+      "wizard": {
+        "kicker": "Z pomocą AI",
+        "title": "Utwórz CV z kreatorem AI",
+        "description": "Odpowiedz na kilka pytań, a kreator przygotuje pierwszą wersję głównego CV.",
+        "action": "Uruchom kreator"
+      }
+    },
+    "created": {
+      "title": "Utworzono główne CV",
+      "description": "Główne CV jest gotowe. Otwórz je, aby kontynuować edycję."
+    },
+    "initialQuestion": "Cześć! Pomogę Ci przygotować główne CV. Jak masz na imię i jakiej pracy szukasz?"
+  },
+  "tracker": {
+    "manage": "Zarządzaj",
+    "manageDialog": {
+      "title": "Zarządzaj kolumnami",
+      "description": "Wybierz etapy widoczne na tablicy.",
+      "visible": "Widoczne",
+      "hidden": "Ukryte",
+      "lastVisibleHint": "Co najmniej jeden etap musi pozostać widoczny.",
+      "close": "Gotowe"
+    },
+    "scroll": {
+      "prev": "Przewiń w lewo",
+      "next": "Przewiń w prawo",
+      "hint": "Przewiń, aby zobaczyć więcej etapów"
+    },
+    "title": "Śledzenie aplikacji",
+    "subtitle": "Sprawdzaj status CV dopasowanych do ofert pracy.",
+    "addApplication": "Dodaj aplikację",
+    "columns": {
+      "saved": "Zapisane",
+      "applied": "Wysłane",
+      "no_response": "Brak odpowiedzi",
+      "response": "Odpowiedź",
+      "interview": "Rozmowa",
+      "accepted": "Przyjęte",
+      "rejected": "Odrzucone",
+      "empty": "Na razie pusto"
+    },
+    "empty": {
+      "title": "Nie masz jeszcze aplikacji",
+      "description": "Dopasuj CV do oferty lub dodaj aplikację ręcznie, aby rozpocząć śledzenie."
+    },
+    "card": {
+      "companyUnknown": "Nieznana firma",
+      "roleUnknown": "Stanowisko bez nazwy",
+      "sharedResume": "Wspólne CV",
+      "selectAria": "Wybierz aplikację",
+      "dragAria": "Przeciągnij, aby zmienić kolejność"
+    },
+    "modal": {
+      "jobDescription": "Opis stanowiska",
+      "noJobDescription": "Brak zapisanego opisu stanowiska.",
+      "notes": "Notatki",
+      "notesPlaceholder": "Dodaj notatkę o tej aplikacji…",
+      "saveNotes": "Zapisz notatki",
+      "resumeUnavailable": "CV użyte do aplikacji nie jest już dostępne.",
+      "loadFailed": "Nie udało się wczytać tej aplikacji.",
+      "editResume": "Edytuj CV"
+    },
+    "followUp": {
+      "due": "Do kontaktu",
+      "title": "Kontakt ponowny",
+      "description": "Dni od wysłania: {days}",
+      "agentHint": "Poproś agenta kodującego o napisanie wiadomości z ponownym kontaktem.",
+      "draft": "Napisz wiadomość z ponownym kontaktem",
+      "drafting": "Pisanie…",
+      "failed": "Nie udało się przygotować wiadomości.",
+      "draftLabel": "Wiadomość z ponownym kontaktem",
+      "copy": "Kopiuj",
+      "copied": "Skopiowano!",
+      "moveToNoResponse": "Przenieś do „Brak odpowiedzi”",
+      "moving": "Przenoszenie…"
+    },
+    "bulk": {
+      "selected": "Wybrano: {count}",
+      "moveTo": "Przenieś do…",
+      "clear": "Wyczyść",
+      "deleteConfirmTitle": "Usunąć aplikacje?",
+      "deleteConfirmDescription": "Usunąć wybrane aplikacje ({count})? Tej operacji nie można cofnąć."
+    },
+    "manualAdd": {
+      "title": "Dodaj aplikację",
+      "description": "Wklej opis stanowiska, aby śledzić aplikację.",
+      "resume": "CV",
+      "untitledResume": "CV bez nazwy",
+      "jobDescription": "Opis stanowiska",
+      "jobDescriptionPlaceholder": "Wklej tutaj opis stanowiska…",
+      "company": "Firma",
+      "role": "Stanowisko",
+      "optional": "Opcjonalnie",
+      "status": "Status",
+      "submit": "Dodaj",
+      "validation": "Wybierz CV i wklej opis stanowiska.",
+      "failed": "Nie udało się dodać aplikacji."
+    },
+    "errors": {
+      "loadFailed": "Nie udało się wczytać aplikacji.",
+      "moveFailed": "Nie udało się przenieść aplikacji.",
+      "deleteFailed": "Nie udało się usunąć aplikacji."
+    }
+  },
+  "interviewPrep": {
+    "title": "Przygotowanie do rozmowy",
+    "regenerate": "Wygeneruj ponownie",
+    "unavailableTitle": "Przygotowanie do rozmowy niedostępne",
+    "loadingContextDescription": "Sprawdzanie informacji o ofercie przed przygotowaniem materiałów.",
+    "missingContextDescription": "To dopasowane CV nie ma zapisanego opisu stanowiska potrzebnego do przygotowania pytań. Dopasuj CV ponownie do oferty, aby użyć tej funkcji.",
+    "saveRequiredDescription": "Zapisz dopasowane CV przed przygotowaniem materiałów do rozmowy.",
+    "focusArea": "Obszar do omówienia",
+    "suggestedAnswerPoints": "Proponowane punkty odpowiedzi",
+    "whyItMatters": "Dlaczego to ważne",
+    "preparationSuggestion": "Wskazówka do przygotowania",
+    "sections": {
+      "roleFit": "Dopasowanie do roli",
+      "resumeQuestions": "Pytania o CV",
+      "projectFollowUps": "Pytania o projekty",
+      "skillGaps": "Brakujące umiejętności",
+      "talkingPoints": "Najważniejsze punkty"
+    }
+  },
+  "queue": {
+    "title": "Kolejka dopasowywania",
+    "subtitle": "Dodawaj oferty pracy i dopasowuj do nich CV kolejno w tle",
+    "form": {
+      "title": "Dodaj ofertę pracy",
+      "masterDescription": "Każde CV w kolejce będzie dopasowane do tego głównego CV.",
+      "noMaster": "Najpierw prześlij główne CV na panelu.",
+      "jobDescriptionLabel": "Opis stanowiska",
+      "jobDescriptionHint": "Stanowisko, firma i identyfikator oferty są wykrywane bez użycia AI. Popraw je, jeśli są nieprawidłowe.",
+      "detectedTitle": "Wykryte informacje",
+      "roleLabel": "Stanowisko",
+      "rolePlaceholder": "np. Inżynier Frontend",
+      "companyLabel": "Firma",
+      "companyPlaceholder": "np. Allegro",
+      "jobReqIdLabel": "Identyfikator oferty",
+      "cooldownLabel": "Przerwa (sekundy)",
+      "cooldownHint": "Odczekaj chwilę po każdej ofercie, aby ograniczyć ryzyko przekroczenia limitu dostawcy AI.",
+      "submit": "Dodaj do kolejki",
+      "adding": "Dodawanie…",
+      "added": "Dodano do kolejki. Wklej opis kolejnej oferty."
+    },
+    "monitor": {
+      "title": "Kolejka",
+      "count": "Oferty: {count}",
+      "refresh": "Odśwież",
+      "clearCompleted": "Wyczyść zakończone",
+      "clearAll": "Wyczyść wszystko",
+      "emptyTitle": "Kolejka jest pusta",
+      "emptyDescription": "Dodaj opis stanowiska, aby rozpocząć dopasowywanie.",
+      "untitled": "Stanowisko bez nazwy",
+      "jobId": "ID {id}",
+      "viewResume": "Wyświetl CV",
+      "remove": "Usuń z kolejki"
+    },
+    "status": {
+      "pending": "W kolejce",
+      "processing": "Dopasowywanie",
+      "completed": "Gotowe",
+      "failed": "Niepowodzenie"
+    },
+    "errors": {
+      "addFailed": "Nie udało się dodać oferty. Spróbuj ponownie.",
+      "item": {
+        "not_found": "Główne CV lub oferta pracy zostały usunięte.",
+        "too_large": "Opis stanowiska lub CV jest za długi.",
+        "timeout": "Dopasowywanie przekroczyło limit czasu. Dodaj ofertę ponownie, aby spróbować jeszcze raz.",
+        "failed": "Dopasowywanie nie powiodło się. Sprawdź dostawcę AI w ustawieniach i ponownie dodaj ofertę."
+      },
+      "loadFailed": "Nie udało się wczytać kolejki.",
+      "deleteFailed": "Nie udało się usunąć oferty. Spróbuj ponownie.",
+      "deleteInProgress": "Oferta jest właśnie przetwarzana. Usuń ją po zakończeniu.",
+      "clearFailed": "Nie udało się wyczyścić kolejki. Spróbuj ponownie."
+    }
+  },
+  "agentPrompt": {
+    "instructions": "Wklej ten prompt do agenta kodującego (Claude Code, Codex, Cursor lub Copilot) uruchomionego w katalogu CVKA. Agent przygotuje treść i zapisze wynik tutaj.",
+    "refresh": "Ta strona odświeża się automatycznie po zapisaniu zmian przez agenta.",
+    "copy": "Kopiuj prompt",
+    "copied": "Skopiowano",
+    "modeTitle": "Tryb agenta jest włączony",
+    "tailorPageMessage": "W trybie agenta CV dopasowuje Twój agent kodujący. Wklej opis stanowiska poniżej, a następnie skopiuj prompt dla agenta.",
+    "queuePageMessage": "W trybie agenta za obsługę wielu ofert odpowiada Twój agent kodujący. Zapisz opisy w folderze jobs/ jako pliki .md lub .txt, a potem poproś agenta o dopasowanie CV do każdej z nich.",
+    "getPrompt": "Przygotuj prompt dla agenta",
+    "createMaster": {
+      "title": "Utwórz główne CV",
+      "prompt": "Użyj CVKA, aby utworzyć moje główne CV z tego pliku: <ścieżka do pliku PDF lub DOCX z CV>. Jeśli nie mam pliku, zadaj mi pytania i pomóż mi je przygotować."
+    },
+    "tailor": {
+      "title": "Dopasuj CV",
+      "prompt": "Użyj CVKA, aby dopasować moje główne CV do tej oferty pracy:\n\n<wklej opis stanowiska>",
+      "promptWithJob": "Użyj CVKA, aby dopasować CV {resumeId} do tej oferty pracy:\n\n{job}",
+      "note": "Kilka ofert? Zapisz każdy opis jako plik .md lub .txt w folderze jobs/ i poproś agenta o dopasowanie CV do każdej z nich. Każda oferta pojawi się na panelu."
+    },
+    "enhance": {
+      "title": "Ulepsz CV",
+      "prompt": "Użyj CVKA, aby poprawić punkty w CV {resumeId}. Zapytaj mnie o pominięte wyniki, liczby i narzędzia, a następnie zaktualizuj CV na podstawie moich odpowiedzi. Niczego nie dopisuj, jeśli Ci o tym nie powiedziałem(-am)."
+    },
+    "regenerate": {
+      "title": "Przeredaguj z agentem",
+      "prompt": "Użyj CVKA, aby przeredagować <wybrane doświadczenie, projekty lub umiejętności> w CV {resumeId}: <co poprawić>. Zachowaj prawdziwość informacji i pokaż mi zmiany przed zapisaniem."
+    },
+    "coverLetter": {
+      "title": "Napisz list motywacyjny",
+      "prompt": "Użyj CVKA, aby napisać list motywacyjny do stanowiska, do którego dopasowano CV {resumeId}, i zapisz go w tym CV."
+    },
+    "outreach": {
+      "title": "Napisz wiadomość kontaktową",
+      "prompt": "Użyj CVKA, aby napisać krótką wiadomość do osoby rekrutującej na stanowisko, do którego dopasowano CV {resumeId}, i zapisz ją w tym CV."
+    },
+    "interviewPrep": {
+      "title": "Przygotuj się do rozmowy",
+      "prompt": "Użyj CVKA, aby przeanalizować CV {resumeId} i ofertę, do której je dopasowano, a następnie pomóż mi przygotować się do rozmowy: prawdopodobne pytania, historie do opowiedzenia i pytania do zadania.",
+      "note": "Agent odpowiada w osobnym czacie. W trybie agenta przygotowanie do rozmowy nie jest zapisywane w CV."
+    },
+    "improveWriting": {
+      "title": "Popraw tekst",
+      "prompt": "Użyj CVKA, aby poprawić tekst CV {resumeId}: przeprowadź dwie rundy (oceń każdy wiersz według zasad, popraw słabsze, zachowując wszystkie fakty, a potem sprawdź wynik) i zapisz zmiany."
+    }
+  }
+}

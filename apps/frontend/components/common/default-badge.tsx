@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 /**
  * The "DEFAULT" marker for the default master resume (dashboard + viewer).
  * Reproduces the badge as it rendered on the dashboard tile (`border-black` → `border-ink`).
- * `className` lets a host recolour it (the dashboard tile turns its frame white on blue).
+ * `className` lets a host recolour it (the dashboard tile turns its frame white on orange).
  */
 export function DefaultBadge({
   children,

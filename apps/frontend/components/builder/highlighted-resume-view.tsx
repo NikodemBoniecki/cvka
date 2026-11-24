@@ -354,8 +354,8 @@ function HighlightedText({ text, keywords }: { text: string; keywords: KeywordLi
             key={i}
             className={
               forced.has(segment.text.toLowerCase())
-                ? 'bg-primary text-white px-1'
-                : 'bg-highlight text-ink px-1'
+                ? 'bg-primary text-on-accent px-1'
+                : 'bg-highlight text-on-accent px-1'
             }
           >
             {segment.text}
@@ -383,9 +383,9 @@ function SkillTag({ text, keywords }: { text: string; keywords: KeywordList }) {
     <span
       className={`inline-block px-2 py-1 text-xs ${
         isForced
-          ? 'bg-primary text-white font-medium'
+          ? 'bg-primary text-on-accent font-medium'
           : matches.length > 0
-            ? 'bg-highlight text-ink font-medium'
+            ? 'bg-highlight text-on-accent font-medium'
             : 'bg-canvas text-ink-soft'
       }`}
     >

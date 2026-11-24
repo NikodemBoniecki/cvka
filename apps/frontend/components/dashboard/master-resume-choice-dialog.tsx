@@ -63,7 +63,7 @@ export function MasterResumeChoiceDialog({
           </section>
 
           <section className="flex min-h-64 flex-col border border-ink bg-white p-6 shadow-sw-nested">
-            <div className="mb-6 flex h-12 w-12 items-center justify-center border-2 border-ink bg-primary text-white">
+            <div className="mb-6 flex h-12 w-12 items-center justify-center border-2 border-ink bg-primary text-on-accent">
               <Robot className="h-6 w-6" aria-hidden="true" />
             </div>
             <p className="font-mono text-xs font-bold uppercase tracking-wider text-steel">

@@ -1038,6 +1038,9 @@
     },
     "llmConfiguration": {
       "selectedProvider": "選択中: {provider}",
+      "defaultProviderName": "デフォルト（CVKA）",
+      "defaultProviderShortName": "デフォルト",
+      "defaultProviderNote": "CVKA はこのサーバーで設定されたプロバイダー群を使い、利用できない場合は次のプロバイダーに切り替えます。独自の API キーを使うには、特定のプロバイダーを選択してください。",
       "claudeCliNote": "このマシンにインストール済みでサインイン済みの Claude Code CLI を実行するため、ここで API キーは不要です。Claude Code はお使いのアカウント経由でプロンプトを Anthropic に送信します。",
       "claudeCliDefaultModel": "Claude Code の既定",
       "claudeCliModelHint": "各エイリアスは、そのファミリーの最新モデルを使います。使えるモデルは Claude プランによって決まります。",
@@ -1428,7 +1431,8 @@
     "created": {
       "title": "マスター履歴書を作成しました",
       "description": "マスター履歴書を作成しました。開いて編集を続けてください。"
-    }
+    },
+    "initialQuestion": "こんにちは。マスター履歴書の作成をお手伝いします。お名前と希望する職種を教えてください。"
   },
   "tracker": {
     "manage": "管理",

@@ -171,23 +171,17 @@ Both apps have real test suites, and **tests are in scope** (deliberate testing 
 
 | Element | Value |
 |---------|-------|
-| Canvas background (`canvas`) | `#F0F0E8` |
-| White (cards, inputs, dialogs) | `#FFFFFF` |
-| Ink (headings, borders) | `#000000` |
-| Body text (`ink-soft`) | `#3D424C` |
-| Steel (secondary text; never on `panel`) | `#696D75` |
-| `paper` / `panel` / `panel-hover` | `#F5F5F0` / `#E5E5E0` / `#D8D8D2` |
-| Hyper Blue (`primary`, links) | `#1D4ED8` |
-| Signal Green (`success`) | `#127E3B` |
-| Alert Orange (`warning` fill, ink text only) | `#F97316` |
-| `warning-text` (orange labels and icons) | `#B44F02` |
-| Alert Red (`destructive`) | `#D61E21` |
-| Alert tints (`info`/`success`/`warning`/`destructive`-tint) | `#EFF6FF` / `#F0FDF4` / `#FFF7ED` / `#FEF2F2` |
-| Headers font | `font-serif` (Tailwind default stack) |
-| Body font | `font-sans` (Helvetica, Arial) |
-| Label / metadata font | `font-mono` (resolves to Space Grotesk) |
+| Canvas background (`canvas`) | `#000000` |
+| 221 warm white (`brand-white`, text and paper) | `#FDF6F6` |
+| Ink / body text (headings, borders, copy) | `#FDF6F6` |
+| 221 Orange (primary actions, success and warning) | `#FF751F` |
+| Text on orange (`on-accent`) | `#000000` |
+| Destructive action fill | `#FDF6F6` with black text |
+| `paper` / `panel` / `panel-hover` | `#000000` |
+| Headers and body | `font-serif` / `font-sans` (221 Supreme Variable) |
+| Label / metadata font | `font-mono` (221 JetBrains Mono) |
 | Borders | `rounded-none`; 1px ink controls, 2px alerts |
-| Shadows | Hard, by role. Solid ink: `shadow-sw-sm` controls, `-default` menus and popovers, `-lg` dialogs and `PageFrame`. Translucent ink: `shadow-sw-nested` for every card or box inside a frame or dialog |
+| Shadows | Hard, by role. Solid warm white: `shadow-sw-sm` controls, `-default` menus and popovers, `-lg` dialogs and `PageFrame`. Translucent warm white: `shadow-sw-nested` for every card or box inside a frame or dialog |
 | Motion | `import { m } from 'motion/react'` only; feedback only |
 | Drift guard | `cd apps/frontend && npm run guard -- <path>` |
 

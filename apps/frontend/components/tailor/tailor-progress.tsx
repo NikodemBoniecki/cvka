@@ -103,7 +103,7 @@ export function TailorProgress({
                 className={cn(
                   'flex size-6 shrink-0 items-center justify-center border',
                   state === 'done' && 'border-success bg-success-tint text-success',
-                  state === 'current' && 'border-ink bg-ink text-white',
+                  state === 'current' && 'border-ink bg-primary text-on-accent',
                   state === 'pending' && 'border-panel-hover bg-paper text-ink-soft'
                 )}
               >

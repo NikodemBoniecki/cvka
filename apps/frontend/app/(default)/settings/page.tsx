@@ -36,6 +36,7 @@ import {
 import { API_URL } from '@/lib/api/client';
 import { CHATGPT_RETURN_OUTCOMES, type ChatGptReturnOutcome } from '@/lib/api/chatgpt';
 import { ChatGptConnection } from '@/components/settings/chatgpt-connection';
+import { CvkaWordmark } from '@/components/common/cvka-wordmark';
 import {
   AGENT_SETUP_URL,
   SubscriptionRiskDialog,
@@ -88,6 +89,7 @@ import { useEffectsEnabled, useSetEffectsEnabled } from '@/lib/context/effects-c
 type Status = 'idle' | 'loading' | 'saving' | 'saved' | 'error' | 'testing';
 
 const PROVIDERS: LLMProvider[] = [
+  'default',
   'openai',
   'openai_compatible',
   'azure_foundry',
@@ -104,11 +106,13 @@ const PROVIDERS: LLMProvider[] = [
 
 /** Picker labels translated instead of derived from PROVIDER_INFO's English name. */
 const SHORT_NAME_KEYS: Partial<Record<LLMProvider, string>> = {
+  default: 'settings.llmConfiguration.defaultProviderShortName',
   claude_cli: 'settings.llmConfiguration.claudeCliShortName',
   chatgpt: 'settings.llmConfiguration.chatgptShortName',
   agent: 'settings.llmConfiguration.agentShortName',
 };
 const FULL_NAME_KEYS: Partial<Record<LLMProvider, string>> = {
+  default: 'settings.llmConfiguration.defaultProviderName',
   claude_cli: 'settings.llmConfiguration.claudeCliName',
   chatgpt: 'settings.llmConfiguration.chatgptName',
   agent: 'settings.llmConfiguration.agentName',
@@ -168,7 +172,7 @@ export default function SettingsPage() {
   const [error, setError] = useState<string | null>(null);
 
   // LLM Config state
-  const [provider, setProvider] = useState<LLMProvider>('openai');
+  const [provider, setProvider] = useState<LLMProvider>('default');
   const [model, setModel] = useState('');
   // The model as last loaded from the backend; keeps a saved full Claude model
   // name in the picker after another option is chosen.
@@ -292,6 +296,10 @@ export default function SettingsPage() {
         label: t('tailor.promptOptions.full.label'),
         description: t('tailor.promptOptions.full.description'),
       },
+      heavy: {
+        label: t('tailor.promptOptions.heavy.label'),
+        description: t('tailor.promptOptions.heavy.description'),
+      },
     }),
     [t]
   );
@@ -370,10 +378,10 @@ export default function SettingsPage() {
         setApiKeyStatuses(statuses);
 
         if (llmConfig) {
-          const providerFromBackend = llmConfig.provider || 'openai';
+          const providerFromBackend = llmConfig.provider || 'default';
           const safeProvider = PROVIDERS.includes(providerFromBackend as LLMProvider)
             ? (providerFromBackend as LLMProvider)
-            : 'openai';
+            : 'default';
           // Back from Sign in with ChatGPT: show the ChatGPT plan panel (unsaved)
           // even if another provider is still the saved one.
           const resumeChatGpt = returnedFromChatGpt !== null && safeProvider !== 'chatgpt';
@@ -388,7 +396,9 @@ export default function SettingsPage() {
           // Whether THIS provider already has an encrypted key (per-provider,
           // not the legacy shared slot) drives the "leave blank to keep" hint.
           const keyProvider = llmProviderToKeyProvider(activeProvider);
-          setHasStoredApiKey(statuses.some((s) => s.provider === keyProvider && s.configured));
+          setHasStoredApiKey(
+            keyProvider !== null && statuses.some((s) => s.provider === keyProvider && s.configured)
+          );
           setApiKey('');
           setApiBase(resumeChatGpt ? '' : llmConfig.api_base || '');
           setReasoningEffort((llmConfig.reasoning_effort as ReasoningEffort | null) ?? 'auto');
@@ -435,7 +445,9 @@ export default function SettingsPage() {
   // Whether a given key-store provider currently has a saved key.
   const providerHasStoredKey = (p: LLMProvider): boolean => {
     const keyProvider = llmProviderToKeyProvider(p);
-    return apiKeyStatuses.some((s) => s.provider === keyProvider && s.configured);
+    return (
+      keyProvider !== null && apiKeyStatuses.some((s) => s.provider === keyProvider && s.configured)
+    );
   };
 
   // Re-fetch the per-provider key status (after save/delete/clear).
@@ -507,7 +519,7 @@ export default function SettingsPage() {
     setHealthCheck(null);
 
     try {
-      if (requiresApiKey && !apiKey.trim() && !hasStoredApiKey) {
+      if (provider !== 'default' && requiresApiKey && !apiKey.trim() && !hasStoredApiKey) {
         setError(t('settings.errors.apiKeyRequired'));
         setStatus('error');
         return;
@@ -523,16 +535,18 @@ export default function SettingsPage() {
       // (1) Persist the key to the encrypted PER-PROVIDER store (only when the
       // user typed a new one). This is the bug fix: keys no longer ride on the
       // shared config slot, so saving one provider never wipes another's key.
-      if (trimmedKey) {
+      if (trimmedKey && provider !== 'default') {
         const keyProvider = llmProviderToKeyProvider(provider);
-        await updateApiKeys({ [keyProvider]: trimmedKey } as Record<ApiKeyProvider, string>);
+        if (keyProvider) {
+          await updateApiKeys({ [keyProvider]: trimmedKey } as Record<ApiKeyProvider, string>);
+        }
       }
 
       // (2) Persist non-secret LLM config — WITHOUT api_key.
       const update: LLMConfigUpdate = {
         provider,
-        model: model.trim(),
-        api_base: apiBase.trim() || null,
+        model: provider === 'default' ? 'default' : model.trim(),
+        api_base: provider === 'default' ? null : apiBase.trim() || null,
         // Map UI sentinel 'auto' → '' so the server persists an empty string
         // and the gpt-5 auto-migration won't re-fire.
         reasoning_effort: reasoningEffort === 'auto' ? '' : (reasoningEffort as ReasoningEffort),
@@ -546,8 +560,9 @@ export default function SettingsPage() {
       // Refresh the per-provider key status + cached system status after save.
       const statuses = await refreshApiKeyStatus();
       setApiKey('');
+      const keyProvider = llmProviderToKeyProvider(provider);
       setHasStoredApiKey(
-        statuses.some((s) => s.provider === llmProviderToKeyProvider(provider) && s.configured)
+        keyProvider !== null && statuses.some((s) => s.provider === keyProvider && s.configured)
       );
       await refreshStatus();
 
@@ -685,8 +700,8 @@ export default function SettingsPage() {
       // Refetch full LLM config to ensure local state is synced with backend
       const llmConfig = await fetchLlmConfig().catch(() => null);
       if (llmConfig) {
-        setProvider(llmConfig.provider || 'openai');
-        setModel(llmConfig.model || PROVIDER_INFO['openai'].defaultModel);
+        setProvider(llmConfig.provider || 'default');
+        setModel(llmConfig.model || PROVIDER_INFO['default'].defaultModel);
         setSavedModel(llmConfig.model || '');
         setApiBase(llmConfig.api_base || '');
         setReasoningEffort(llmConfig.reasoning_effort ?? 'auto');
@@ -772,6 +787,7 @@ export default function SettingsPage() {
 
   const requiresApiKey = providerInfo.requiresKey ?? true;
   const requiresApiBase = providerInfo.requiresBaseUrl ?? false;
+  const usesServerManaged = providerInfo.serverManaged ?? false;
   const usesLocalCli = providerInfo.localCli ?? false;
   const usesChatGptSignIn = providerInfo.chatgptSignIn ?? false;
   const usesAgent = providerInfo.agentMode ?? false;
@@ -1002,9 +1018,13 @@ export default function SettingsPage() {
                       value: p,
                       label: (
                         <span className="inline-flex items-center gap-2">
-                          {hasBrandIcon(mark) && (
+                          {p === 'default' ? (
+                            <CvkaWordmark
+                              className={`size-5 shrink-0 ${p === provider ? 'brightness-0 invert' : 'brightness-0'}`}
+                            />
+                          ) : hasBrandIcon(mark) ? (
                             <BrandIcon name={mark} className="size-4 shrink-0" />
-                          )}
+                          ) : null}
                           {shortNameKey ? t(shortNameKey) : PROVIDER_INFO[p].name.split(' ')[0]}
                         </span>
                       ),
@@ -1020,7 +1040,11 @@ export default function SettingsPage() {
                 </p>
               </div>
 
-              {usesAgent ? (
+              {usesServerManaged ? (
+                <Alert tone="info" title={t('settings.llmConfiguration.defaultProviderName')}>
+                  {t('settings.llmConfiguration.defaultProviderNote')}
+                </Alert>
+              ) : usesAgent ? (
                 <Alert tone="info" title={t('settings.llmConfiguration.agentNoteTitle')}>
                   <p>{t('settings.llmConfiguration.agentNote')}</p>
                   <a
@@ -1167,7 +1191,7 @@ export default function SettingsPage() {
                 </div>
               )}
 
-              {!usesLocalCli && !usesChatGptSignIn && !usesAgent && (
+              {!usesServerManaged && !usesLocalCli && !usesChatGptSignIn && !usesAgent && (
                 <>
                   {/* API Base URL (optional, for proxies/aggregators/custom endpoints) */}
                   <div className="space-y-2">
@@ -1674,13 +1698,8 @@ export default function SettingsPage() {
         {/* Footer */}
         <div className="bg-canvas p-4 border-t border-ink flex justify-between items-center">
           <div className="flex items-center gap-2">
-            <Image
-              src="/logo.svg"
-              alt="CVKA"
-              width={20}
-              height={20}
-              className="w-5 h-5"
-            />
+            <Image src="/logo.svg" alt="221 Studio" width={42} height={20} className="h-5 w-auto" />
+            <CvkaWordmark className="text-primary" />
             <span className="font-mono text-xs text-steel">{getVersionString().toUpperCase()}</span>
           </div>
           <div className="flex items-center gap-2">

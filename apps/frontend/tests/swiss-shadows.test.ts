@@ -32,16 +32,16 @@ describe('Swiss shadow tokens', () => {
     }
   });
 
-  it('keeps floating and pressable roles solid ink and the nested role translucent ink', () => {
+  it('keeps floating and pressable roles solid warm white and the nested role translucent warm white', () => {
     for (const name of ['sm', 'default', 'lg', 'xl', 'card']) {
-      expect(parse(shadows[name]).colour).toBe('#000000');
+      expect(parse(shadows[name]).colour).toBe('#fdf6f6');
     }
     expect(parse(shadows.nested)).toEqual({
       x: '4px',
       y: '4px',
       blur: '0px',
       spread: '0px',
-      colour: 'rgb(0 0 0 / 0.15)',
+      colour: 'rgb(253 246 246 / 0.15)',
     });
   });
 });

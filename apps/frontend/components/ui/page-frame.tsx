@@ -16,13 +16,13 @@ const WIDTH: Record<PageFrameWidth, string> = {
 };
 
 /**
- * The house page frame: background effect on canvas (grey pixel beams unless `effect` says
- * otherwise; `effectIntensity` is `idle` or `active`), 1px ink frame, 8px hard shadow. Server-safe.
+ * The house page frame: cursor-reactive 221 waves behind the canvas (`effectIntensity` is `idle`
+ * or `active`), 1px ink frame, 8px hard shadow. Server-safe.
  */
 export function PageFrame({
   width = 'default',
   height = 'auto',
-  effect = 'beams',
+  effect = 'waves',
   effectIntensity = 'idle',
   className,
   children,
@@ -44,7 +44,7 @@ export function PageFrame({
       <BackgroundEffect effect={effect} intensity={effectIntensity} />
       <div
         className={cn(
-          'flex w-full flex-col border border-ink bg-canvas shadow-sw-lg',
+          'relative z-10 flex w-full flex-col border border-ink bg-canvas shadow-sw-lg',
           WIDTH[width],
           height === 'screen' && 'max-h-full overflow-hidden',
           className

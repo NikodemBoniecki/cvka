@@ -25,6 +25,7 @@ from app.llm import (
     LLMConfig,
     api_base_key_binding,
     check_llm_health,
+    get_llm_config,
     normalize_endpoint,
     resolve_api_key,
     saved_endpoint_accepts_key,
@@ -151,16 +152,13 @@ async def _log_llm_health_check(config: LLMConfig) -> None:
 @router.get("/llm-api-key", response_model=LLMConfigResponse)
 async def get_llm_config_endpoint() -> LLMConfigResponse:
     """Get current LLM configuration (API key masked)."""
-    stored = _load_config()
-
-    provider = stored.get("provider", settings.llm_provider)
-    reasoning_effort = stored.get("reasoning_effort", settings.reasoning_effort)
+    config = get_llm_config()
     return LLMConfigResponse(
-        provider=provider,
-        model=stored.get("model", settings.llm_model),
-        api_key=_mask_api_key(resolve_api_key(stored, provider)),
-        api_base=_effective_api_base(stored),
-        reasoning_effort=reasoning_effort or None,
+        provider=config.provider,
+        model=config.model,
+        api_key="" if config.server_managed else _mask_api_key(config.api_key),
+        api_base=None if config.server_managed else config.api_base,
+        reasoning_effort=config.reasoning_effort,
     )
 
 
@@ -180,6 +178,24 @@ async def update_llm_config(
     """
     stored = _load_config()
     previous = copy.deepcopy(stored)
+
+    if request.provider == "default":
+        stored["provider"] = "default"
+        stored["model"] = "default"
+        stored.pop("api_base", None)
+        stored.pop(API_BASE_KEY_BINDING, None)
+        if request.reasoning_effort is not None:
+            stored["reasoning_effort"] = request.reasoning_effort
+        _save_config(stored)
+        active_config = get_llm_config()
+        background_tasks.add_task(_log_llm_health_check, active_config)
+        return LLMConfigResponse(
+            provider="default",
+            model=active_config.model,
+            api_key="",
+            api_base=None,
+            reasoning_effort=active_config.reasoning_effort,
+        )
 
     # Update only provided fields
     if request.provider is not None:
@@ -378,7 +394,7 @@ async def update_feature_config(request: FeatureConfigRequest) -> FeatureConfigR
 
 
 # Supported languages for i18n
-SUPPORTED_LANGUAGES = ["en", "es", "zh", "ja", "pt", "fr", "ko"]
+SUPPORTED_LANGUAGES = ["pl", "en", "es", "zh", "ja", "pt", "fr", "ko"]
 
 
 @router.get("/language", response_model=LanguageConfigResponse)
@@ -387,7 +403,7 @@ async def get_language_config() -> LanguageConfigResponse:
     stored = _load_config()
 
     # Support legacy single 'language' field migration
-    legacy_language = stored.get("language", "en")
+    legacy_language = stored.get("language", "pl")
 
     return LanguageConfigResponse(
         ui_language=stored.get("ui_language", legacy_language),
@@ -425,7 +441,7 @@ async def update_language_config(
     _save_config(stored)
 
     # Support legacy single 'language' field migration
-    legacy_language = stored.get("language", "en")
+    legacy_language = stored.get("language", "pl")
 
     return LanguageConfigResponse(
         ui_language=stored.get("ui_language", legacy_language),

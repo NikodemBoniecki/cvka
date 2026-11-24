@@ -90,7 +90,7 @@ _INTRO_NAME_PATTERNS = (
 )
 
 
-def section_prompt(section: str, language: str = "en") -> str:
+def section_prompt(section: str, language: str = "pl") -> str:
     """Deterministic fallback question text for a section."""
     return wizard_copy(language, section if section in _VALID_SECTIONS else "next")
 
@@ -135,7 +135,7 @@ def merge_unique_skills(existing: list[str], inferred: list[str]) -> list[str]:
     return merged
 
 
-def build_review_warnings(data: ResumeData, language: str = "en") -> list[str]:
+def build_review_warnings(data: ResumeData, language: str = "pl") -> list[str]:
     """Deterministic, gentle notes about useful resume facts that are missing."""
     warnings: list[str] = []
     info = data.personalInfo

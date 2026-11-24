@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { ListNumbers, SquaresFour } from '@phosphor-icons/react';
 import { CommunityLinks } from '@/components/common/community-links';
+import { CvkaWordmark } from '@/components/common/cvka-wordmark';
 import { buttonClass } from '@/components/ui/button';
 import { PageFrame } from '@/components/ui/page-frame';
 import { PageHeader } from '@/components/ui/page-header';
@@ -45,8 +46,8 @@ export const SwissGrid = ({
       {/* Footer - stays above hovered cards */}
       <div className="p-4 bg-canvas flex flex-wrap justify-between items-center gap-4 font-mono text-xs text-primary border-t border-ink shrink-0 relative z-30">
         <div className="flex items-center gap-2">
-          <Image src="/logo.svg" alt="" width={20} height={20} className="w-5 h-5" />
-          <span className="uppercase font-bold">CVKA</span>
+          <Image src="/logo.svg" alt="221 Studio" width={42} height={20} className="h-5 w-auto" />
+          <CvkaWordmark />
           <span className="text-steel">v{APP_VERSION}</span>
         </div>
         <div className="flex flex-wrap items-center gap-4">

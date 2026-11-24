@@ -1038,6 +1038,9 @@
     },
     "llmConfiguration": {
       "selectedProvider": "선택됨: {provider}",
+      "defaultProviderName": "기본값(CVKA)",
+      "defaultProviderShortName": "기본값",
+      "defaultProviderNote": "CVKA는 이 서버에 설정된 제공업체 목록을 사용하며 하나를 사용할 수 없으면 다음 제공업체로 전환합니다. 개인 API 키를 사용하려면 특정 제공업체를 선택하세요.",
       "claudeCliNote": "이 컴퓨터에 설치되어 로그인된 Claude Code CLI를 실행하므로 여기에서는 API 키가 필요하지 않습니다. Claude Code는 계정을 통해 프롬프트를 Anthropic으로 전송합니다.",
       "claudeCliDefaultModel": "Claude Code 기본값",
       "claudeCliModelHint": "각 별칭은 해당 계열의 최신 모델을 사용합니다. 사용할 수 있는 모델은 Claude 요금제에 따라 다릅니다.",
@@ -1428,7 +1431,8 @@
     "created": {
       "title": "마스터 이력서 생성 완료",
       "description": "마스터 이력서를 만들었습니다. 이력서를 열어 계속 편집하세요."
-    }
+    },
+    "initialQuestion": "안녕하세요. 마스터 이력서 작성을 도와드리겠습니다. 이름과 희망하는 직무를 알려 주세요."
   },
   "tracker": {
     "manage": "관리",

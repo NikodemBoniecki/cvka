@@ -9,8 +9,10 @@ from app.llm import (
     JSON_MODE_VERIFIED_HOSTS,
     OPENCODE_ZEN_HY3_MODELS,
     LLMConfig,
+    LLMFallbackDeployment,
     _appears_truncated,
     _azure_foundry_api_version,
+    _build_router,
     _extract_choice_primary_text,
     _get_retry_temperature,
     _normalize_api_base,
@@ -149,6 +151,39 @@ class TestProviderConfiguration:
         )
         assert _uses_opencode_zen_hy3(config)
         assert _openai_compatible_supports_json_mode(config)
+
+    def test_server_pool_keeps_ordered_fallbacks_out_of_cooldown(self, monkeypatch):
+        class RouterCapture:
+            def __init__(self, **kwargs):
+                self.kwargs = kwargs
+
+        monkeypatch.setattr("app.llm._policy_router_class", lambda: RouterCapture)
+        config = LLMConfig(
+            provider="default",
+            model="openrouter/free",
+            api_key="primary-test-key",
+            api_base="https://openrouter.ai/api/v1",
+            server_managed=True,
+            fallback_deployments=[
+                LLMFallbackDeployment(
+                    name="groq",
+                    model="openai/gpt-oss-120b",
+                    api_key="fallback-test-key",
+                    api_base="https://api.groq.com/openai/v1",
+                )
+            ],
+        )
+
+        router = _build_router(config)
+
+        assert router.kwargs["disable_cooldowns"] is True
+        assert router.kwargs["fallbacks"] == [{"primary": ["fallback_1"]}]
+        assert router.kwargs["model_list"][0]["litellm_params"]["model"] == (
+            "openai/openrouter/free"
+        )
+        assert router.kwargs["model_list"][1]["litellm_params"]["model"] == (
+            "openai/openai/gpt-oss-120b"
+        )
 
     @patch("app.llm.litellm.get_model_info", side_effect=Exception("unknown model"))
     def test_unknown_models_keep_conservative_token_fallback(self, _mock_model_info):
@@ -1205,6 +1240,10 @@ class TestGetLlmConfigApiBase:
             llm_api_key = "env-key"
             llm_api_base = "https://env-default.example/v1"
             reasoning_effort = None
+            gemini_api_key = ""
+            groq_api_key = ""
+            openrouter_api_key = ""
+            llm_fallback_order = "gemini,groq,openrouter"
 
         monkeypatch.setattr("app.llm.load_config_file", lambda: {"api_base": None})
         monkeypatch.setattr("app.llm.settings", FakeSettings())
@@ -1222,6 +1261,10 @@ class TestGetLlmConfigApiBase:
             llm_api_key = "env-key"
             llm_api_base = "https://env-default.example/v1"
             reasoning_effort = None
+            gemini_api_key = ""
+            groq_api_key = ""
+            openrouter_api_key = ""
+            llm_fallback_order = "gemini,groq,openrouter"
 
         monkeypatch.setattr(
             "app.llm.load_config_file",
@@ -1242,6 +1285,10 @@ class TestGetLlmConfigApiBase:
             llm_api_key = "env-key"
             llm_api_base = "https://env-default.example/v1"
             reasoning_effort = None
+            gemini_api_key = ""
+            groq_api_key = ""
+            openrouter_api_key = ""
+            llm_fallback_order = "gemini,groq,openrouter"
 
         monkeypatch.setattr("app.llm.load_config_file", lambda: {})
         monkeypatch.setattr("app.llm.settings", FakeSettings())

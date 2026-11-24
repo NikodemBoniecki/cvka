@@ -1038,6 +1038,9 @@
     },
     "llmConfiguration": {
       "selectedProvider": "已选择：{provider}",
+      "defaultProviderName": "默认（CVKA）",
+      "defaultProviderShortName": "默认",
+      "defaultProviderNote": "CVKA 使用此服务器配置的提供商列表，并在某个提供商不可用时切换到下一个。若要使用自己的 API 密钥，请选择具体的提供商。",
       "claudeCliNote": "运行本机已安装并已登录的 Claude Code CLI，因此这里无需 API 密钥。Claude Code 仍会通过你的账户将提示词发送给 Anthropic。",
       "claudeCliDefaultModel": "Claude Code 默认模型",
       "claudeCliModelHint": "每个别名都会使用该系列的最新模型。可用的模型取决于你的 Claude 订阅。",
@@ -1428,7 +1431,8 @@
     "created": {
       "title": "主简历已创建",
       "description": "您的主简历已创建。打开它以继续编辑。"
-    }
+    },
+    "initialQuestion": "你好，我会帮你创建主简历。你叫什么名字，想应聘哪类职位？"
   },
   "tracker": {
     "manage": "管理",

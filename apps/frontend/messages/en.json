@@ -1038,6 +1038,9 @@
     },
     "llmConfiguration": {
       "selectedProvider": "SELECTED: {provider}",
+      "defaultProviderName": "Default (CVKA)",
+      "defaultProviderShortName": "Default",
+      "defaultProviderNote": "CVKA uses the provider pool configured on this server and switches to the next provider when one is unavailable. To use your own API key, select a specific provider.",
       "claudeCliNote": "Runs the Claude Code CLI installed and signed in on this machine, so no API key is needed here. Claude Code still sends your prompts to Anthropic through your account.",
       "claudeCliDefaultModel": "Claude Code default",
       "claudeCliModelHint": "Each alias runs the newest model in its family. Your Claude plan decides which ones you can use.",
@@ -1428,7 +1431,8 @@
     "created": {
       "title": "Master Resume Created",
       "description": "Your master resume was created. Open it to continue editing."
-    }
+    },
+    "initialQuestion": "Hi — I'll help you build your master resume. What's your name, and what kind of role are you going for?"
   },
   "tracker": {
     "manage": "Manage",

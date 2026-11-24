@@ -294,6 +294,7 @@ class Settings(BaseSettings):
 
     # LLM Configuration
     llm_provider: Literal[
+        "default",
         "openai",
         "openai_compatible",
         "azure_foundry",
@@ -306,10 +307,19 @@ class Settings(BaseSettings):
         "claude_cli",
         "chatgpt",
         "agent",
-    ] = "openai"
+    ] = "default"
     llm_model: str = "gpt-5-nano-2025-08-07"
     llm_api_key: str = ""
     llm_api_base: str | None = None  # For Ollama or custom endpoints
+    # Optional server-managed OpenAI-compatible providers. These credentials are
+    # supplied by the deployment operator and never stored in the user config.
+    llm_fallback_order: str = "gemini,groq,openrouter"
+    gemini_api_key: str = ""
+    gemini_model: str = "gemini-3.8-flash"
+    groq_api_key: str = ""
+    groq_model: str = "openai/gpt-oss-120b"
+    openrouter_api_key: str = ""
+    openrouter_model: str = "openrouter/free"
     log_llm: Literal["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"] = "WARNING"
 
     @field_validator("llm_provider", mode="before")

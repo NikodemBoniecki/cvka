@@ -83,7 +83,7 @@ export const DEFAULT_TEMPLATE_SETTINGS: TemplateSettings = {
   fontSize: { base: 3, headerScale: 3, headerFont: 'serif', bodyFont: 'sans-serif' },
   compactMode: false,
   showContactIcons: false,
-  accentColor: 'blue',
+  accentColor: 'orange',
 };
 
 /**
@@ -199,7 +199,7 @@ export const ACCENT_COLOR_MAP: Record<
 > = {
   blue: { primary: '#1D4ED8', light: '#DBEAFE', name: 'Blue' },
   green: { primary: '#15803D', light: '#DCFCE7', name: 'Green' },
-  orange: { primary: '#EA580C', light: '#FED7AA', name: 'Orange' },
+  orange: { primary: '#A83F00', light: '#F2E7D7', name: 'Orange' },
   red: { primary: '#DC2626', light: '#FEE2E2', name: 'Red' },
 };
 

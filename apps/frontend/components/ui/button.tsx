@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
  * (translate 1px into the shadow). Transition timing comes from the theme
  * default (100ms ease-out-expo), see globals.css.
  *
- * - default: Hyper Blue, the one primary action per region
+ * - default: 221 Orange, the one primary action per region
  * - destructive / outline-destructive: delete, remove
  * - success: confirm, complete
  * - warning: risky but reversible, orange fill with ink text
@@ -43,14 +43,17 @@ const PRESS =
   'shadow-sw-sm hover:translate-x-px hover:translate-y-px hover:shadow-none active:translate-x-[2px] active:translate-y-[2px]';
 
 const VARIANTS: Record<ButtonVariant, string> = {
-  default: cn('border border-ink bg-primary text-white hover:bg-primary-hover', PRESS),
-  destructive: cn('border border-ink bg-destructive text-white hover:bg-destructive-hover', PRESS),
+  default: cn('border border-ink bg-primary text-on-accent hover:bg-primary-hover', PRESS),
+  destructive: cn(
+    'border border-ink bg-destructive text-on-accent hover:bg-destructive-hover',
+    PRESS
+  ),
   'outline-destructive': cn(
     'border border-destructive bg-canvas text-destructive hover:bg-destructive-tint',
     PRESS
   ),
-  success: cn('border border-ink bg-success text-white hover:bg-success-hover', PRESS),
-  warning: cn('border border-ink bg-warning text-ink hover:bg-warning-hover', PRESS),
+  success: cn('border border-ink bg-success text-on-accent hover:bg-success-hover', PRESS),
+  warning: cn('border border-ink bg-warning text-on-accent hover:bg-warning-hover', PRESS),
   outline: cn('border border-ink bg-canvas text-ink hover:bg-panel', PRESS),
   secondary: cn('border border-ink bg-panel text-ink hover:bg-panel-hover', PRESS),
   ghost: 'border-none bg-transparent text-ink shadow-none hover:bg-panel active:bg-panel-hover',

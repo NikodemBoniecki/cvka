@@ -44,7 +44,7 @@ const LAYOUTS: Record<CommunityLinksVariant, ReadonlyArray<readonly [CommunityLi
   ],
 };
 
-/** Quiet text links for the hero and the dashboard strip: steel at rest, blue on hover. */
+/** Quiet text links for the hero and the dashboard strip: steel at rest, orange on hover. */
 const QUIET_LINK = cn(
   'inline-flex items-center gap-2 py-1 font-mono text-xs uppercase tracking-wide text-steel',
   'underline-offset-4 hover:text-primary hover:underline',

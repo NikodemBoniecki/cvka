@@ -7,8 +7,8 @@ import { GLSL_BAYER, GLSL_HEAD, GLSL_MIRROR } from './common';
  *
  * Swiss palette, light: the field is Canvas. The gradient position picks each block's grey (Canvas,
  * Panel, Panel Hover, Panel Hover with a little Steel); a second noise field turns some blocks
- * faded Hyper Blue (Canvas mixed 15-30% toward Primary, computed here from the tokens). `u_level`
- * is the share of blue blocks: idle is mostly grey, active has more blue. The dither is a subtle
+ * faded 221 Orange (Canvas mixed 15-30% toward Primary, computed here from the tokens). `u_level`
+ * is the share of orange blocks: idle is mostly grey, active has more orange. The dither is a subtle
  * Steel or Primary dot overlay at low alpha, so contrast stays as low as Pixel Beams.
  */
 
@@ -36,11 +36,11 @@ const vec2 GRADIENT_END = vec2(0.89, 0.39);
 const float PIXELATE = 41.0;
 const float DITHER_PIXEL = 3.0;
 
-// Light palette: how much Steel the darkest grey takes, how far the faded blue is mixed from
+// Light palette: how much Steel the darkest grey takes, how far the faded orange is mixed from
 // Canvas toward Primary, and how strong the dither dots are over a block.
 const float STEEL_WEIGHT = 0.12;
-const float BLUE_MIN = 0.15;
-const float BLUE_MAX = 0.3;
+const float ACCENT_MIN = 0.15;
+const float ACCENT_MAX = 0.3;
 const float DOT_ALPHA = 0.1;
 
 // 3D simplex noise, -1 to 1. Ian McEwan, Ashima Arts (MIT).
@@ -128,20 +128,20 @@ void main() {
   else if (tone == 3.0) grey = mix(u_panel_hover, u_steel, STEEL_WEIGHT);
   float ink = tone / 3.0;
 
-  // Faded blue: a second noise field picks the blocks; u_level widens the share (idle is mostly
-  // grey, active has far more blue). The blue is Canvas mixed toward Primary, per block.
+  // Faded orange: a second noise field picks the blocks; u_level widens the share (idle is mostly
+  // grey, active has far more orange). The accent is Canvas mixed toward Primary, per block.
   float b = snoise(vec3(p * NOISE_SCALE * 0.8 + 17.0, u_time * NOISE_SPEED * 1.3)) * 0.5 + 0.5;
   b += (hash(cell + 7.3) - 0.5) * 0.16;
-  float isBlue = step(0.74 - 0.22 * u_level, b);
-  float k = mix(BLUE_MIN, BLUE_MAX, hash(cell + 3.1));
-  vec3 color = mix(grey, mix(u_canvas, u_primary, k), isBlue);
-  ink = mix(ink, 0.4 + 2.0 * k, isBlue);
+  float isAccent = step(0.74 - 0.22 * u_level, b);
+  float k = mix(ACCENT_MIN, ACCENT_MAX, hash(cell + 3.1));
+  vec3 color = mix(grey, mix(u_canvas, u_primary, k), isAccent);
+  ink = mix(ink, 0.4 + 2.0 * k, isAccent);
 
   // Dither: a faint Steel or Primary dot overlay (bayer4, 3 CSS px), denser on the darker blocks
   // and absent on Canvas. Plain alpha over the block: screen would wash out on a light ground.
   vec2 dpx = floor(gl_FragCoord.xy / (DITHER_PIXEL * u_dpr));
   float dotOn = step(bayer4(dpx), ink * 0.6) * step(0.01, ink);
-  color = mix(color, mix(u_steel, u_primary, isBlue), dotOn * DOT_ALPHA);
+  color = mix(color, mix(u_steel, u_primary, isAccent), dotOn * DOT_ALPHA);
 
   gl_FragColor = vec4(color, 1.0);
 }

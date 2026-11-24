@@ -24,7 +24,10 @@ describe('Hero entrance', () => {
   it('links the Docs button to the docs section in a new tab', () => {
     render(<Hero />);
     const docs = screen.getByRole('link', { name: 'home.docs' });
-    expect(docs).toHaveAttribute('href', 'https://github.com/NikodemBoniecki/cvka/blob/main/SETUP.md');
+    expect(docs).toHaveAttribute(
+      'href',
+      'https://github.com/NikodemBoniecki/cvka/blob/main/SETUP.md'
+    );
     expect(docs).toHaveAttribute('target', '_blank');
     expect(docs).toHaveAttribute('rel', 'noopener noreferrer');
   });

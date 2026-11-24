@@ -17,9 +17,9 @@ const VARIANTS: ButtonVariant[] = [
 const SIZES: ButtonSize[] = ['default', 'sm', 'lg', 'icon', 'icon-sm', 'icon-xs'];
 
 describe('Button', () => {
-  it('gives warning buttons ink text (white on orange is 2.8:1)', () => {
-    expect(buttonClass({ variant: 'warning' })).toContain('text-ink');
-    expect(buttonClass({ variant: 'warning' })).not.toContain('text-white');
+  it('gives warning buttons black text on orange', () => {
+    expect(buttonClass({ variant: 'warning' })).toContain('text-on-accent');
+    expect(buttonClass({ variant: 'warning' })).not.toContain('text-brand-white');
   });
 
   it('styles a link exactly like a button', () => {

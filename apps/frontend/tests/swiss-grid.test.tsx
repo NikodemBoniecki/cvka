@@ -13,7 +13,7 @@ describe('SwissGrid', () => {
 
     const version = screen.getByText(`v${APP_VERSION}`);
     expect(version).toHaveClass('text-steel');
-    const brand = screen.getByText('CVKA');
+    const brand = screen.getByRole('img', { name: 'CVKA' });
     expect(version.parentElement).toBe(brand.parentElement);
     // The footer row sets the label face for the brand line and the version alike.
     expect(brand.closest('.font-mono')).toContainElement(version);
@@ -43,14 +43,8 @@ describe('SwissGrid', () => {
   it('closes the page with a slim community strip under the footer row', () => {
     render(<SwissGrid>{null}</SwissGrid>);
 
-    const strip = screen.getByRole('link', { name: 'community.follow' }).closest('div');
-    for (const name of [
-      'community.follow',
-      'community.star',
-      'community.sponsor',
-      'community.discord',
-      'community.contributors',
-    ]) {
+    const strip = screen.getByRole('link', { name: 'community.repository' }).closest('div');
+    for (const name of ['community.repository', 'community.studio']) {
       expect(strip).toContainElement(screen.getByRole('link', { name }));
     }
     // A separate row after the footer, so the footer's own layout is untouched.

@@ -26,10 +26,10 @@ describe('BackgroundEffect', () => {
         <BackgroundEffect />
       </EffectsProvider>
     );
-    // Fixed + inset-0: one screen of dots however long the page is. Not `absolute`, which would
+    // Fixed + inset-0: one screen of animated waves however long the page is. Not `absolute`, which would
     // fill the whole (possibly very tall) parent.
     const field = screen.getByTestId('field');
-    expect(field).toHaveClass('fixed', 'inset-0', '-z-10', 'h-full', 'w-full', 'text-steel');
+    expect(field).toHaveClass('fixed', 'inset-0', 'z-0', 'h-full', 'w-full');
     expect(field).not.toHaveClass('absolute');
   });
 

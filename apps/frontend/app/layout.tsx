@@ -1,17 +1,25 @@
 import type { Metadata, Viewport } from 'next';
+import localFont from 'next/font/local';
 import {
+  JetBrains_Mono,
   Lato,
   Noto_Sans_JP,
   Noto_Sans_KR,
   Noto_Sans_SC,
   Raleway,
-  Space_Grotesk,
 } from 'next/font/google';
 import { THEME_COLOR } from '@/lib/theme-color';
 import './(default)/css/globals.css';
 
-const spaceGrotesk = Space_Grotesk({
-  variable: '--font-space-grotesk',
+const supreme = localFont({
+  src: '../public/fonts/221/Supreme-Variable.woff2',
+  variable: '--font-221-supreme',
+  weight: '100 800',
+  display: 'swap',
+});
+
+const jetBrainsMono = JetBrains_Mono({
+  variable: '--font-jetbrains',
   subsets: ['latin'],
   display: 'swap',
 });
@@ -86,9 +94,9 @@ export const viewport: Viewport = { themeColor: THEME_COLOR };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-US" className="h-full" suppressHydrationWarning>
+    <html lang="pl-PL" className="h-full" suppressHydrationWarning>
       <body
-        className={`${spaceGrotesk.variable} ${lato.variable} ${raleway.variable} ${notoSansSC.variable} ${notoSansKR.variable} ${notoSansJP.variable} antialiased bg-canvas text-ink-soft min-h-full`}
+        className={`${supreme.variable} ${jetBrainsMono.variable} ${lato.variable} ${raleway.variable} ${notoSansSC.variable} ${notoSansKR.variable} ${notoSansJP.variable} antialiased bg-canvas text-ink-soft min-h-full`}
       >
         {children}
       </body>
