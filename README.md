@@ -349,3 +349,6 @@ Check out the roadmap if you would like to work on the features that are planned
 ## Resume Matcher is a part of [Vercel Open Source Program](https://vercel.com/oss)
 
 ![Vercel OSS Program](https://vercel.com/oss/program-badge.svg)
+
+
+Kod bazowy pochodzi z projektu [Resume Matcher](https://github.com/srbhr/Resume-Matcher), udostępnionego na licencji [Apache 2.0](LICENSE).
