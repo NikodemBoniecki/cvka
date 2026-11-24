@@ -306,6 +306,30 @@ def _raise_improve_error(
     detail: str,
 ) -> NoReturn:
     logger.error("Resume %s failed during %s: %s", action, stage, error)
+    error_text = str(error).lower()
+    provider_unavailable_markers = (
+        "ratelimit",
+        "rate limit",
+        "429",
+        "insufficient_quota",
+        "quota exceeded",
+        "free-models-per-day",
+        "no deployments available",
+        "service unavailable",
+        "serviceunavailable",
+        "internal server error",
+        "502",
+        "503",
+        "504",
+    )
+    if any(marker in error_text for marker in provider_unavailable_markers):
+        raise HTTPException(
+            status_code=503,
+            detail=(
+                "AI providers are temporarily unavailable or rate-limited. "
+                "Please try again later."
+            ),
+        ) from error
     raise HTTPException(status_code=500, detail=detail)
 
 

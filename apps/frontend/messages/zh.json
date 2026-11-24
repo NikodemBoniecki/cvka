@@ -873,10 +873,10 @@
     "errors": {
       "jobDescriptionTooShort": "职位描述过短。请添加更多细节后重试。",
       "apiKeyError": "您的 API 密钥无效。请在设置中检查。",
-      "rateLimit": "已达到速率限制。请等待约一分钟后重试。",
+      "rateLimit": "AI 服务提供商暂时不可用或已达到使用限额。请稍后重试。",
       "timeout": "简历预览在 {minutes} 分钟后超时。请缩短职位描述，或改用更简单的提示词后重试。",
-      "failedToGenerate": "无法生成简历。请在设置中检查 API 密钥后重试。",
-      "failedToPreview": "无法预览简历。请在设置中检查 API 密钥后重试。",
+      "failedToGenerate": "无法生成简历。请重试。",
+      "failedToPreview": "无法准备简历预览。请重试。",
       "failedToConfirm": "无法应用更改。请重试。",
       "previewUnavailable": "此预览已过期或原始简历已更改。请先生成新的预览再保存。"
     },

@@ -873,10 +873,10 @@
     "errors": {
       "jobDescriptionTooShort": "Opis stanowiska jest za krótki. Dodaj więcej szczegółów i spróbuj ponownie.",
       "apiKeyError": "Klucz API nie działa. Sprawdź go w ustawieniach.",
-      "rateLimit": "Osiągnięto limit zapytań. Odczekaj około minuty i spróbuj ponownie.",
+      "rateLimit": "Dostawcy AI są chwilowo niedostępni lub osiągnęli limity. Spróbuj ponownie później.",
       "timeout": "Podgląd CV przekroczył limit czasu ({minutes} min). Spróbuj skrócić opis stanowiska lub uprościć prompt.",
-      "failedToGenerate": "Nie udało się wygenerować CV. Sprawdź klucz API w ustawieniach i spróbuj ponownie.",
-      "failedToPreview": "Nie udało się wyświetlić podglądu. Sprawdź klucz API w ustawieniach i spróbuj ponownie.",
+      "failedToGenerate": "Nie udało się wygenerować CV. Spróbuj ponownie.",
+      "failedToPreview": "Nie udało się przygotować podglądu CV. Spróbuj ponownie.",
       "failedToConfirm": "Nie udało się zastosować zmian. Spróbuj ponownie.",
       "previewUnavailable": "Podgląd wygasł lub źródłowe CV uległo zmianie. Wygeneruj nowy podgląd przed zapisaniem."
     },

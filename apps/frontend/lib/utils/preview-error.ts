@@ -33,8 +33,12 @@ export function getPreviewErrorMessage(
 
   if (
     normalized.includes('rate limit') ||
+    normalized.includes('rate-limited') ||
     normalized.includes('insufficient_quota') ||
-    normalized.includes('429')
+    normalized.includes('429') ||
+    normalized.includes('temporarily unavailable') ||
+    normalized.includes('no deployments available') ||
+    normalized.includes('503')
   ) {
     return t('tailor.errors.rateLimit');
   }
