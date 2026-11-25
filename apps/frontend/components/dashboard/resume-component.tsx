@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import {
   ResumeSingleColumn,
   ResumeTwoColumn,
@@ -15,6 +16,7 @@ import {
   type TemplateSettings,
   type TemplateType,
   DEFAULT_TEMPLATE_SETTINGS,
+  RESUME_PHOTO_DIMENSIONS,
   settingsToCssVars,
 } from '@/lib/types/template-settings';
 import baseStyles from '@/components/resume/styles/_base.module.css';
@@ -213,12 +215,58 @@ const Resume: React.FC<ResumeProps> = ({
 
   // Convert settings to CSS variables
   const cssVars = settingsToCssVars(mergedSettings, locale);
+  const gdprText =
+    mergedSettings.gdprConsent === 'current'
+      ? 'Wyrażam zgodę na przetwarzanie moich danych osobowych dla potrzeb niezbędnych do realizacji procesu rekrutacji zgodnie z Rozporządzeniem Parlamentu Europejskiego i Rady (UE) 2016/679 z dnia 27 kwietnia 2016 r. w sprawie ochrony osób fizycznych w związku z przetwarzaniem danych osobowych i w sprawie swobodnego przepływu takich danych oraz uchylenia dyrektywy 95/46/WE (RODO).'
+      : mergedSettings.gdprConsent === 'current_future'
+        ? 'Wyrażam zgodę na przetwarzanie moich danych osobowych dla potrzeb niezbędnych do realizacji procesu tej oraz przyszłych rekrutacji (zgodnie z ustawą z dnia 10 maja 2018 roku o ochronie danych osobowych (Dz. Ustaw z 2018, poz. 1000) oraz zgodnie z Rozporządzeniem Parlamentu Europejskiego i Rady (UE) 2016/679 z dnia 27 kwietnia 2016 r. w sprawie ochrony osób fizycznych w związku z przetwarzaniem danych osobowych i w sprawie swobodnego przepływu takich danych oraz uchylenia dyrektywy 95/46/WE (RODO)).'
+        : null;
+  const photoDimensions = mergedSettings.photo
+    ? RESUME_PHOTO_DIMENSIONS[mergedSettings.photo.size]
+    : undefined;
+  const photoHeight = photoDimensions?.height;
+  const photoWidth = photoDimensions?.width;
 
   return (
     <div
-      className={`${baseStyles['resume-body']} bg-brand-white text-black w-full mx-auto resume-template-${mergedSettings.template}`}
-      style={cssVars}
+      className={`${baseStyles['resume-body']} relative bg-brand-white text-black w-full mx-auto resume-template-${mergedSettings.template}`}
+      data-photo-position={mergedSettings.photo?.position}
+      style={
+        {
+          ...cssVars,
+          ...(photoWidth ? { '--resume-photo-width': `${photoWidth}px` } : {}),
+          ...(photoHeight ? { '--resume-photo-height': `${photoHeight}px` } : {}),
+        } as React.CSSProperties
+      }
     >
+      {mergedSettings.photo?.dataUrl && photoWidth && photoHeight && (
+        <div
+          className="absolute z-10 overflow-hidden"
+          style={{
+            top: 'var(--margin-top)',
+            [mergedSettings.photo.position]:
+              mergedSettings.photo.position === 'left'
+                ? 'var(--margin-left)'
+                : 'var(--margin-right)',
+            width: photoWidth,
+            height: photoHeight,
+          }}
+        >
+          <Image
+            src={mergedSettings.photo.dataUrl}
+            alt={resumeData.personalInfo?.name || 'Zdjęcie'}
+            width={photoWidth}
+            height={photoHeight}
+            unoptimized
+            draggable={false}
+            className="size-full object-cover"
+            style={{
+              transform: `scale(${mergedSettings.photo.zoom ?? 1}) translate(${-(mergedSettings.photo.cropX ?? 0)}%, ${-(mergedSettings.photo.cropY ?? 0)}%)`,
+              transformOrigin: 'center',
+            }}
+          />
+        </div>
+      )}
       {mergedSettings.template === 'swiss-single' && (
         <ResumeSingleColumn
           earlierExperienceLabel={sectionHeadings?.earlierExperience}
@@ -302,6 +350,11 @@ const Resume: React.FC<ResumeProps> = ({
           additionalSectionLabels={additionalSectionLabels}
           fallbackLabels={fallbackLabels}
         />
+      )}
+      {gdprText && (
+        <footer className="mt-5 break-inside-avoid border-t border-black/20 pt-2 text-[8px] leading-[1.25] text-black/75">
+          {gdprText}
+        </footer>
       )}
     </div>
   );

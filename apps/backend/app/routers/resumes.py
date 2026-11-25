@@ -1808,6 +1808,7 @@ async def apply_keywords_endpoint(
     terms = {term.casefold(): term for term in job_keyword_terms(job_keywords)}
 
     keywords: list[str] = []
+    attested_keywords: set[str] = set()
     for item in request.keywords:
         term = terms.get(item.keyword.strip().casefold())
         if term is None:
@@ -1821,11 +1822,33 @@ async def apply_keywords_endpoint(
             )
         if term not in keywords:
             keywords.append(term)
+        if item.attested:
+            # The UI's "Mam tę umiejętność" action is an explicit claim that
+            # this missing job term belongs in the candidate's skills list.
+            attested_keywords.add(term.casefold())
 
     language = get_content_language()
+    job_skill_terms = {
+        term.strip().casefold()
+        for field in ("required_skills", "preferred_skills")
+        for term in job_keywords.get(field, [])
+        if isinstance(term, str) and term.strip()
+    }
+    selected_skills = [
+        keyword
+        for keyword in keywords
+        if keyword.casefold() in job_skill_terms
+        or keyword.casefold() in attested_keywords
+    ]
     try:
         forced = await asyncio.wait_for(
-            force_keywords(current, keywords, job["content"], language),
+            force_keywords(
+                current,
+                keywords,
+                job["content"],
+                language,
+                skill_keywords=selected_skills,
+            ),
             timeout=remaining_timeout(),
         )
     except asyncio.TimeoutError as e:

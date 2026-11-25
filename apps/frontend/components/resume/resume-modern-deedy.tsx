@@ -279,7 +279,7 @@ export const ResumeModernDeedy: React.FC<ResumeModernDeedyProps> = ({
   return (
     <div className={styles.container}>
       {personalInfo && (
-        <header className={styles.header}>
+        <header data-resume-header className={styles.header}>
           {personalInfo.name && <h1 className={styles.name}>{personalInfo.name}</h1>}
           {personalInfo.title && <div className={styles.tagline}>{personalInfo.title}</div>}
           {contactItems.length > 0 && (

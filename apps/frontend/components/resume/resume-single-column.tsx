@@ -308,6 +308,7 @@ export const ResumeSingleColumn: React.FC<ResumeSingleColumnProps> = ({
       {/* Header Section - Centered Layout (always first) */}
       {personalInfo && (
         <header
+          data-resume-header
           className={`text-center ${baseStyles['resume-header']}${accent ? '' : ' border-b'}`}
           style={accent ? undefined : { borderColor: 'var(--resume-border-primary)' }}
         >

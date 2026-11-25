@@ -531,7 +531,16 @@ const ResumeBuilderContent = ({ agentMode = false }: ResumeBuilderProps) => {
           setIsTailoredResume(Boolean(data.parent_id));
           // Store resume title for downloads
           setResumeTitle(data.title ?? null);
-          setTemplateSettings(data.template_settings ?? DEFAULT_TEMPLATE_SETTINGS);
+          const savedTemplateSettings = data.template_settings;
+          setTemplateSettings({
+            ...DEFAULT_TEMPLATE_SETTINGS,
+            ...savedTemplateSettings,
+            margins: { ...DEFAULT_TEMPLATE_SETTINGS.margins, ...savedTemplateSettings?.margins },
+            spacing: { ...DEFAULT_TEMPLATE_SETTINGS.spacing, ...savedTemplateSettings?.spacing },
+            fontSize: { ...DEFAULT_TEMPLATE_SETTINGS.fontSize, ...savedTemplateSettings?.fontSize },
+            photo: savedTemplateSettings?.photo ?? null,
+            gdprConsent: savedTemplateSettings?.gdprConsent ?? 'current',
+          });
           setFormattingSaveFailed(false);
           // These values belong to this resume. Explicitly applying empty values
           // prevents the preceding document's attachment from surviving a switch.
@@ -697,19 +706,21 @@ const ResumeBuilderContent = ({ agentMode = false }: ResumeBuilderProps) => {
   // Sends right away, also while the page unloads (the request is keepalive). Each save
   // carries the next number in this session, so one that arrives late cannot undo a
   // newer choice from this tab.
-  const flushFormattingSave = useCallback(() => {
+  const flushFormattingSave = useCallback(async (): Promise<boolean> => {
     if (formattingTimerRef.current) clearTimeout(formattingTimerRef.current);
     formattingTimerRef.current = null;
     const pending = pendingFormattingRef.current;
     pendingFormattingRef.current = null;
-    if (!pending) return;
-    updateResumeTemplateSettings(pending.resumeId, pending.settings, pending.order).then(
-      () => setFormattingSaveFailed(false),
-      (error) => {
-        console.error('Failed to save resume formatting:', error);
-        setFormattingSaveFailed(true);
-      }
-    );
+    if (!pending) return true;
+    try {
+      await updateResumeTemplateSettings(pending.resumeId, pending.settings, pending.order);
+      setFormattingSaveFailed(false);
+      return true;
+    } catch (error) {
+      console.error('Failed to save resume formatting:', error);
+      setFormattingSaveFailed(true);
+      return false;
+    }
   }, []);
 
   // Formatting is saved with the resume, so its view page and PDF match the builder.
@@ -739,9 +750,16 @@ const ResumeBuilderContent = ({ agentMode = false }: ResumeBuilderProps) => {
 
   // Save pending formatting before switching resumes, leaving the builder, or a
   // refresh or tab close (which skip React cleanup).
-  useEffect(() => () => flushFormattingSave(), [resumeId, flushFormattingSave]);
+  useEffect(
+    () => () => {
+      void flushFormattingSave();
+    },
+    [resumeId, flushFormattingSave]
+  );
   useEffect(() => {
-    const onPageHide = () => flushFormattingSave();
+    const onPageHide = () => {
+      void flushFormattingSave();
+    };
     window.addEventListener('pagehide', onPageHide);
     return () => window.removeEventListener('pagehide', onPageHide);
   }, [flushFormattingSave]);
@@ -1295,6 +1313,10 @@ const ResumeBuilderContent = ({ agentMode = false }: ResumeBuilderProps) => {
       return;
     }
     try {
+      if (!(await flushFormattingSave())) {
+        showNotification(t('builder.alerts.formattingSaveFailed'), 'danger');
+        return;
+      }
       setIsDownloading(true);
       const blob = await downloadResumePdf(resumeId, templateSettings, uiLanguage);
       const company = getCompanyFromTitle(resumeTitle);

@@ -522,6 +522,29 @@
       "options": "Opcje",
       "compactMode": "Tryb kompaktowy",
       "contactIcons": "Ikony kontaktów",
+      "photo": {
+        "title": "Zdjęcie w CV",
+        "upload": "Dodaj zdjęcie",
+        "change": "Zmień zdjęcie",
+        "remove": "Usuń zdjęcie",
+        "help": "JPEG, PNG lub WebP. Oryginalny plik jest zachowywany bez ponownej kompresji.",
+        "invalidFile": "Wybierz plik JPEG, PNG lub WebP o rozmiarze do 10 MB.",
+        "previewAlt": "Podgląd zdjęcia do CV",
+        "position": "Pozycja zdjęcia",
+        "positions": { "left": "Lewa", "right": "Prawa" },
+        "size": "Rozmiar zdjęcia",
+        "sizes": { "small": "Małe · 4 × 4 cm", "medium": "Średnie · 5 × 5,5 cm", "large": "Duże · 6 × 7 cm" },
+        "crop": "Kadrowanie",
+        "cropHelp": "Przeciągnij zdjęcie bezpośrednio w kadrze i ustaw powiększenie.",
+        "zoom": "Powiększenie"
+      },
+      "gdpr": {
+        "title": "Klauzula RODO",
+        "enable": "Dodaj klauzulę na dole CV",
+        "scope": "Zakres zgody",
+        "current": "Tylko ta rekrutacja",
+        "currentFuture": "Ta i przyszłe rekrutacje"
+      },
       "effectiveOutput": "Moc użyteczna",
       "effectiveMargins": "Marginesy (mm): G{top} D{bottom} L{left} P{right}",
       "effectiveSectionGap": "Odstęp między sekcjami",
@@ -946,7 +969,7 @@
     },
     "forceKeywords": {
       "title": "Dodaj brakujące słowa kluczowe",
-      "description": "Wybierz słowa kluczowe z oferty do uwzględnienia w CV. Każde trafi do umiejętności i maksymalnie dwóch pasujących punktów.",
+      "description": "Zaznacz hasła, a potem kliknij „Zastosuj”, żeby dopisać je do podglądu. Potwierdzone umiejętności trafią do sekcji Umiejętności.",
       "supported": "Występują w głównym CV",
       "unsupported": "Nie występują w głównym CV",
       "apply": "Zastosuj",

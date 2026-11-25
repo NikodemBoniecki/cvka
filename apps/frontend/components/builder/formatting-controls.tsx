@@ -1,9 +1,19 @@
 'use client';
 
-import React, { useId, useState } from 'react';
+import React, { useEffect, useId, useRef, useState } from 'react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { SegmentedControl } from '@/components/ui/segmented-control';
 import { ToggleSwitch } from '@/components/ui/toggle-switch';
+import { Label } from '@/components/ui/label';
+import {
+  Dialog,
+  DialogBody,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import { CaretDown, CaretUp, ArrowCounterClockwise } from '@phosphor-icons/react';
 import {
   type TemplateSettings,
@@ -13,7 +23,11 @@ import {
   type HeaderFontFamily,
   type BodyFontFamily,
   type AccentColor,
+  type ResumePhotoPosition,
+  type ResumePhotoSize,
+  type ResumeGdprConsent,
   DEFAULT_TEMPLATE_SETTINGS,
+  RESUME_PHOTO_DIMENSIONS,
   applyTemplatePreset,
   SECTION_SPACING_MAP,
   ITEM_SPACING_MAP,
@@ -50,6 +64,9 @@ interface FormattingControlsProps {
 export const FormattingControls: React.FC<FormattingControlsProps> = ({ settings, onChange }) => {
   const { t } = useTranslations();
   const [isExpanded, setIsExpanded] = useState(true);
+  const [photoError, setPhotoError] = useState<string | null>(null);
+  const [cropOpen, setCropOpen] = useState(false);
+  const photoInputRef = useRef<HTMLInputElement>(null);
   const contentId = useId();
   const compactMultiplier = settings.compactMode ? COMPACT_MULTIPLIER : 1;
   const sectionGapRem =
@@ -118,6 +135,46 @@ export const FormattingControls: React.FC<FormattingControlsProps> = ({ settings
   const handleAccentColorChange = (accentColor: AccentColor) => {
     onChange({ ...settings, accentColor });
   };
+
+  const handlePhotoUpload = async (file?: File) => {
+    if (!file) return;
+    setPhotoError(null);
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 10_000_000) {
+      setPhotoError(t('builder.formatting.photo.invalidFile'));
+      return;
+    }
+    try {
+      const dataUrl = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () =>
+          typeof reader.result === 'string'
+            ? resolve(reader.result)
+            : reject(new Error('Invalid image'));
+        reader.onerror = () => reject(reader.error ?? new Error('Image read failed'));
+        reader.readAsDataURL(file);
+      });
+      onChange({
+        ...settings,
+        photo: {
+          dataUrl,
+          position: settings.photo?.position ?? 'right',
+          size: settings.photo?.size ?? 'medium',
+          zoom: settings.photo?.zoom ?? 1,
+          cropX: settings.photo?.cropX ?? 0,
+          cropY: settings.photo?.cropY ?? 0,
+        },
+      });
+    } catch {
+      setPhotoError(t('builder.formatting.photo.invalidFile'));
+    }
+    if (photoInputRef.current) photoInputRef.current.value = '';
+  };
+
+  const updatePhoto = (patch: Partial<NonNullable<TemplateSettings['photo']>>) => {
+    if (settings.photo) onChange({ ...settings, photo: { ...settings.photo, ...patch } });
+  };
+
+  const updateGdpr = (gdprConsent: ResumeGdprConsent) => onChange({ ...settings, gdprConsent });
 
   const handleReset = () => {
     onChange(DEFAULT_TEMPLATE_SETTINGS);
@@ -417,6 +474,154 @@ export const FormattingControls: React.FC<FormattingControlsProps> = ({ settings
           </div>
 
           {/* Options Section */}
+          <section className="space-y-4 border-t border-paper pt-4">
+            <div>
+              <h4 className="font-mono text-xs font-bold uppercase tracking-wider mb-3 text-ink-soft">
+                {t('builder.formatting.photo.title')}
+              </h4>
+              <input
+                ref={photoInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp"
+                className="sr-only"
+                aria-label={t('builder.formatting.photo.upload')}
+                onChange={(event) => void handlePhotoUpload(event.target.files?.[0])}
+              />
+              <div className="flex items-center gap-3">
+                {settings.photo?.dataUrl && (
+                  <button
+                    type="button"
+                    aria-label={t('builder.formatting.photo.crop')}
+                    onClick={() => setCropOpen(true)}
+                    className="group relative w-[72px] shrink-0 overflow-hidden border border-ink"
+                    style={{
+                      aspectRatio: `${RESUME_PHOTO_DIMENSIONS[settings.photo.size].width} / ${RESUME_PHOTO_DIMENSIONS[settings.photo.size].height}`,
+                    }}
+                  >
+                    <Image
+                      src={settings.photo.dataUrl}
+                      alt={t('builder.formatting.photo.previewAlt')}
+                      width={Math.round(
+                        (72 * RESUME_PHOTO_DIMENSIONS[settings.photo.size].width) /
+                          RESUME_PHOTO_DIMENSIONS[settings.photo.size].height
+                      )}
+                      height={72}
+                      unoptimized
+                      draggable={false}
+                      className="pointer-events-none h-full w-full object-cover"
+                      style={{
+                        transform: `scale(${settings.photo.zoom ?? 1}) translate(${-(settings.photo.cropX ?? 0)}%, ${-(settings.photo.cropY ?? 0)}%)`,
+                      }}
+                    />
+                    <span className="absolute inset-x-0 bottom-0 bg-ink/80 px-1 py-0.5 text-center text-[10px] text-paper opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
+                      {t('builder.formatting.photo.crop')}
+                    </span>
+                  </button>
+                )}
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => photoInputRef.current?.click()}
+                  >
+                    {t(
+                      settings.photo
+                        ? 'builder.formatting.photo.change'
+                        : 'builder.formatting.photo.upload'
+                    )}
+                  </Button>
+                  {settings.photo && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => onChange({ ...settings, photo: null })}
+                    >
+                      {t('builder.formatting.photo.remove')}
+                    </Button>
+                  )}
+                </div>
+              </div>
+              <p className="mt-2 text-xs text-ink-soft">{t('builder.formatting.photo.help')}</p>
+              {photoError && <p className="mt-2 text-sm text-destructive">{photoError}</p>}
+              {settings.photo && (
+                <div className="mt-4 space-y-3">
+                  <div>
+                    <p
+                      id={`${contentId}-photo-position`}
+                      className="font-mono text-xs uppercase text-ink-soft"
+                    >
+                      {t('builder.formatting.photo.position')}
+                    </p>
+                    <SegmentedControl
+                      size="sm"
+                      className="mt-2 grid grid-cols-2"
+                      aria-labelledby={`${contentId}-photo-position`}
+                      value={settings.photo.position}
+                      onChange={(position: ResumePhotoPosition) => updatePhoto({ position })}
+                      items={(['left', 'right'] as ResumePhotoPosition[]).map((position) => ({
+                        value: position,
+                        label: t(`builder.formatting.photo.positions.${position}`),
+                      }))}
+                    />
+                  </div>
+                  <div>
+                    <p
+                      id={`${contentId}-photo-size`}
+                      className="font-mono text-xs uppercase text-ink-soft"
+                    >
+                      {t('builder.formatting.photo.size')}
+                    </p>
+                    <SegmentedControl
+                      size="sm"
+                      className="mt-2 grid grid-cols-3"
+                      aria-labelledby={`${contentId}-photo-size`}
+                      value={settings.photo.size}
+                      onChange={(size: ResumePhotoSize) => updatePhoto({ size })}
+                      items={(['small', 'medium', 'large'] as ResumePhotoSize[]).map((size) => ({
+                        value: size,
+                        label: t(`builder.formatting.photo.sizes.${size}`),
+                      }))}
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+          </section>
+
+          <section className="space-y-3 border-t border-paper pt-4">
+            <h4 className="font-mono text-xs font-bold uppercase tracking-wider text-ink-soft">
+              {t('builder.formatting.gdpr.title')}
+            </h4>
+            <label className="flex items-center gap-2 text-sm text-ink">
+              <input
+                type="checkbox"
+                checked={(settings.gdprConsent ?? 'current') !== 'none'}
+                onChange={(event) => updateGdpr(event.target.checked ? 'current' : 'none')}
+                className="size-4 accent-ink"
+              />
+              {t('builder.formatting.gdpr.enable')}
+            </label>
+            {(settings.gdprConsent ?? 'current') !== 'none' && (
+              <div className="space-y-2">
+                <Label htmlFor={`${contentId}-gdpr-scope`}>
+                  {t('builder.formatting.gdpr.scope')}
+                </Label>
+                <select
+                  id={`${contentId}-gdpr-scope`}
+                  className="w-full border border-ink bg-white px-3 py-2 text-sm"
+                  value={settings.gdprConsent ?? 'current'}
+                  onChange={(event) => updateGdpr(event.target.value as ResumeGdprConsent)}
+                >
+                  <option value="current">{t('builder.formatting.gdpr.current')}</option>
+                  <option value="current_future">
+                    {t('builder.formatting.gdpr.currentFuture')}
+                  </option>
+                </select>
+              </div>
+            )}
+          </section>
+
+          {/* Options Section */}
           <div>
             <h4 className="font-mono text-xs font-bold uppercase tracking-wider mb-3 text-ink-soft">
               {t('builder.formatting.options')}
@@ -491,9 +696,149 @@ export const FormattingControls: React.FC<FormattingControlsProps> = ({ settings
           </div>
         </div>
       )}
+      <PhotoCropDialog
+        open={cropOpen}
+        dataUrl={settings.photo?.dataUrl ?? null}
+        size={settings.photo?.size ?? 'medium'}
+        initial={{
+          zoom: settings.photo?.zoom ?? 1,
+          cropX: settings.photo?.cropX ?? 0,
+          cropY: settings.photo?.cropY ?? 0,
+        }}
+        onClose={() => setCropOpen(false)}
+        onSave={(crop) => {
+          updatePhoto(crop);
+          setCropOpen(false);
+        }}
+      />
     </div>
   );
 };
+
+interface PhotoCropDialogProps {
+  open: boolean;
+  dataUrl: string | null;
+  size: ResumePhotoSize;
+  initial: { zoom: number; cropX: number; cropY: number };
+  onClose: () => void;
+  onSave: (crop: { zoom: number; cropX: number; cropY: number }) => void;
+}
+
+function PhotoCropDialog({ open, dataUrl, size, initial, onClose, onSave }: PhotoCropDialogProps) {
+  const { t } = useTranslations();
+  const zoomId = useId();
+  const { zoom: initialZoom, cropX: initialCropX, cropY: initialCropY } = initial;
+  const cropDimensions = RESUME_PHOTO_DIMENSIONS[size];
+  const cropFrameWidth = Math.round((350 * cropDimensions.width) / cropDimensions.height);
+  const [crop, setCrop] = useState(initial);
+  const dragRef = useRef<{
+    pointerId: number;
+    x: number;
+    y: number;
+    cropX: number;
+    cropY: number;
+  } | null>(null);
+
+  useEffect(() => {
+    if (open) setCrop({ zoom: initialZoom, cropX: initialCropX, cropY: initialCropY });
+  }, [open, initialZoom, initialCropX, initialCropY]);
+
+  const startDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    event.currentTarget.setPointerCapture(event.pointerId);
+    dragRef.current = {
+      pointerId: event.pointerId,
+      x: event.clientX,
+      y: event.clientY,
+      cropX: crop.cropX,
+      cropY: crop.cropY,
+    };
+  };
+
+  const moveDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    const bounds = event.currentTarget.getBoundingClientRect();
+    setCrop((current) => ({
+      ...current,
+      cropX: Math.max(
+        -50,
+        Math.min(50, drag.cropX - ((event.clientX - drag.x) / bounds.width) * (100 / current.zoom))
+      ),
+      cropY: Math.max(
+        -50,
+        Math.min(50, drag.cropY - ((event.clientY - drag.y) / bounds.height) * (100 / current.zoom))
+      ),
+    }));
+  };
+
+  const finishDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (dragRef.current?.pointerId === event.pointerId) dragRef.current = null;
+  };
+
+  return (
+    <Dialog open={open && Boolean(dataUrl)} onOpenChange={(visible) => !visible && onClose()}>
+      <DialogContent size="md">
+        <DialogHeader>
+          <DialogTitle>{t('builder.formatting.photo.crop')}</DialogTitle>
+        </DialogHeader>
+        <DialogBody className="flex flex-col items-center gap-4">
+          {dataUrl && (
+            <div
+              aria-label={t('builder.formatting.photo.cropHelp')}
+              className="relative max-w-full touch-none cursor-grab overflow-hidden border border-ink active:cursor-grabbing"
+              style={{
+                width: cropFrameWidth,
+                aspectRatio: `${cropDimensions.width} / ${cropDimensions.height}`,
+              }}
+              onPointerDown={startDrag}
+              onPointerMove={moveDrag}
+              onPointerUp={finishDrag}
+              onPointerCancel={finishDrag}
+            >
+              <Image
+                src={dataUrl}
+                alt=""
+                fill
+                unoptimized
+                draggable={false}
+                className="pointer-events-none object-cover"
+                style={{
+                  transform: `scale(${crop.zoom}) translate(${-crop.cropX}%, ${-crop.cropY}%)`,
+                }}
+              />
+              <div className="pointer-events-none absolute inset-0 border-[20px] border-black/20" />
+              <div className="pointer-events-none absolute inset-5 border border-white/80" />
+            </div>
+          )}
+          <p className="text-center text-sm text-ink-soft">
+            {t('builder.formatting.photo.cropHelp')}
+          </p>
+          <div className="w-full space-y-2">
+            <Label htmlFor={zoomId}>{t('builder.formatting.photo.zoom')}</Label>
+            <input
+              id={zoomId}
+              type="range"
+              min="1"
+              max="4"
+              step="0.05"
+              value={crop.zoom}
+              onChange={(event) =>
+                setCrop((current) => ({ ...current, zoom: Number(event.target.value) }))
+              }
+              className="w-full accent-ink"
+            />
+          </div>
+        </DialogBody>
+        <DialogFooter>
+          <Button variant="ghost" onClick={onClose}>
+            {t('common.cancel')}
+          </Button>
+          <Button onClick={() => onSave(crop)}>{t('common.save')}</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
 
 /** Font stacks for the font-family option labels, so each option previews its face. */
 const FONT_PREVIEW: Record<HeaderFontFamily, string> = {

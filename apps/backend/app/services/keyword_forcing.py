@@ -160,13 +160,32 @@ async def force_keywords(
     keywords: list[str],
     job_description: str,
     language: str,
+    *,
+    skill_keywords: list[str] | None = None,
 ) -> dict[str, Any]:
-    """Return ``data`` with each keyword placed; unplaced ones join the skills list.
+    """Return ``data`` with each selected term placed in the resume.
 
-    A failed AI call still places every keyword in the skills list, so an
-    explicit request is never silently dropped.
+    Confirmed job skills are guaranteed to appear in the technical-skills list,
+    even when the tailored draft already mentions them in a bullet. Other
+    selected terms go into the skills list or summary. A failed AI call still
+    places each requested term deterministically, so a user selection is never
+    silently dropped.
     """
-    pending = [k for k in keywords if not keyword_in_text(k, _extract_all_text(data))]
+    requested = list(dict.fromkeys(k.strip() for k in keywords if k.strip()))
+    skill_keys = {
+        k.casefold() for k in (skill_keywords or []) if isinstance(k, str) and k.strip()
+    }
+    current_skills = " ".join(_skills(data))
+    all_text = _extract_all_text(data)
+    pending = [
+        keyword
+        for keyword in requested
+        if (
+            not keyword_in_text(keyword, current_skills)
+            if keyword.casefold() in skill_keys
+            else not keyword_in_text(keyword, all_text)
+        )
+    ]
     if not pending:
         return data
     try:
@@ -182,14 +201,19 @@ async def force_keywords(
         logger.info(
             "Keyword placement: %d change(s) refused by apply_diffs", len(rejected)
         )
-    # Every keyword reaches the skills list or the summary on its own; a bullet
-    # edit alone is not enough (optional edits may be the only placement).
+    # Every selected skill reaches the technical-skills list even when it was
+    # already present in a bullet. A bullet edit alone is not enough.
     skills_text = " ".join(_skills(result))
     summary = result.get("summary") if isinstance(result.get("summary"), str) else ""
     missing = [
-        k
-        for k in pending
-        if not keyword_in_text(k, skills_text) and not keyword_in_text(k, summary)
+        keyword
+        for keyword in pending
+        if (
+            not keyword_in_text(keyword, skills_text)
+            if keyword.casefold() in skill_keys
+            else not keyword_in_text(keyword, skills_text)
+            and not keyword_in_text(keyword, summary)
+        )
     ]
     if missing:
         fallback = [

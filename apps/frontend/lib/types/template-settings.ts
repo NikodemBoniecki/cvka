@@ -37,6 +37,25 @@ export type SpacingLevel = 1 | 2 | 3 | 4 | 5;
 
 export type HeaderFontFamily = 'serif' | 'sans-serif' | 'mono';
 export type BodyFontFamily = 'serif' | 'sans-serif' | 'mono';
+export type ResumePhotoPosition = 'left' | 'right';
+export type ResumePhotoSize = 'small' | 'medium' | 'large';
+export type ResumeGdprConsent = 'none' | 'current' | 'current_future';
+
+/** CV photo output dimensions at 96 DPI: 4×4, 5×5.5 and 6×7 cm. */
+export const RESUME_PHOTO_DIMENSIONS: Record<ResumePhotoSize, { width: number; height: number }> = {
+  small: { width: 151, height: 151 },
+  medium: { width: 189, height: 208 },
+  large: { width: 227, height: 265 },
+};
+
+export interface ResumePhotoSettings {
+  dataUrl: string;
+  position: ResumePhotoPosition;
+  size: ResumePhotoSize;
+  zoom: number;
+  cropX: number;
+  cropY: number;
+}
 
 export interface MarginSettings {
   top: number; // 5-25mm
@@ -67,6 +86,8 @@ export interface TemplateSettings {
   compactMode: boolean; // Apply tighter spacing across the board
   showContactIcons: boolean; // Show icons next to contact info
   accentColor: AccentColor; // Accent color for Modern template
+  photo?: ResumePhotoSettings | null;
+  gdprConsent?: ResumeGdprConsent;
   // On saved settings: which builder session saved them, and its save number.
   session?: string | null;
   revision?: number;
@@ -84,6 +105,8 @@ export const DEFAULT_TEMPLATE_SETTINGS: TemplateSettings = {
   compactMode: false,
   showContactIcons: false,
   accentColor: 'orange',
+  photo: null,
+  gdprConsent: 'current',
 };
 
 /**

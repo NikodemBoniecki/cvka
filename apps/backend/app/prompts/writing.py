@@ -6,11 +6,13 @@ tests/unit/test_writing_rubric_parity.py keeps the two in sync.
 """
 
 WRITING_RUBRIC = """- Start every bullet with a strong action verb in the past tense (present tense for a current role). Never open with "Responsible for", "Helped with", "Assisted in", "Involved in", "Participated in", "Worked on" or "Tasked with".
+- Lead with the action, not its purpose. In Polish, do not start a bullet with "Aby...", "Żeby...", "W celu..." or "Po to, by..."; put the action first and retain the purpose or result only when the source supports it.
+- Keep one grammatical voice throughout the resume, following the style used by most existing bullets. In Polish, both impersonal noun phrases ("Tworzenie raportów") and first-person past-tense verbs ("Tworzyłem raporty") are valid; do not mix them or convert a first-person source to impersonal phrasing.
 - Shape each bullet as Challenge, Action, Result: the situation, what the candidate did, and what changed because of it.
 - State the result. Keep every number in the source exactly. Never invent a number, percentage, amount, count or time saved, and never add size words ("significantly", "dramatically", "greatly") the source does not use.
 - When the source has no number, state the result through scope and outcome the source already gives: who used the work, what it replaced, what it made possible, how often it ran.
 - Keep every fact: each number, name, product, tool, skill and outcome in the original stays in the rewrite. Add none.
-- One idea per bullet, at most about 35 words. No first-person pronouns ("I", "my").
+- One idea per bullet, at most about 35 words. Avoid first-person pronouns in English ("I", "my"); this does not prohibit consistent Polish first-person verb forms used in the source.
 - No em dashes ("—") or double hyphens ("--"). Use a comma, a semicolon or a new sentence.
 - Avoid stock phrases such as "spearheaded", "leveraged", "orchestrated", "utilized", "synergy", "cutting-edge" and "results-driven"."""
 
@@ -46,7 +48,8 @@ Hard rules:
 2. Every number, name, product, tool and skill in the original line must appear in your rewrite. Add no new ones.
 3. Never invent a metric. If the line has no number, state the outcome or scope the line already implies, or leave the result qualitative.
 4. Write in {output_language}.
-5. The summary stays a summary: 2 to 4 sentences, no bullet points.
+5. Start each bullet with the action itself, not a purpose clause such as Polish "Aby...". Use the same grammatical voice as most existing bullets; Polish first-person past-tense verbs are valid when used consistently.
+6. The summary stays a summary: 2 to 4 sentences, no bullet points.
 {mode_rule}
 Context (the full resume, for tone and facts only):
 {resume}
@@ -66,7 +69,7 @@ WRITING_HEAVY_MODE_RULE = "6. Heavy rewrite: you may restructure each line fully
 KEYWORD_PLACEMENT_PROMPT = """Work the listed job keywords into this resume. The candidate confirmed each keyword is true for them. Output only JSON.
 
 Hard rules:
-1. A skill, tool or technology keyword goes into the skills list with action "add_skill" (value = the keyword exactly as listed).
+1. Every skill, tool or technology keyword must appear in the skills list even if it already appears in a summary or bullet. Add it with action "add_skill" (value = the keyword exactly as listed) unless it is already listed there.
 2. You may also weave each keyword into AT MOST 2 existing lines where it honestly fits the work described: the summary or a work or project bullet. Use action "replace", copying the path and the original text exactly.
 3. When a keyword fits no line, use only the skills list (or, for a practice or concept such as "agile", only the summary).
 4. In a replaced line keep every number, name, tool and skill the line already has. Add nothing except the keyword itself: no new responsibility, no number, no other tool.

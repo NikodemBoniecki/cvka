@@ -151,7 +151,15 @@ export default function ResumeViewerPage() {
         setIsTailoredResume(Boolean(data.parent_id));
         setIsMasterResume(Boolean(data.is_master));
         setIsDefaultMaster(Boolean(data.is_default_master));
-        setTemplateSettings(data.template_settings ?? DEFAULT_TEMPLATE_SETTINGS);
+        setTemplateSettings({
+          ...DEFAULT_TEMPLATE_SETTINGS,
+          ...data.template_settings,
+          margins: { ...DEFAULT_TEMPLATE_SETTINGS.margins, ...data.template_settings?.margins },
+          spacing: { ...DEFAULT_TEMPLATE_SETTINGS.spacing, ...data.template_settings?.spacing },
+          fontSize: { ...DEFAULT_TEMPLATE_SETTINGS.fontSize, ...data.template_settings?.fontSize },
+          photo: data.template_settings?.photo ?? null,
+          gdprConsent: data.template_settings?.gdprConsent ?? 'current',
+        });
 
         // Prioritize processed_resume if available (structured JSON)
         if (data.processed_resume) {

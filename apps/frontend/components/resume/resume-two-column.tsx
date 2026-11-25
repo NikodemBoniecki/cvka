@@ -145,6 +145,7 @@ export const ResumeTwoColumn: React.FC<ResumeTwoColumnProps> = ({
       {/* Header Section - Centered Layout */}
       {personalInfo && (
         <header
+          data-resume-header
           className={`text-center ${baseStyles['resume-header']} border-b`}
           style={{ borderColor: 'var(--resume-border-primary)' }}
         >

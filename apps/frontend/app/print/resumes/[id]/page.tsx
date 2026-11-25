@@ -78,7 +78,10 @@ function parseBoolean(value: string | undefined, defaultValue: boolean): boolean
   return defaultValue;
 }
 
-async function fetchResumeData(id: string, draftToken?: string): Promise<ResumeData> {
+async function fetchResumeData(
+  id: string,
+  draftToken?: string
+): Promise<{ resumeData: ResumeData; templateSettings?: TemplateSettings | null }> {
   const url =
     draftToken && /^[a-f0-9]{32}$/.test(draftToken)
       ? `${API_BASE}/resumes/render-drafts/${draftToken}`
@@ -88,14 +91,24 @@ async function fetchResumeData(id: string, draftToken?: string): Promise<ResumeD
     throw new Error(`Failed to load resume (status ${res.status}).`);
   }
   const payload = (await res.json()) as {
-    data: { processed_resume?: ResumeData; raw_resume?: { content?: string } };
+    data: {
+      processed_resume?: ResumeData;
+      raw_resume?: { content?: string };
+      template_settings?: TemplateSettings | null;
+    };
   };
   if (payload.data.processed_resume) {
-    return payload.data.processed_resume;
+    return {
+      resumeData: payload.data.processed_resume,
+      templateSettings: payload.data.template_settings,
+    };
   }
   if (payload.data.raw_resume?.content) {
     try {
-      return JSON.parse(payload.data.raw_resume.content) as ResumeData;
+      return {
+        resumeData: JSON.parse(payload.data.raw_resume.content) as ResumeData,
+        templateSettings: payload.data.template_settings,
+      };
     } catch (error) {
       // Log error for debugging instead of silently failing
       // Note: Avoid logging content preview to prevent PII exposure
@@ -107,7 +120,7 @@ async function fetchResumeData(id: string, draftToken?: string): Promise<ResumeD
       throw new Error('Failed to parse resume data. The resume content may be corrupted.');
     }
   }
-  return {} as ResumeData;
+  return { resumeData: {} as ResumeData, templateSettings: payload.data.template_settings };
 }
 
 /**
@@ -167,8 +180,11 @@ export default async function PrintResumePage({ params, searchParams }: PageProp
   const resolvedSearchParams = searchParams ? await searchParams : undefined;
   const draftToken = resolvedSearchParams?.draft;
   let resumeData: ResumeData;
+  let savedTemplateSettings: TemplateSettings | null | undefined;
   try {
-    resumeData = await fetchResumeData(resolvedParams.id, draftToken);
+    const fetched = await fetchResumeData(resolvedParams.id, draftToken);
+    resumeData = fetched.resumeData;
+    savedTemplateSettings = fetched.templateSettings;
   } catch (error) {
     // Render a marker the PDF renderer waits for, so a resume that cannot load
     // (an expired page-fit draft, an unreachable backend) fails fast instead
@@ -259,6 +275,8 @@ export default async function PrintResumePage({ params, searchParams }: PageProp
       DEFAULT_TEMPLATE_SETTINGS.showContactIcons
     ),
     accentColor: parseAccentColor(resolvedSearchParams?.accentColor),
+    photo: savedTemplateSettings?.photo ?? null,
+    gdprConsent: savedTemplateSettings?.gdprConsent ?? 'current',
   };
 
   // Note: Margins are applied by Playwright's PDF renderer (not here)

@@ -712,6 +712,30 @@ class TemplateFontSize(BaseModel):
     bodyFont: Literal["serif", "sans-serif", "mono"] = "sans-serif"
 
 
+class ResumePhotoSettings(BaseModel):
+    """A compressed, user-provided portrait stored with resume formatting."""
+
+    dataUrl: str = Field(min_length=32, max_length=15_000_000)
+    position: Literal["left", "right"] = "right"
+    size: Literal["small", "medium", "large"] = "medium"
+    zoom: float = Field(1.0, ge=1.0, le=4.0)
+    cropX: float = Field(0.0, ge=-50.0, le=50.0)
+    cropY: float = Field(0.0, ge=-50.0, le=50.0)
+
+    @field_validator("dataUrl")
+    @classmethod
+    def validate_photo_data_url(cls, value: str) -> str:
+        if not value.startswith(
+            (
+                "data:image/jpeg;base64,",
+                "data:image/png;base64,",
+                "data:image/webp;base64,",
+            )
+        ):
+            raise ValueError("Photo must be a JPEG, PNG, or WebP data URL")
+        return value
+
+
 class TemplateSettings(BaseModel):
     """A resume's saved formatting.
 
@@ -726,6 +750,8 @@ class TemplateSettings(BaseModel):
     compactMode: bool = False
     showContactIcons: bool = False
     accentColor: Literal["blue", "green", "orange", "red"] = "blue"
+    photo: ResumePhotoSettings | None = None
+    gdprConsent: Literal["none", "current", "current_future"] = "current"
     # Orders saves from one builder session (a tab): `revision` counts up per session.
     # A save older than the stored one from the same session is ignored, so that
     # tab's requests arriving out of order cannot undo its newer choice. Saves from

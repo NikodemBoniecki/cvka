@@ -1,8 +1,9 @@
 """Writing-quality rules, the writing score and the rewrite fact check. No LLM.
 
 The rules see the summary and every work and project bullet, the rows the
-rewrite loop can change. English resumes get every rule; other content
-languages get the em dash rule only (the AI critic covers the rest there).
+rewrite loop can change. English resumes get the English rules; Polish resumes
+also get a deterministic check against purpose-clause openers. Other languages
+get the em dash rule and AI critique.
 """
 
 import re
@@ -34,6 +35,10 @@ WEAK_OPENERS: tuple[str, ...] = (
 )
 _WEAK_OPENER_RE = re.compile(
     r"^\W*(?:" + "|".join(re.escape(o) for o in WEAK_OPENERS) + r")\b",
+    re.IGNORECASE,
+)
+_POLISH_PURPOSE_OPENER_RE = re.compile(
+    r"^\W*(?:aby|żeby|w\s+celu|po\s+to\s*,?\s*(?:aby|żeby|by))\b",
     re.IGNORECASE,
 )
 _FIRST_PERSON_RE = re.compile(r"\bI\b|\b(?i:me|my|mine|myself)\b")
@@ -128,9 +133,11 @@ def check_writing(data: dict[str, Any], language: str = "en") -> list[WritingFin
 
         if EM_DASH_RE.search(text):
             add("em_dash", "hard")
+        is_bullet = path != "summary"
+        if is_bullet and language == "pl" and _POLISH_PURPOSE_OPENER_RE.search(text):
+            add("weak_opener", "hard")
         if not english:
             continue
-        is_bullet = path != "summary"
         if is_bullet and _WEAK_OPENER_RE.search(text):
             add("weak_opener", "hard")
         if _FIRST_PERSON_RE.search(text):

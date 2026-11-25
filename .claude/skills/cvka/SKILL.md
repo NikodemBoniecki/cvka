@@ -138,11 +138,13 @@ The app's critique prompt uses this exact text (a test keeps the two in sync).
 
 <!-- writing-rubric:start -->
 - Start every bullet with a strong action verb in the past tense (present tense for a current role). Never open with "Responsible for", "Helped with", "Assisted in", "Involved in", "Participated in", "Worked on" or "Tasked with".
+- Lead with the action, not its purpose. In Polish, do not start a bullet with "Aby...", "Żeby...", "W celu..." or "Po to, by..."; put the action first and retain the purpose or result only when the source supports it.
+- Keep one grammatical voice throughout the resume, following the style used by most existing bullets. In Polish, both impersonal noun phrases ("Tworzenie raportów") and first-person past-tense verbs ("Tworzyłem raporty") are valid; do not mix them or convert a first-person source to impersonal phrasing.
 - Shape each bullet as Challenge, Action, Result: the situation, what the candidate did, and what changed because of it.
 - State the result. Keep every number in the source exactly. Never invent a number, percentage, amount, count or time saved, and never add size words ("significantly", "dramatically", "greatly") the source does not use.
 - When the source has no number, state the result through scope and outcome the source already gives: who used the work, what it replaced, what it made possible, how often it ran.
 - Keep every fact: each number, name, product, tool, skill and outcome in the original stays in the rewrite. Add none.
-- One idea per bullet, at most about 35 words. No first-person pronouns ("I", "my").
+- One idea per bullet, at most about 35 words. Avoid first-person pronouns in English ("I", "my"); this does not prohibit consistent Polish first-person verb forms used in the source.
 - No em dashes ("—") or double hyphens ("--"). Use a comma, a semicolon or a new sentence.
 - Avoid stock phrases such as "spearheaded", "leveraged", "orchestrated", "utilized", "synergy", "cutting-edge" and "results-driven".
 <!-- writing-rubric:end -->

@@ -137,7 +137,7 @@ export const VividHeader: React.FC<{
   const nameRest = firstSpace === -1 ? '' : fullName.slice(firstSpace + 1);
 
   return (
-    <div className={baseStyles['resume-header']}>
+    <div data-resume-header className={baseStyles['resume-header']}>
       <h1 className={baseStyles['resume-name']}>
         <span className={styles.nameFirst}>{nameFirst}</span>
         {nameRest && <span className={nameRestClassName}> {nameRest}</span>}

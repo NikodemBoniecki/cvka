@@ -567,7 +567,7 @@ export const ResumeDeedy: React.FC<ResumeDeedyProps> = ({
 
   return (
     <div className={styles.deedy}>
-      <header className={styles.header}>
+      <header data-resume-header className={styles.header}>
         <h1 className={styles.name}>
           {nameFirst && (
             <>

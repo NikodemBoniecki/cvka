@@ -315,6 +315,7 @@ Do NOT include personalInfo in your output - it will be preserved from the origi
 
 Rules:
 - Make targeted adjustments to bullet points to align with job description phrasing. Preserve the candidate's original details and voice - adjust wording, do not rewrite entirely.
+- Start each bullet with the action the candidate performed, not a purpose clause such as Polish "Aby...", "Żeby..." or "W celu...". Match the grammatical voice used by most existing bullets; Polish first-person past tense is valid.
 - DO NOT invent new information
 - Preserve existing action verbs. Do not invent quantifiable achievements not in the original.
 - Keep proper nouns (names, company names, locations) unchanged
@@ -347,6 +348,7 @@ Do NOT include personalInfo in your output - it will be preserved from the origi
 
 Rules:
 - Rewrite every bullet as Challenge, Action, Result: open with a strong action verb, state what changed because of the work. Keep every fact of the original bullet.
+- In Polish, lead with the completed action rather than a purpose clause beginning "Aby...", "Żeby..." or "W celu..."; use the grammatical voice used by most existing bullets.
 - Rewrite the summary from scratch as a positioning statement: role identity, years and domain, signature strength, all taken from the resume.
 - You may reorder bullets within a role so the strongest evidence for this job comes first.
 - Keep the same number of bullets in every entry. Do not merge, drop or add bullets.
@@ -646,11 +648,13 @@ RULES:
 5. Each change MUST include the original text (copied exactly) so it can be verified
 6. For each change, explain WHY it helps match the job description
 7. Generate all new text in {output_language}
-8. Do not use em dash characters
-9. Keep changes minimal and targeted; do not rewrite content that already aligns well
-10. Exception to rule 2: you may add a skill only if it appears in the verified skill targets below
-11. By DEFAULT, scan the summary and every work, project, and education description for content that already demonstrates a job-description keyword or skill, and reframe that text using the job description's terminology where it is not already phrased that way (per rule 9, leave content that already aligns well), while preserving the candidate's actual accomplishment. Do NOT add new work, metrics, or responsibilities; only restate existing content in the JD's language, and verify every reframe stays factually accurate.
-12. Preserve original capitalization, especially for proper nouns, technical terms (e.g., REST, API, AWS), and acronyms. Do not change the casing of words that were capitalized in the original.
+8. Start each bullet with the action the candidate performed, not a purpose clause such as Polish "Aby...", "Żeby..." or "W celu...". Put the action first and keep purpose/result wording only when supported by the source.
+9. Keep one grammatical voice throughout the resume, following the style used by most existing bullets. Polish first-person past-tense verbs are valid; do not mix them with impersonal noun phrases.
+10. Do not use em dash characters
+11. Keep changes minimal and targeted; do not rewrite content that already aligns well
+12. Exception to rule 2: you may add a skill only if it appears in the verified skill targets below
+13. By DEFAULT, scan the summary and every work, project, and education description for content that already demonstrates a job-description keyword or skill, and reframe that text using the job description's terminology where it is not already phrased that way (per rule 11, leave content that already aligns well), while preserving the candidate's actual accomplishment. Do NOT add new work, metrics, or responsibilities; only restate existing content in the JD's language, and verify every reframe stays factually accurate.
+14. Preserve original capitalization, especially for proper nouns, technical terms (e.g., REST, API, AWS), and acronyms. Do not change the casing of words that were capitalized in the original.
 
 PATHS you can target:
 - "summary" — the resume summary text

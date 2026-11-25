@@ -151,7 +151,7 @@ export const ResumeModernTwoColumn: React.FC<ResumeModernTwoColumnProps> = ({
   return (
     <>
       {/* Header */}
-      <div className={baseStyles['resume-header']}>
+      <div data-resume-header className={baseStyles['resume-header']}>
         <h1 className={`${baseStyles['resume-name']} ${styles.nameAccent}`}>
           {personalInfo?.name || nameFallback}
         </h1>

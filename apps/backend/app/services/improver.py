@@ -1484,6 +1484,30 @@ def calculate_resume_diff(
             confidences=confidences,
         )
 
+    # Project descriptions are separate changes too. Excluding them from the
+    # entry-level comparison prevents a rewritten description from appearing
+    # as a project metadata change with identical name/role/date labels.
+    original_projects = original.get("personalProjects", [])
+    improved_projects = improved.get("personalProjects", [])
+    max_project_len = max(len(original_projects), len(improved_projects))
+    for idx in range(max_project_len):
+        original_entry = (
+            original_projects[idx] if idx < len(original_projects) else None
+        )
+        improved_entry = (
+            improved_projects[idx] if idx < len(improved_projects) else None
+        )
+        if not original_entry and not improved_entry:
+            continue
+        _append_list_changes(
+            changes,
+            field_path=f"personalProjects[{idx}].description",
+            field_type="project",
+            original_items=_extract_description_list(original_entry),
+            improved_items=_extract_description_list(improved_entry),
+            confidences=confidences,
+        )
+
     # 4. Compare certifications (order changes are intentionally ignored)
     orig_certs = _build_string_index(
         original.get("additional", {}).get("certificationsTraining", []),
@@ -1641,6 +1665,7 @@ def calculate_resume_diff(
         original.get("personalProjects", []),
         improved.get("personalProjects", []),
         _format_project_entry,
+        {"description", "descriptionStyles"},
     )
 
     # 6. Build summary

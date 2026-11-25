@@ -30,6 +30,24 @@
   padding: var(--margin-top) var(--margin-right) var(--margin-bottom) var(--margin-left);
 }
 
+.resume-body[data-photo-position='left'] [data-resume-header] {
+  padding-left: calc(var(--resume-photo-width, 0px) + var(--item-gap));
+  min-height: calc(var(--resume-photo-height, 0px) + var(--item-gap));
+}
+
+.resume-body[data-photo-position='right'] [data-resume-header] {
+  padding-right: calc(var(--resume-photo-width, 0px) + var(--item-gap));
+  min-height: calc(var(--resume-photo-height, 0px) + var(--item-gap));
+}
+
+.resume-body[data-photo-position] [data-resume-header] {
+  text-align: left;
+}
+
+.resume-body[data-photo-position] [data-resume-header] [class*='justify-center'] {
+  justify-content: flex-start;
+}
+
 .resume-header {
   margin-bottom: var(--section-gap);
   padding-bottom: calc(var(--item-gap) * 1.25);

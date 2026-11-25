@@ -91,6 +91,20 @@ def test_non_english_checks_em_dash_only() -> None:
     assert _rules(data, "es") == {("workExperience[0].description[0]", "em_dash")}
 
 
+def test_polish_purpose_clause_is_a_weak_opener_but_direct_first_person_is_valid() -> (
+    None
+):
+    data = _resume(
+        "Aby połączyć system z narzędziami, wykorzystałem Python i PostgreSQL",
+        "Zintegrowałem system z Pythonem i PostgreSQL",
+        "W celu skrócenia procesu wdrożyłem automatyzację",
+    )
+    rules = _rules(data, "pl")
+    assert ("workExperience[0].description[0]", "weak_opener") in rules
+    assert ("workExperience[0].description[1]", "weak_opener") not in rules
+    assert ("workExperience[0].description[2]", "weak_opener") in rules
+
+
 def test_score_rewards_clean_bullets() -> None:
     clean = _resume("Led the migration of 12 services to Kubernetes")
     dirty = _resume("Responsible for the migration — of services")

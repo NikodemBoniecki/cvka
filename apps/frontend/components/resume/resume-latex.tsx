@@ -300,7 +300,7 @@ export const ResumeLatex: React.FC<ResumeLatexProps> = ({
   return (
     <div className={styles.container}>
       {personalInfo && (
-        <header className={`text-center ${baseStyles['resume-header']}`}>
+        <header data-resume-header className={`text-center ${baseStyles['resume-header']}`}>
           {personalInfo.name && <h1 className={`${styles.name} mb-1`}>{personalInfo.name}</h1>}
           {personalInfo.title && (
             <div className={`${styles.tagline} mb-1`}>{personalInfo.title}</div>
