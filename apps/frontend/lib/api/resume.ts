@@ -444,12 +444,16 @@ export async function updateResumeTemplateSettings(
   settings: TemplateSettings,
   order: { session: string; revision: number }
 ): Promise<void> {
-  // keepalive: the builder sends a pending save as the page unloads.
+  const body = JSON.stringify({ ...settings, ...order });
+  // Chromium limits keepalive request bodies (including all outstanding
+  // keepalive requests) to roughly 64 KiB. A resume photo is stored as a data
+  // URL and is commonly much larger, so send those saves as normal requests.
+  const keepalive = new Blob([body]).size < 60 * 1024;
   const res = await apiFetch(`/resumes/${encodeURIComponent(resumeId)}/template-settings`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ...settings, ...order }),
-    keepalive: true,
+    body,
+    keepalive,
   });
   if (!res.ok) {
     const text = await res.text().catch(() => '');

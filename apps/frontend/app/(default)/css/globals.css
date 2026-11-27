@@ -9,6 +9,7 @@
 :root {
   --sw-canvas: #000000;
   --sw-white: #fdf6f6;
+  --resume-page: #ffffff;
   --sw-ink: #fdf6f6;
   --sw-ink-soft: #fdf6f6;
   --sw-steel: #fdf6f6;
@@ -37,6 +38,7 @@
   --color-canvas: var(--sw-canvas);
   --color-white: var(--sw-canvas);
   --color-brand-white: var(--sw-white);
+  --color-resume-page: var(--resume-page);
   --color-on-accent: var(--sw-on-accent);
   --color-ink: var(--sw-ink);
   --color-ink-soft: var(--sw-ink-soft);

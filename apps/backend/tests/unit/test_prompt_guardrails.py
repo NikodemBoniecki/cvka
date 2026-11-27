@@ -16,9 +16,11 @@ import pytest
 from app.prompts.refinement import KEYWORD_INJECTION_PROMPT
 from app.prompts.templates import (
     COVER_LETTER_PROMPT,
+    CRITICAL_TRUTHFULNESS_RULES,
     DIFF_IMPROVE_PROMPT,
     INTERVIEW_PREP_PROMPT,
 )
+from app.routers.resumes import _heavy_inferred_skills
 from app.services.cover_letter import generate_cover_letter
 
 
@@ -122,16 +124,25 @@ class TestCoverLetterWritingApproach:
 
 
 class TestAntiFabricationClausesPresent:
-    def test_diff_prompt_keeps_no_invented_work_clauses(self):
-        # rule 11's reframe permission must ship WITH its anti-fabrication clause
+    def test_diff_prompt_protects_hard_facts_and_allows_heavy_inference(self):
         assert (
-            "Do NOT add new work, metrics, or responsibilities" in DIFF_IMPROVE_PROMPT
+            "Never invent or change employers, job titles, dates" in DIFF_IMPROVE_PROMPT
         )
-        # rule 2 must remain
+        assert "project scope, stated outcomes, or numbers" in DIFF_IMPROVE_PROMPT
         assert (
-            "Do not invent metrics or achievements not supported by the original resume"
+            "For heavy, use the source CV plus domain knowledge to infer"
             in DIFF_IMPROVE_PROMPT
         )
+        assert (
+            "Do not let a minimal-edit preference override the heavy rewrite strategy"
+            in DIFF_IMPROVE_PROMPT
+        )
+
+    def test_legacy_heavy_prompt_protects_hard_facts_and_allows_inference(self):
+        rules = CRITICAL_TRUTHFULNESS_RULES["heavy"]
+        assert "Keep employer names, job titles, employment dates" in rules
+        assert "infer plausible responsibilities, methods, tools and skills" in rules
+        assert "Do not create employers, roles, projects, dates" in rules
 
     def test_keyword_injection_keeps_no_invent_clauses(self):
         assert (
@@ -159,3 +170,25 @@ class TestAntiFabricationClausesPresent:
         assert "Do NOT translate JSON property names" in INTERVIEW_PREP_PROMPT
         assert "role_fit_analysis" in INTERVIEW_PREP_PROMPT
         assert "talking_points" in INTERVIEW_PREP_PROMPT
+
+
+def test_heavy_mode_infers_figma_from_existing_digital_projects():
+    data = {
+        "personalProjects": [
+            {"name": "Website redesign", "description": ["Responsive website"]}
+        ]
+    }
+    assert _heavy_inferred_skills(
+        data,
+        {"required_skills": ["Figma"]},
+        "UX/UI Designer role requiring Figma.",
+    ) == ["Figma"]
+
+    assert (
+        _heavy_inferred_skills(
+            {"personalProjects": [{"name": "CLI tool", "description": ["API tool"]}]},
+            {"required_skills": ["Figma"]},
+            "UX/UI Designer role requiring Figma.",
+        )
+        == []
+    )

@@ -22,6 +22,9 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     proxyTimeout: REQUEST_TIMEOUT_MS,
+    // Template settings include an image data URL. The frontend accepts image
+    // files up to 10MB; base64 encoding expands those to about 13.4MB.
+    proxyClientMaxBodySize: '16mb',
     // Tree-shake barrel imports — saves ~200-800ms cold start per route
     optimizePackageImports: [
       'lucide-react',

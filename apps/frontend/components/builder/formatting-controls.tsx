@@ -43,6 +43,62 @@ import {
 import { TemplateThumbnail } from './template-selector';
 import { useTranslations } from '@/lib/i18n';
 
+const MAX_PHOTO_INPUT_BYTES = 10_000_000;
+const MAX_PHOTO_OUTPUT_BYTES = 1_500_000;
+const MAX_PHOTO_DIMENSION = 1200;
+
+async function convertPhotoToWebp(file: File): Promise<Blob> {
+  const bitmap = await createImageBitmap(file);
+  try {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    if (!context) throw new Error('Canvas is unavailable');
+
+    let scale = Math.min(1, MAX_PHOTO_DIMENSION / Math.max(bitmap.width, bitmap.height));
+    let quality = 0.82;
+
+    for (let attempt = 0; attempt < 10; attempt += 1) {
+      canvas.width = Math.max(1, Math.round(bitmap.width * scale));
+      canvas.height = Math.max(1, Math.round(bitmap.height * scale));
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+
+      const blob = await new Promise<Blob>((resolve, reject) => {
+        canvas.toBlob(
+          (result) => (result ? resolve(result) : reject(new Error('WebP conversion failed'))),
+          'image/webp',
+          quality
+        );
+      });
+      if (blob.type !== 'image/webp') throw new Error('WebP is not supported');
+      if (blob.size <= MAX_PHOTO_OUTPUT_BYTES) return blob;
+
+      if (quality > 0.52) {
+        quality = Math.max(0.5, quality - 0.12);
+      } else {
+        scale *= 0.82;
+        quality = 0.78;
+      }
+    }
+
+    throw new Error('Could not reduce the photo enough');
+  } finally {
+    bitmap.close();
+  }
+}
+
+function blobToDataUrl(blob: Blob): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () =>
+      typeof reader.result === 'string'
+        ? resolve(reader.result)
+        : reject(new Error('Invalid image'));
+    reader.onerror = () => reject(reader.error ?? new Error('Image read failed'));
+    reader.readAsDataURL(blob);
+  });
+}
+
 interface FormattingControlsProps {
   settings: TemplateSettings;
   onChange: (settings: TemplateSettings) => void;
@@ -65,6 +121,7 @@ export const FormattingControls: React.FC<FormattingControlsProps> = ({ settings
   const { t } = useTranslations();
   const [isExpanded, setIsExpanded] = useState(true);
   const [photoError, setPhotoError] = useState<string | null>(null);
+  const [isPhotoProcessing, setIsPhotoProcessing] = useState(false);
   const [cropOpen, setCropOpen] = useState(false);
   const photoInputRef = useRef<HTMLInputElement>(null);
   const contentId = useId();
@@ -139,20 +196,18 @@ export const FormattingControls: React.FC<FormattingControlsProps> = ({ settings
   const handlePhotoUpload = async (file?: File) => {
     if (!file) return;
     setPhotoError(null);
-    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 10_000_000) {
+    if (
+      !['image/jpeg', 'image/png', 'image/webp'].includes(file.type) ||
+      file.size > MAX_PHOTO_INPUT_BYTES
+    ) {
       setPhotoError(t('builder.formatting.photo.invalidFile'));
+      if (photoInputRef.current) photoInputRef.current.value = '';
       return;
     }
+    setIsPhotoProcessing(true);
     try {
-      const dataUrl = await new Promise<string>((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () =>
-          typeof reader.result === 'string'
-            ? resolve(reader.result)
-            : reject(new Error('Invalid image'));
-        reader.onerror = () => reject(reader.error ?? new Error('Image read failed'));
-        reader.readAsDataURL(file);
-      });
+      const webp = await convertPhotoToWebp(file);
+      const dataUrl = await blobToDataUrl(webp);
       onChange({
         ...settings,
         photo: {
@@ -164,10 +219,13 @@ export const FormattingControls: React.FC<FormattingControlsProps> = ({ settings
           cropY: settings.photo?.cropY ?? 0,
         },
       });
-    } catch {
-      setPhotoError(t('builder.formatting.photo.invalidFile'));
+    } catch (error) {
+      console.error('Failed to convert resume photo to WebP:', error);
+      setPhotoError(t('builder.formatting.photo.processingFailed'));
+    } finally {
+      setIsPhotoProcessing(false);
+      if (photoInputRef.current) photoInputRef.current.value = '';
     }
-    if (photoInputRef.current) photoInputRef.current.value = '';
   };
 
   const updatePhoto = (patch: Partial<NonNullable<TemplateSettings['photo']>>) => {
@@ -485,6 +543,7 @@ export const FormattingControls: React.FC<FormattingControlsProps> = ({ settings
                 accept="image/jpeg,image/png,image/webp"
                 className="sr-only"
                 aria-label={t('builder.formatting.photo.upload')}
+                disabled={isPhotoProcessing}
                 onChange={(event) => void handlePhotoUpload(event.target.files?.[0])}
               />
               <div className="flex items-center gap-3">
@@ -522,12 +581,15 @@ export const FormattingControls: React.FC<FormattingControlsProps> = ({ settings
                   <Button
                     variant="outline"
                     size="sm"
+                    disabled={isPhotoProcessing}
                     onClick={() => photoInputRef.current?.click()}
                   >
                     {t(
-                      settings.photo
-                        ? 'builder.formatting.photo.change'
-                        : 'builder.formatting.photo.upload'
+                      isPhotoProcessing
+                        ? 'builder.formatting.photo.processing'
+                        : settings.photo
+                          ? 'builder.formatting.photo.change'
+                          : 'builder.formatting.photo.upload'
                     )}
                   </Button>
                   {settings.photo && (

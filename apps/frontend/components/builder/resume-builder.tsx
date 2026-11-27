@@ -717,6 +717,15 @@ const ResumeBuilderContent = ({ agentMode = false }: ResumeBuilderProps) => {
       setFormattingSaveFailed(false);
       return true;
     } catch (error) {
+      // Keep a failed settings save retryable. A newer edit made while this
+      // request was in flight already owns the queue and must not be replaced.
+      if (
+        documentIsActiveRef.current &&
+        formattingRevisionRef.current <= pending.order.revision &&
+        !pendingFormattingRef.current
+      ) {
+        pendingFormattingRef.current = pending;
+      }
       console.error('Failed to save resume formatting:', error);
       setFormattingSaveFailed(true);
       return false;
@@ -930,9 +939,7 @@ const ResumeBuilderContent = ({ agentMode = false }: ResumeBuilderProps) => {
 
   const flushResumeChanges = useCallback(
     async (showErrorDialog = true): Promise<boolean> => {
-      if (!resumeId || (!hasUnsavedChanges && !autoSaveError)) {
-        return true;
-      }
+      if (!resumeId) return true;
 
       // Same guard as the autosave effect. Gating only autosave left the
       // manual Save button able to issue the identical destructive
@@ -941,6 +948,19 @@ const ResumeBuilderContent = ({ agentMode = false }: ResumeBuilderProps) => {
       if (loadingState !== 'loaded') {
         return false;
       }
+
+      const flushFormatting = async () => {
+        const saved = await flushFormattingSave();
+        if (!saved && showErrorDialog) {
+          showNotification(t('builder.alerts.formattingSaveFailed'), 'danger');
+        }
+        return saved;
+      };
+
+      // Photo and layout settings are saved separately from resume content.
+      // A formatting-only edit (such as adding a photo) must still be flushed
+      // by the explicit Save action.
+      if (!hasUnsavedChanges && !autoSaveError) return flushFormatting();
 
       try {
         setIsSaving(true);
@@ -967,7 +987,7 @@ const ResumeBuilderContent = ({ agentMode = false }: ResumeBuilderProps) => {
           setLastAutoSavedAt(Date.now());
           clearStoredResumeDraft(resumeId);
           setHasCurrentLocalDraft(false);
-          return true;
+          return flushFormatting();
         }
 
         return false;
@@ -986,6 +1006,7 @@ const ResumeBuilderContent = ({ agentMode = false }: ResumeBuilderProps) => {
     [
       agentAllowsSave,
       autoSaveError,
+      flushFormattingSave,
       hasUnsavedChanges,
       loadingState,
       queueResumeSave,

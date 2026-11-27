@@ -9,6 +9,7 @@ import { getSortedSections } from '@/lib/utils/section-helpers';
 import { formatDateRange } from '@/lib/utils';
 import { labeledSkillRows } from '@/lib/utils/skill-groups';
 import { DescriptionList } from './description-list';
+import { CertificationLinkList } from './certification-link';
 import { EarlierExperience, splitCondensed } from './earlier-experience';
 import { RESUME_SECTION, RESUME_SECTION_TITLE, resumeItem } from './page-break-attrs';
 import baseStyles from './styles/_base.module.css';
@@ -384,7 +385,12 @@ const AdditionalSection: React.FC<{
           <React.Fragment key={index}>{line(row.label, row.items)}</React.Fragment>
         ))}
         {line(mergedLabels.languages, languages)}
-        {line(mergedLabels.certifications, certificationsTraining)}
+        {certificationsTraining.length > 0 && (
+          <div {...resumeItem()}>
+            <span className={styles.skillLabel}>{mergedLabels.certifications}</span>{' '}
+            <CertificationLinkList items={certificationsTraining} separator=", " />
+          </div>
+        )}
         {line(mergedLabels.awards, awards)}
       </div>
     </div>

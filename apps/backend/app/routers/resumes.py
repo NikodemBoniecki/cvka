@@ -129,7 +129,7 @@ from app.services.tailor_selection import (
     final_page_check,
     run_bullet_selection,
 )
-from app.services.text_match import keyword_in_text
+from app.services.text_match import keyword_in_text, normalize_skill_key
 from app.services.writing_loop import finalized_writing_report, run_writing_loop
 
 logger = logging.getLogger(__name__)
@@ -353,6 +353,96 @@ def _get_original_resume_data(resume: dict[str, Any]) -> dict[str, Any] | None:
         except json.JSONDecodeError as e:
             logger.warning("Skipping resume diff due to JSON parse failure: %s", e)
     return original_data
+
+
+def _heavy_rewrite_required_paths(data: dict[str, Any]) -> list[str]:
+    """Return the summary and existing work/project bullets heavy mode must edit."""
+    paths: list[str] = []
+    summary = data.get("summary")
+    if isinstance(summary, str) and summary.strip():
+        paths.append("summary")
+    for section in ("workExperience", "personalProjects"):
+        entries = data.get(section)
+        if not isinstance(entries, list):
+            continue
+        for entry_index, entry in enumerate(entries):
+            if not isinstance(entry, dict):
+                continue
+            rows = entry.get("description")
+            if not isinstance(rows, list):
+                continue
+            styles = entry.get("descriptionStyles")
+            for row_index, row in enumerate(rows):
+                if not isinstance(row, str) or not row.strip():
+                    continue
+                if isinstance(styles, list) and row_index < len(styles):
+                    if styles[row_index] == "plain":
+                        continue
+                paths.append(f"{section}[{entry_index}].description[{row_index}]")
+    return paths
+
+
+def _missing_heavy_rewrite_paths(
+    required_paths: list[str], applied_changes: list[Any]
+) -> list[str]:
+    """Find required lines the LLM did not actually replace with new text."""
+    replaced = {
+        change.path
+        for change in applied_changes
+        if change.action == "replace"
+        and isinstance(change.original, str)
+        and isinstance(change.value, str)
+        and change.original.strip() != change.value.strip()
+    }
+    return [path for path in required_paths if path not in replaced]
+
+
+def _heavy_inferred_skills(
+    data: dict[str, Any], job_keywords: dict[str, Any], job_description: str
+) -> list[str]:
+    """Return narrowly grounded tool inferences for heavy rewrites.
+
+    A website or app project is enough context to infer Figma when the target
+    role explicitly asks for it. Other skills remain model-selected from the
+    candidate's specific source context.
+    """
+    requested = [
+        skill
+        for field in ("required_skills", "preferred_skills")
+        for skill in job_keywords.get(field, [])
+        if isinstance(skill, str) and normalize_skill_key(skill) == "figma"
+    ]
+    if not requested or not keyword_in_text("Figma", job_description):
+        return []
+
+    project_context = json.dumps(
+        data.get("personalProjects", []), ensure_ascii=False
+    ).lower()
+    has_digital_project = any(
+        marker in project_context
+        for marker in ("website", "stron", "app", "aplikac", "interfejs", "ui")
+    )
+    return [requested[0]] if has_digital_project else []
+
+
+def _apply_heavy_skill_inferences(
+    data: dict[str, Any], job_keywords: dict[str, Any], job_description: str
+) -> dict[str, Any]:
+    """Add explicitly mapped, context-supported heavy-mode tool inferences."""
+    inferred = _heavy_inferred_skills(data, job_keywords, job_description)
+    if not inferred:
+        return data
+    additional = data.setdefault("additional", {})
+    if not isinstance(additional, dict):
+        return data
+    skills = additional.setdefault("technicalSkills", [])
+    if not isinstance(skills, list):
+        return data
+    existing = {normalize_skill_key(s) for s in skills if isinstance(s, str)}
+    skills.extend(
+        skill for skill in inferred if normalize_skill_key(skill) not in existing
+    )
+    return data
 
 
 async def _grounding_master_data(resume: dict[str, Any]) -> dict[str, Any] | None:
@@ -1478,6 +1568,34 @@ async def _improve_preview_flow(
             logger.warning("Skill target planning failed, continuing without it: %s", e)
             response_warnings.append("Skill target planning failed")
 
+        if prompt_id == "heavy":
+            allowed_keys = {
+                normalize_skill_key(str(target.get("skill", "")))
+                for target in skill_targets
+                if isinstance(target, dict)
+            }
+            for field in ("required_skills", "preferred_skills"):
+                values = job_keywords.get(field, [])
+                if not isinstance(values, list):
+                    continue
+                for value in values:
+                    if not isinstance(value, str) or not value.strip():
+                        continue
+                    skill_key = normalize_skill_key(value)
+                    if skill_key in allowed_keys:
+                        continue
+                    skill_targets.append(
+                        {
+                            "skill": value,
+                            "source": "job_inference",
+                            "reason": (
+                                "Required or preferred by the job; include when the "
+                                "source work or project makes it plausible."
+                            ),
+                        }
+                    )
+                    allowed_keys.add(skill_key)
+
         progress["stage"] = "generate_resume_diffs"
         diff_result = await generate_resume_diffs(
             original_resume=source_content,
@@ -1498,6 +1616,55 @@ async def _improve_preview_flow(
             fixed_row_sections=fixed_row_sections,
             allow_bullet_reorder=prompt_id == "heavy",
         )
+
+        if prompt_id == "heavy":
+            required_paths = _heavy_rewrite_required_paths(original_resume_data)
+            missing_paths = _missing_heavy_rewrite_paths(
+                required_paths, applied_changes
+            )
+            if missing_paths:
+                progress["stage"] = "complete_heavy_rewrite"
+                try:
+                    completion = await generate_resume_diffs(
+                        original_resume=json.dumps(improved_data, ensure_ascii=False),
+                        job_description=job["content"],
+                        job_keywords=job_keywords,
+                        language=language,
+                        prompt_id=prompt_id,
+                        original_resume_data=improved_data,
+                        skill_targets=skill_targets,
+                        fixed_row_sections=fixed_row_sections,
+                        required_paths=missing_paths,
+                    )
+                    (
+                        improved_data,
+                        completion_applied,
+                        completion_rejected,
+                    ) = apply_diffs(
+                        original=improved_data,
+                        changes=completion.changes,
+                        allowed_skill_targets=skill_targets,
+                        fixed_row_sections=fixed_row_sections,
+                    )
+                    applied_changes.extend(completion_applied)
+                    rejected_changes.extend(completion_rejected)
+                except (AIOperationDeadlineExceeded, PromptSizeError):
+                    raise
+                except Exception as e:
+                    logger.warning("Heavy rewrite completion pass failed: %s", e)
+                    response_warnings.append("Heavy rewrite completion pass failed")
+                still_missing = _missing_heavy_rewrite_paths(
+                    required_paths, applied_changes
+                )
+                if still_missing:
+                    response_warnings.append(
+                        f"Heavy rewrite incomplete: {len(still_missing)} required "
+                        "summary or bullet line(s) remain unchanged"
+                    )
+            improved_data = _apply_heavy_skill_inferences(
+                improved_data, job_keywords, job["content"]
+            )
+
         allow_appended_rows = any(
             change.action == "append" for change in applied_changes
         )
@@ -1572,7 +1739,9 @@ async def _improve_preview_flow(
                 master_resume=master_data,
                 job_description=job["content"],
                 job_keywords=job_keywords,
-                config=RefinementConfig(),
+                config=RefinementConfig(
+                    enable_master_alignment_check=prompt_id != "heavy"
+                ),
                 fixed_row_sections=fixed_row_sections,
             )
             improved_data = refinement_result.refined_data
@@ -2226,7 +2395,9 @@ async def execute_tailoring_pipeline(
                 master_resume=master_data,
                 job_description=job["content"],
                 job_keywords=job_keywords,
-                config=RefinementConfig(),
+                config=RefinementConfig(
+                    enable_master_alignment_check=effective_prompt_id != "heavy"
+                ),
             )
             improved_data = refinement_result.refined_data
             refinement_stats = refinement_result.to_stats(initial_match)
@@ -2243,6 +2414,11 @@ async def execute_tailoring_pipeline(
         if refinement_attempted:
             response_warnings.append(REFINEMENT_FAILED_WARNING)
 
+    if effective_prompt_id == "heavy":
+        improved_data = _apply_heavy_skill_inferences(
+            improved_data, job_keywords, job["content"]
+        )
+
     improved_data, _writing = await _run_tailor_writing_loop(
         improved_data, language, effective_prompt_id
     )
@@ -2251,7 +2427,7 @@ async def execute_tailoring_pipeline(
         improved_data = finalize_ai_resume(
             original_resume_data,
             improved_data,
-            allow_review_claims=False,
+            allow_review_claims=effective_prompt_id == "heavy",
             allow_appended_rows=allow_appended_rows,
         )
         response_warnings.extend(

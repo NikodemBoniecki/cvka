@@ -108,7 +108,7 @@ export default async function PrintCoverLetterPage({ params, searchParams }: Pag
 
   return (
     <div
-      className="cover-letter-print bg-brand-white text-black"
+      className="cover-letter-print bg-resume-page text-black"
       style={{
         width: `${pageDims.width}mm`,
         minHeight: `${pageDims.height}mm`,

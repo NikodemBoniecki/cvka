@@ -11,6 +11,7 @@ interface DescriptionListProps {
   textClassName?: string;
   marker?: string;
   markerClassName?: string;
+  renderItem?: (item: string, index: number) => React.ReactNode;
 }
 
 export const DescriptionList: React.FC<DescriptionListProps> = ({
@@ -19,6 +20,7 @@ export const DescriptionList: React.FC<DescriptionListProps> = ({
   textClassName = baseStyles['resume-text-sm'],
   marker = '•',
   markerClassName = 'mr-1.5 flex-shrink-0',
+  renderItem,
 }) => {
   if (!items || items.length === 0) return null;
 
@@ -35,9 +37,7 @@ export const DescriptionList: React.FC<DescriptionListProps> = ({
                 {'\u00A0'}
               </span>
             )}
-            <span>
-              <SafeHtml html={desc} />
-            </span>
+            <span>{renderItem ? renderItem(desc, index) : <SafeHtml html={desc} />}</span>
           </li>
         );
       })}

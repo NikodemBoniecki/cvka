@@ -54,6 +54,57 @@ class TestGenerateResumeDiffs:
     """Tests for generate_resume_diffs() with mocked LLM."""
 
     @patch("app.services.improver.complete_json", new_callable=AsyncMock)
+    async def test_heavy_mode_infers_fit_and_allows_expansion(
+        self, mock_llm, sample_resume, sample_job_keywords, sample_job_description
+    ):
+        mock_llm.return_value = {"changes": [], "strategy_notes": "test"}
+
+        await generate_resume_diffs(
+            original_resume="# Resume",
+            job_description=sample_job_description,
+            job_keywords=sample_job_keywords,
+            language="en",
+            prompt_id="heavy",
+            original_resume_data=sample_resume,
+        )
+
+        prompt = mock_llm.call_args.kwargs["prompt"]
+        assert "Infer plausible responsibilities, methods, tools and skills" in prompt
+        assert (
+            "rewrite the summary and every existing work and project bullet" in prompt
+        )
+        assert "add bullets when they clarify relevant work" in prompt
+        assert "add it to technicalSkills" in prompt
+        assert "infer Figma from relevant website or app design work" in prompt
+        assert (
+            "Never invent or change employers, job titles, dates, project names"
+            in prompt
+        )
+        assert "Keep changes minimal and targeted" not in prompt
+
+    @patch("app.services.improver.complete_json", new_callable=AsyncMock)
+    async def test_completion_pass_requires_only_the_missing_paths(
+        self, mock_llm, sample_resume, sample_job_keywords, sample_job_description
+    ):
+        mock_llm.return_value = {"changes": [], "strategy_notes": "test"}
+        required = ["summary", "personalProjects[0].description[1]"]
+
+        await generate_resume_diffs(
+            original_resume="# Resume",
+            job_description=sample_job_description,
+            job_keywords=sample_job_keywords,
+            language="en",
+            prompt_id="heavy",
+            original_resume_data=sample_resume,
+            required_paths=required,
+        )
+
+        prompt = mock_llm.call_args.kwargs["prompt"]
+        assert "This is a completion pass" in prompt
+        assert "one replace change for every path" in prompt
+        assert "Required paths: summary, personalProjects[0].description[1]" in prompt
+
+    @patch("app.services.improver.complete_json", new_callable=AsyncMock)
     async def test_returns_parsed_changes(
         self, mock_llm, sample_resume, sample_job_keywords, sample_job_description
     ):
@@ -104,7 +155,7 @@ class TestGenerateResumeDiffs:
             ],
         )
         prompt = mock_llm.call_args.kwargs.get("prompt") or mock_llm.call_args.args[0]
-        assert "Verified skill targets" in prompt
+        assert "Allowed skill targets" in prompt
         assert "Kubernetes" in prompt
         assert "add_skill" in prompt
 

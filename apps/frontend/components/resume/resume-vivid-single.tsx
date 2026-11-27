@@ -9,6 +9,7 @@ import { getSortedSections } from '@/lib/utils/section-helpers';
 import { formatDateRange } from '@/lib/utils';
 import { groupSkills, isPlainSkillList } from '@/lib/utils/skill-groups';
 import { EarlierExperience, splitCondensed } from './earlier-experience';
+import { CertificationLinkText } from './certification-link';
 import { RESUME_SECTION, RESUME_SECTION_TITLE, resumeItem } from './page-break-attrs';
 import baseStyles from './styles/_base.module.css';
 import styles from './styles/vivid.module.css';
@@ -195,7 +196,9 @@ export const ResumeVividSingle: React.FC<ResumeVividSingleProps> = ({
                 <h3 {...RESUME_SECTION_TITLE} className={titleClass}>
                   {headings.certifications}
                 </h3>
-                {renderArrowBullets(certificationsTraining)}
+                {renderArrowBullets(certificationsTraining, undefined, undefined, (item) => (
+                  <CertificationLinkText value={item} />
+                ))}
               </div>
             )}
             {awards.length > 0 && (

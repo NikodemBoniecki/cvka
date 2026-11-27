@@ -48,7 +48,7 @@ export function CoverLetterPreview({
   return (
     <div
       className={cn(
-        'bg-brand-white text-black border-2 border-primary',
+        'bg-resume-page text-black border-2 border-primary',
         'shadow-sw-card',
         'overflow-hidden',
         className

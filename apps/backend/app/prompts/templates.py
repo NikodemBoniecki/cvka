@@ -239,9 +239,14 @@ CRITICAL_TRUTHFULNESS_RULES = {
     "full": _build_truthfulness_rules(
         "You may expand existing bullet points or add new ones that elaborate on existing work, but DO NOT invent entirely new responsibilities"
     ),
-    "heavy": _build_truthfulness_rules(
-        "You may restructure every bullet point, rewrite the summary and reorder bullets within a role, but DO NOT invent responsibilities, tools, metrics or outcomes"
-    ),
+    "heavy": """CRITICAL FACTS TO PRESERVE:
+1. Keep employer names, job titles, employment dates and education credentials exactly as provided.
+2. Keep project names, project type, scope, stated outcomes and every stated number true and unchanged.
+3. Do not create employers, roles, projects, dates, credentials or numeric achievements.
+4. For this heavy rewrite, infer plausible responsibilities, methods, tools and skills from the described work and projects, the target job, and normal domain practice. Use those inferences to position the candidate strongly, even when the source CV does not name them explicitly.
+5. Do not present an inference as a new measurable result or as a change to the project's identity or scope. The user reviews this draft before saving it.
+6. Preserve all original skills, certifications, languages and awards; reorder them by relevance.
+""",
 }
 
 IMPROVE_RESUME_PROMPT_NUDGE = """Lightly nudge this resume toward the job description. Output ONLY the JSON object, no other text.
@@ -351,7 +356,8 @@ Rules:
 - In Polish, lead with the completed action rather than a purpose clause beginning "Aby...", "Żeby..." or "W celu..."; use the grammatical voice used by most existing bullets.
 - Rewrite the summary from scratch as a positioning statement: role identity, years and domain, signature strength, all taken from the resume.
 - You may reorder bullets within a role so the strongest evidence for this job comes first.
-- Keep the same number of bullets in every entry. Do not merge, drop or add bullets.
+- Add bullets when they clarify likely responsibilities or methods anchored in an existing role or project. Do not merge or drop source bullets.
+- Infer plausible job-relevant tools and skills from the work and projects; add those that fit to the skills list, including tools common to the target discipline when the project context supports them.
 - Never invent metrics. When a bullet has no number, state the outcome or scope it already implies.
 - Keep proper nouns (names, company names, locations) unchanged
 - Preserve descriptionStyles arrays and keep them aligned one-to-one with description arrays
@@ -567,7 +573,7 @@ DIFF_STRATEGY_INSTRUCTIONS = {
     "nudge": "Make minimal edits. Only rephrase where there is a clear match. Do not add new bullet points.",
     "keywords": "Weave in relevant keywords where evidence already exists. You may rephrase bullets but do not add new ones.",
     "full": "Make targeted adjustments. You may rephrase bullets, add verified JD skills, and add new bullets that elaborate on existing work, but do not invent new responsibilities.",
-    "heavy": 'Heavy rewrite. Rewrite every bullet as Challenge, Action, Result and rewrite the summary from scratch, keeping every fact of each original. You may reorder the bullets within an entry (action "reorder" on its description path) so the strongest evidence comes first. Do not add or append bullets and do not invent responsibilities, tools or metrics.',
+    "heavy": "Heavy rewrite. Maximize fit to the job: rewrite the summary and every existing work and project bullet, and add bullets when they clarify relevant work already anchored in an existing role or project. Infer plausible responsibilities, methods, tools and skills from the source context, the job description and normal domain practice, even when the CV does not name them. For every required or preferred skill target that is a reasonable inference from the candidate's work or projects, add it to technicalSkills; do not leave a plausible target out just because it was not named in the source. For example, infer Figma from relevant website or app design work when a UX/UI offer requires it. Preserve employer names, job titles, dates, project names and identity, stated scope, outcomes and every number. Never create a role, employer, project, scope or metric. Reorder bullets within an entry so the strongest evidence comes first.",
 }
 
 # Appended to the strategy rule when the harness already chose the bullets (bullet selection).
@@ -638,11 +644,11 @@ Output this exact JSON format:
 }}
 """
 
-DIFF_IMPROVE_PROMPT = """Given this resume and job description, output a JSON object with targeted changes to better align the resume with the job.
+DIFF_IMPROVE_PROMPT = """Given this resume and job description, output a JSON object with changes to align the resume with the job.
 
 RULES:
 1. Only modify content; never change names, companies, dates, institutions, or degrees
-2. Do not invent metrics or achievements not supported by the original resume text
+2. Never invent or change employers, job titles, dates, project names or identity, project scope, stated outcomes, or numbers. Follow the selected strategy for inferred responsibilities, methods, tools, and skills.
 3. Do not add new work entries, education entries, or project entries
 4. {strategy_instruction}
 5. Each change MUST include the original text (copied exactly) so it can be verified
@@ -651,9 +657,9 @@ RULES:
 8. Start each bullet with the action the candidate performed, not a purpose clause such as Polish "Aby...", "Żeby..." or "W celu...". Put the action first and keep purpose/result wording only when supported by the source.
 9. Keep one grammatical voice throughout the resume, following the style used by most existing bullets. Polish first-person past-tense verbs are valid; do not mix them with impersonal noun phrases.
 10. Do not use em dash characters
-11. Keep changes minimal and targeted; do not rewrite content that already aligns well
-12. Exception to rule 2: you may add a skill only if it appears in the verified skill targets below
-13. By DEFAULT, scan the summary and every work, project, and education description for content that already demonstrates a job-description keyword or skill, and reframe that text using the job description's terminology where it is not already phrased that way (per rule 11, leave content that already aligns well), while preserving the candidate's actual accomplishment. Do NOT add new work, metrics, or responsibilities; only restate existing content in the JD's language, and verify every reframe stays factually accurate.
+11. Follow the selected strategy's level of change. Do not let a minimal-edit preference override the heavy rewrite strategy.
+12. Exception to rule 2: you may add a skill only if it appears in the allowed skill targets below
+13. By DEFAULT for non-heavy strategies, scan the summary and every work, project, and education description for content that already demonstrates a job-description keyword or skill, and reframe it in the job's terminology where useful. For heavy, use the source CV plus domain knowledge to infer relevant methods, tools, responsibilities and skills, and apply them throughout the summary, work and project descriptions. Add plausible required or preferred skill targets to technicalSkills as well as using them in descriptions. For example, infer Figma from relevant website or app design work when a UX/UI offer requires it. Keep all protected facts in rules 1 and 2 unchanged.
 14. Preserve original capitalization, especially for proper nouns, technical terms (e.g., REST, API, AWS), and acronyms. Do not change the casing of words that were capitalized in the original.
 
 PATHS you can target:
@@ -673,7 +679,7 @@ Do NOT target: personalInfo, dates/years, company names, education degree/instit
 Keywords to emphasize (only if already supported by resume content):
 {job_keywords}
 
-Verified skill targets:
+Allowed skill targets:
 {skill_targets}
 
 Job Description:

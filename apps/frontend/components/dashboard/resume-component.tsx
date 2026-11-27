@@ -229,7 +229,7 @@ const Resume: React.FC<ResumeProps> = ({
 
   return (
     <div
-      className={`${baseStyles['resume-body']} relative bg-brand-white text-black w-full mx-auto resume-template-${mergedSettings.template}`}
+      className={`${baseStyles['resume-body']} relative bg-resume-page text-black w-full mx-auto resume-template-${mergedSettings.template}`}
       data-photo-position={mergedSettings.photo?.position}
       style={
         {

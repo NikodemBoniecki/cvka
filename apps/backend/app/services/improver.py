@@ -729,6 +729,7 @@ async def generate_resume_diffs(
     skill_targets: list[dict[str, Any]] | None = None,
     *,
     fixed_row_sections: tuple[str, ...] = (),
+    required_paths: list[str] | None = None,
 ) -> ImproveDiffResult:
     """Generate targeted resume diffs via LLM.
 
@@ -764,6 +765,13 @@ async def generate_resume_diffs(
     if fixed_row_sections:
         strategy_instruction += " " + DIFF_FIXED_ROWS_INSTRUCTION.format(
             sections=" and ".join(fixed_row_sections)
+        )
+    if required_paths:
+        strategy_instruction += (
+            " This is a completion pass. Return one replace change for every path "
+            "listed below, and return changes only for those paths. Copy each "
+            "current value exactly into original. Required paths: "
+            + ", ".join(required_paths)
         )
 
     # LLM-011: Sanitize job description

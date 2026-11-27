@@ -17,6 +17,7 @@ import { getSortedSections } from '@/lib/utils/section-helpers';
 import { formatDateRange } from '@/lib/utils';
 import { labeledSkillRows } from '@/lib/utils/skill-groups';
 import { DescriptionList } from './description-list';
+import { CertificationLinkText } from './certification-link';
 import { SafeHtml } from './safe-html';
 import { EarlierExperience, splitCondensed } from './earlier-experience';
 import { RESUME_SECTION, RESUME_SECTION_TITLE, resumeItem } from './page-break-attrs';
@@ -292,6 +293,16 @@ export const ResumeDeedy: React.FC<ResumeDeedyProps> = ({
     </div>
   );
 
+  const certificationLineList = (items: string[]) => (
+    <div className={styles.lines}>
+      {items.map((item, index) => (
+        <p key={index} className={styles.text}>
+          <CertificationLinkText value={item} />
+        </p>
+      ))}
+    </div>
+  );
+
   const renderEducation = (section: SectionMeta) =>
     education && education.length > 0 ? (
       <section {...RESUME_SECTION} key={section.id} className={styles.section}>
@@ -353,7 +364,11 @@ export const ResumeDeedy: React.FC<ResumeDeedyProps> = ({
           {skillGroups.map((group, index) => (
             <div key={index} {...resumeItem()} className={baseStyles['resume-item']}>
               {group.label && <p className={styles.text}>{group.label}</p>}
-              {group.inline ? dotList(group.items) : lineList(group.items)}
+              {group.inline
+                ? dotList(group.items)
+                : group.label === groupLabels.certifications
+                  ? certificationLineList(group.items)
+                  : lineList(group.items)}
             </div>
           ))}
         </div>

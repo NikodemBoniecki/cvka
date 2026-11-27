@@ -13,6 +13,7 @@ import { getSortedSections, getSectionMeta } from '@/lib/utils/section-helpers';
 import { formatDateRange } from '@/lib/utils';
 import { groupSkills, isPlainSkillList } from '@/lib/utils/skill-groups';
 import { DescriptionList } from './description-list';
+import { CertificationLinkText } from './certification-link';
 import { EarlierExperience, splitCondensed } from './earlier-experience';
 import { RESUME_SECTION, RESUME_SECTION_TITLE, resumeItem } from './page-break-attrs';
 import baseStyles from './styles/_base.module.css';
@@ -105,7 +106,8 @@ export const renderContactDetail = (
 export const renderArrowBullets = (
   items?: string[],
   textClass: string = baseStyles['resume-text-xs'],
-  itemStyles?: ('bullet' | 'plain')[]
+  itemStyles?: ('bullet' | 'plain')[],
+  renderItem?: (item: string, index: number) => React.ReactNode
 ) => (
   <DescriptionList
     items={items}
@@ -113,6 +115,7 @@ export const renderArrowBullets = (
     textClassName={textClass}
     marker="➜"
     markerClassName={`mr-1.5 ${styles.arrow}`}
+    renderItem={renderItem}
   />
 );
 
@@ -350,7 +353,9 @@ export const ResumeVivid: React.FC<ResumeVividProps> = ({
               <h3 {...RESUME_SECTION_TITLE} className={styles.sectionTitleCaps}>
                 {headingFallbacks.certifications}
               </h3>
-              {renderArrowBullets(certificationsTraining)}
+              {renderArrowBullets(certificationsTraining, undefined, undefined, (item) => (
+                <CertificationLinkText value={item} />
+              ))}
             </div>
           )}
 

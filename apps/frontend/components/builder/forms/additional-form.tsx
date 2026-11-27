@@ -1,10 +1,16 @@
 'use client';
 
 import React from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { AdditionalInfo } from '@/components/dashboard/resume-component';
 import { useTranslations } from '@/lib/i18n';
+import {
+  formatCertificationEntry,
+  parseCertificationEntry,
+} from '@/components/resume/certification-link';
 
 interface AdditionalFormProps {
   data: AdditionalInfo;
@@ -29,6 +35,26 @@ export const AdditionalForm: React.FC<AdditionalFormProps> = ({ data, onChange }
   const formatArray = (arr?: string[]) => {
     return arr?.join('\n') || '';
   };
+
+  const certifications = data.certificationsTraining ?? [];
+  const updateCertification = (index: number, field: 'name' | 'url', value: string) => {
+    const next = [...certifications];
+    const current = parseCertificationEntry(next[index] ?? '');
+    next[index] = formatCertificationEntry(
+      field === 'name' ? value : current.name,
+      field === 'url' ? value : current.url
+    );
+    onChange({ ...data, certificationsTraining: next });
+  };
+
+  const addCertification = () =>
+    onChange({ ...data, certificationsTraining: [...certifications, ''] });
+
+  const removeCertification = (index: number) =>
+    onChange({
+      ...data,
+      certificationsTraining: certifications.filter((_, itemIndex) => itemIndex !== index),
+    });
 
   // Explicitly allow Enter key to create newlines (prevent form submission interference)
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -72,15 +98,47 @@ export const AdditionalForm: React.FC<AdditionalFormProps> = ({ data, onChange }
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="certifications">{t('resume.sections.certifications')}</Label>
-          <Textarea
-            id="certifications"
-            value={formatArray(data.certificationsTraining)}
-            onChange={(e) => handleArrayChange('certificationsTraining', e.target.value)}
-            onKeyDown={handleKeyDown}
-            placeholder={t('builder.additionalForm.placeholders.certifications')}
-            className="min-h-[120px]"
-          />
+          <Label>{t('resume.sections.certifications')}</Label>
+          <div className="space-y-3">
+            {certifications.map((certification, index) => {
+              const entry = parseCertificationEntry(certification);
+              return (
+                <div
+                  key={index}
+                  className="grid grid-cols-1 items-center gap-2 sm:grid-cols-[1fr_1fr_auto]"
+                >
+                  <Input
+                    value={entry.name}
+                    onChange={(event) => updateCertification(index, 'name', event.target.value)}
+                    placeholder={t('builder.additionalForm.certificationNamePlaceholder')}
+                    aria-label={`${t('builder.additionalForm.certificationNamePlaceholder')} ${index + 1}`}
+                  />
+                  <Input
+                    type="url"
+                    value={entry.url}
+                    onChange={(event) => updateCertification(index, 'url', event.target.value)}
+                    placeholder={t('builder.additionalForm.certificationUrlPlaceholder')}
+                    aria-label={`${t('builder.additionalForm.certificationUrlPlaceholder')} ${index + 1}`}
+                  />
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => removeCertification(index)}
+                    aria-label={`${t('builder.additionalForm.removeCertification')} ${index + 1}`}
+                  >
+                    {t('builder.additionalForm.removeCertification')}
+                  </Button>
+                </div>
+              );
+            })}
+            <Button type="button" size="sm" variant="outline" onClick={addCertification}>
+              {t('builder.additionalForm.addCertification')}
+            </Button>
+          </div>
+          <p className="text-xs text-ink-soft">
+            {t('builder.additionalForm.certificationLinkHint')}
+          </p>
         </div>
         <div className="space-y-2">
           <Label htmlFor="awards">{t('resume.sections.awards')}</Label>

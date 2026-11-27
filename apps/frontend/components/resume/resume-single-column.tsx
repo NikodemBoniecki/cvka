@@ -11,6 +11,7 @@ import { groupSkills } from '@/lib/utils/skill-groups';
 import { DynamicResumeSection } from './dynamic-resume-section';
 import { DescriptionList } from './description-list';
 import { TagList } from './tag-list';
+import { CertificationLinkList } from './certification-link';
 import { EarlierExperience, splitCondensed } from './earlier-experience';
 import { RESUME_SECTION, RESUME_SECTION_TITLE, resumeItem } from './page-break-attrs';
 import baseStyles from './styles/_base.module.css';
@@ -456,7 +457,7 @@ const AdditionalSection: React.FC<{
         {certificationsTraining.length > 0 && (
           <div {...resumeItem()} className="flex items-baseline">
             <span className="font-bold w-32 shrink-0">{mergedLabels.certifications}</span>
-            <TagList items={certificationsTraining} />
+            <CertificationLinkList items={certificationsTraining} />
           </div>
         )}
         {awards.length > 0 && (

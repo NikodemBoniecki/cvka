@@ -291,7 +291,7 @@ export default async function PrintResumePage({ params, searchParams }: PageProp
   return (
     // `lang` also drives Chromium's own font fallback during PDF render, which
     // matters for the CJK faces (L-08).
-    <div className="resume-print bg-brand-white" lang={locale}>
+    <div className="resume-print bg-resume-page" lang={locale}>
       {/* "Name · 2 / 3" on pages 2+; the CSS string is fully escaped. */}
       <style
         dangerouslySetInnerHTML={{

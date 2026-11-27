@@ -193,6 +193,109 @@ async def test_light_nudge_critiques_without_rewriting(
     ]
 
 
+async def test_heavy_preview_completes_every_bullet_and_allows_job_inferred_skills(
+    isolated_db: Any,
+    sample_resume: dict[str, Any],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(resumes_router, "get_content_language", lambda: "en")
+    resume_id, job_id = await _master_and_job(sample_resume)
+    source = copy.deepcopy(sample_resume)
+
+    async def generate_diffs(**kwargs: Any) -> SimpleNamespace:
+        current = kwargs["original_resume_data"]
+        if kwargs.get("required_paths"):
+            changes = []
+            for path in kwargs["required_paths"]:
+                section, index_and_field = path.split("[", 1)
+                entry_index = int(index_and_field.split("]", 1)[0])
+                row_index = int(index_and_field.rsplit("[", 1)[1].rstrip("]"))
+                original = current[section][entry_index]["description"][row_index]
+                changes.append(
+                    ResumeChange(
+                        path=path,
+                        action="replace",
+                        original=original,
+                        value=f"{original}, reframed for the target role",
+                        reason="Completion pass rewrites this source bullet",
+                    )
+                )
+            return SimpleNamespace(changes=changes)
+        return SimpleNamespace(
+            changes=[
+                ResumeChange(
+                    path="summary",
+                    action="replace",
+                    original=current["summary"],
+                    value="Senior backend engineer with 6 years of experience, positioned for the target role.",
+                    reason="Repositioned for the role",
+                ),
+                ResumeChange(
+                    path="additional.technicalSkills",
+                    action="add_skill",
+                    original=None,
+                    value="Figma",
+                    reason="Required by the job and allowed as a heavy-mode inference",
+                ),
+            ]
+        )
+
+    async def identity_writing(data: dict[str, Any], **_: Any) -> SimpleNamespace:
+        return SimpleNamespace(data=data, report=None)
+
+    with (
+        patch(
+            "app.routers.resumes.extract_job_keywords",
+            new_callable=AsyncMock,
+            return_value={"keywords": ["Figma"], "required_skills": ["Figma"]},
+        ),
+        patch(
+            "app.routers.resumes.generate_skill_target_plan",
+            new_callable=AsyncMock,
+            return_value={"target_skills": [], "strategy_notes": ""},
+        ),
+        patch(
+            "app.routers.resumes.verify_skill_target_plan",
+            return_value={"accepted": [], "rejected": []},
+        ),
+        patch(
+            "app.routers.resumes.generate_resume_diffs",
+            new_callable=AsyncMock,
+            side_effect=generate_diffs,
+        ) as diff_mock,
+        patch(
+            "app.routers.resumes.refine_resume",
+            new_callable=AsyncMock,
+            side_effect=RuntimeError("refinement disabled for test"),
+        ) as refine_mock,
+        patch("app.routers.resumes.run_writing_loop", side_effect=identity_writing),
+    ):
+        async with _client() as client:
+            response = await client.post(
+                "/api/v1/resumes/improve/preview",
+                json={"resume_id": resume_id, "job_id": job_id, "prompt_id": "heavy"},
+            )
+
+    assert response.status_code == 200, response.text
+    data = response.json()["data"]
+    result = data["resume_preview"]
+    assert result["summary"] != source["summary"]
+    assert "Figma" in result["additional"]["technicalSkills"]
+    assert (
+        refine_mock.await_args.kwargs["config"].enable_master_alignment_check is False
+    )
+    assert diff_mock.await_count == 2
+    assert len(diff_mock.await_args_list[1].kwargs["required_paths"]) == 7
+    for section in ("workExperience", "personalProjects"):
+        for source_entry, result_entry in zip(source[section], result[section]):
+            assert all(
+                before != after
+                for before, after in zip(
+                    source_entry["description"], result_entry["description"]
+                )
+            )
+
+
 async def test_heavy_mode_is_an_offered_prompt_option(isolated_db: Any) -> None:
     async with _client() as client:
         resp = await client.get("/api/v1/config/prompts")

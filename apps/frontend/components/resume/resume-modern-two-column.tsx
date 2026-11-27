@@ -10,6 +10,7 @@ import { formatDateRange } from '@/lib/utils';
 import { groupSkills, isPlainSkillList } from '@/lib/utils/skill-groups';
 import { DynamicResumeSection } from './dynamic-resume-section';
 import { DescriptionList } from './description-list';
+import { CertificationLinkText } from './certification-link';
 import { EarlierExperience, splitCondensed } from './earlier-experience';
 import { RESUME_SECTION, RESUME_SECTION_TITLE, resumeItem } from './page-break-attrs';
 import baseStyles from './styles/_base.module.css';
@@ -327,7 +328,9 @@ export const ResumeModernTwoColumn: React.FC<ResumeModernTwoColumnProps> = ({
                 {certificationsTraining.map((cert, index) => (
                   <li key={index} className="flex">
                     <span className="mr-1.5 flex-shrink-0">•&nbsp;</span>
-                    <span>{cert}</span>
+                    <span>
+                      <CertificationLinkText value={cert} />
+                    </span>
                   </li>
                 ))}
               </ul>
