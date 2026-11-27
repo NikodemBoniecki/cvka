@@ -546,6 +546,41 @@ class TestSkillTargetPlanning:
         ]
         assert all(item["source"] == "jd_added" for item in verified["accepted"])
 
+    def test_verify_skill_target_plan_accepts_atomic_skills_from_grouped_requirements(
+        self, sample_resume
+    ):
+        job_keywords = {
+            "required_skills": [
+                "Basic knowledge of Linux and networking (TCP/IP, DNS, HTTP/HTTPS)"
+            ],
+            "preferred_skills": ["Zabbix or other infrastructure monitoring tools"],
+            "keywords": ["Linux", "TCP/IP", "DNS", "HTTP/HTTPS", "Zabbix", "CI/CD"],
+        }
+        verified = verify_skill_target_plan(
+            {
+                "target_skills": [
+                    {"skill": "Linux"},
+                    {"skill": "TCP/IP"},
+                    {"skill": "DNS"},
+                    {"skill": "Zabbix"},
+                    {"skill": "CI/CD"},
+                ]
+            },
+            original_resume_data=sample_resume,
+            job_keywords=job_keywords,
+            job_description=(
+                "Basic knowledge of Linux and networking (TCP/IP, DNS, HTTP/HTTPS). "
+                "Zabbix or other infrastructure monitoring tools are a plus."
+            ),
+        )
+        assert [item["skill"] for item in verified["accepted"]] == [
+            "Linux",
+            "TCP/IP",
+            "DNS",
+            "Zabbix",
+        ]
+        assert [item["skill"] for item in verified["rejected"]] == ["CI/CD"]
+
 
 class TestGenerateResumeDiffsEdgeCases:
     """Edge cases for generate_resume_diffs."""

@@ -42,6 +42,11 @@ async def direct_case(
     )
     monkeypatch.setattr(
         resumes,
+        "generate_skill_target_plan",
+        AsyncMock(return_value={"target_skills": [], "strategy_notes": ""}),
+    )
+    monkeypatch.setattr(
+        resumes,
         "generate_resume_diffs",
         AsyncMock(return_value=ImproveDiffResult(changes=[])),
     )

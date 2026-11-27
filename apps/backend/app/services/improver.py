@@ -928,8 +928,9 @@ def _extract_jd_skill_index(
     job_keywords: dict[str, Any],
     job_description: str | None = None,
 ) -> dict[str, str]:
-    """Build a normalized index of explicit JD skills."""
+    """Build a normalized index of explicit JD skills and their atomic terms."""
     index: dict[str, str] = {}
+    skill_phrases: list[str] = []
     for field in ("required_skills", "preferred_skills"):
         values = job_keywords.get(field, [])
         if not isinstance(values, list):
@@ -942,6 +943,20 @@ def _extract_jd_skill_index(
                 job_description is None or keyword_in_text(skill, job_description)
             ):
                 index.setdefault(normalize_skill_key(skill), skill)
+                skill_phrases.append(skill)
+
+    # Keyword extraction sometimes represents real skills as parts of grouped
+    # requirements, e.g. "Bash or Python" or "Zabbix and other monitoring tools".
+    # Permit those atomic JD terms as targets, while keeping unrelated keywords
+    # (e.g. CI/CD mentioned only elsewhere) outside the skill allowlist.
+    keywords = job_keywords.get("keywords", [])
+    if isinstance(keywords, list):
+        for value in keywords:
+            if not isinstance(value, str) or not value.strip():
+                continue
+            keyword = value.strip()
+            if any(keyword_in_text(keyword, phrase) for phrase in skill_phrases):
+                index.setdefault(normalize_skill_key(keyword), keyword)
     return index
 
 

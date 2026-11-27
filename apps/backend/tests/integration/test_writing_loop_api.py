@@ -16,6 +16,7 @@ from httpx import ASGITransport, AsyncClient
 from app.main import app
 from app.routers import resumes as resumes_router
 from app.schemas.models import ResumeChange
+from app.services import queue_worker
 from app.services.improver import apply_diffs
 from app.services.progress import progress_events, tracked_progress
 
@@ -288,6 +289,146 @@ async def test_heavy_preview_completes_every_bullet_and_allows_job_inferred_skil
     assert len(diff_mock.await_args_list[1].kwargs["required_paths"]) == 7
     for section in ("workExperience", "personalProjects"):
         for source_entry, result_entry in zip(source[section], result[section]):
+            assert all(
+                before != after
+                for before, after in zip(
+                    source_entry["description"], result_entry["description"]
+                )
+            )
+
+
+async def test_heavy_queue_completes_every_required_rewrite(
+    isolated_db: Any,
+    sample_resume: dict[str, Any],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(resumes_router, "get_content_language", lambda: "en")
+    source = copy.deepcopy(sample_resume)
+    resume = await isolated_db.create_resume(
+        content=json.dumps(source),
+        content_type="json",
+        processed_data=source,
+        is_master=True,
+        processing_status="ready",
+    )
+    await isolated_db.create_queue_item(
+        "heavy-queue-item",
+        resume["resume_id"],
+        "Junior security operations role",
+        rate_limit_seconds=0,
+        prompt_id="heavy",
+    )
+
+    async def generate_diffs(**kwargs: Any) -> SimpleNamespace:
+        current = kwargs["original_resume_data"]
+        if not kwargs.get("required_paths"):
+            return SimpleNamespace(
+                changes=[
+                    ResumeChange(
+                        path="additional.technicalSkills",
+                        action="add_skill",
+                        original=None,
+                        value="Elastic SIEM",
+                        reason="Relevant target skill for the security role",
+                    )
+                ]
+            )
+        changes = []
+        for path in kwargs.get("required_paths", []):
+            if path == "summary":
+                original = current["summary"]
+            else:
+                section, remainder = path.split("[", 1)
+                entry_index, remainder = remainder.split("]", 1)
+                row_index = remainder.removeprefix(".description[").removesuffix("]")
+                original = current[section][int(entry_index)]["description"][
+                    int(row_index)
+                ]
+            changes.append(
+                ResumeChange(
+                    path=path,
+                    action="replace",
+                    original=original,
+                    value=f"{original}, reframed for the target role",
+                    reason="Complete the requested heavy rewrite",
+                )
+            )
+        return SimpleNamespace(changes=changes)
+
+    async def identity_writing(data: dict[str, Any], **_: Any) -> SimpleNamespace:
+        return SimpleNamespace(data=data, report=None)
+
+    with (
+        patch(
+            "app.routers.resumes.extract_job_keywords",
+            new_callable=AsyncMock,
+            return_value={
+                "keywords": ["Linux", "Elastic SIEM"],
+                "required_skills": ["Linux"],
+                "preferred_skills": ["Elastic SIEM"],
+            },
+        ),
+        patch(
+            "app.routers.resumes.generate_skill_target_plan",
+            new_callable=AsyncMock,
+            return_value={
+                "target_skills": [
+                    {"skill": "Elastic SIEM", "reason": "Relevant to the project"}
+                ],
+                "strategy_notes": "Focus on relevant infrastructure skills",
+            },
+        ),
+        patch(
+            "app.routers.resumes.verify_skill_target_plan",
+            return_value={
+                "accepted": [
+                    {
+                        "skill": "Elastic SIEM",
+                        "source": "jd_added",
+                        "reason": "Relevant to the project",
+                    }
+                ],
+                "rejected": [],
+            },
+        ),
+        patch(
+            "app.routers.resumes.generate_resume_diffs",
+            new_callable=AsyncMock,
+            side_effect=generate_diffs,
+        ) as diff_mock,
+        patch(
+            "app.routers.resumes.refine_resume",
+            new_callable=AsyncMock,
+            side_effect=RuntimeError("refinement disabled for test"),
+        ),
+        patch("app.routers.resumes.run_writing_loop", side_effect=identity_writing),
+        patch(
+            "app.routers.resumes._generate_auxiliary_messages",
+            new_callable=AsyncMock,
+            return_value=(None, None, None, None, []),
+        ),
+        patch(
+            "app.routers.resumes.generate_resume_title",
+            new_callable=AsyncMock,
+            return_value="Junior Security Operations",
+        ),
+    ):
+        await queue_worker.QueueManager().drain()
+
+    item = await isolated_db.get_queue_item("heavy-queue-item")
+    assert item is not None and item["status"] == "completed"
+    assert diff_mock.await_count == 2
+    assert any(
+        target["skill"] == "Elastic SIEM"
+        for target in diff_mock.await_args_list[0].kwargs["skill_targets"]
+    )
+    result = await isolated_db.get_resume(item["tailored_resume_id"])
+    assert result is not None
+    tailored = result["processed_data"]
+    assert tailored["summary"] != source["summary"]
+    assert "Elastic SIEM" in tailored["additional"]["technicalSkills"]
+    for section in ("workExperience", "personalProjects"):
+        for source_entry, result_entry in zip(source[section], tailored[section]):
             assert all(
                 before != after
                 for before, after in zip(

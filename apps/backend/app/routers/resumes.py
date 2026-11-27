@@ -397,6 +397,140 @@ def _missing_heavy_rewrite_paths(
     return [path for path in required_paths if path not in replaced]
 
 
+async def _plan_skill_targets(
+    *,
+    original_resume_data: dict[str, Any],
+    job_description: str,
+    job_keywords: dict[str, Any],
+    language: str,
+    prompt_id: str,
+    response_warnings: list[str],
+    progress: dict[str, str] | None = None,
+) -> list[dict[str, Any]]:
+    """Select and verify job-relevant skills before generating resume diffs."""
+    skill_targets: list[dict[str, Any]] = []
+    try:
+        if progress is not None:
+            progress["stage"] = "plan_skill_targets"
+        raw_skill_plan = await generate_skill_target_plan(
+            original_resume_data=original_resume_data,
+            job_description=job_description,
+            job_keywords=job_keywords,
+            language=language,
+        )
+        verified_skill_plan = verify_skill_target_plan(
+            raw_skill_plan,
+            original_resume_data=original_resume_data,
+            job_keywords=job_keywords,
+            job_description=job_description,
+        )
+        accepted_targets = verified_skill_plan.get("accepted", [])
+        if isinstance(accepted_targets, list):
+            skill_targets = [
+                target for target in accepted_targets if isinstance(target, dict)
+            ]
+        rejected_targets = verified_skill_plan.get("rejected", [])
+        if isinstance(rejected_targets, list) and rejected_targets:
+            response_warnings.append(
+                f"{len(rejected_targets)} unsupported skill target(s) rejected"
+            )
+    except (AIOperationDeadlineExceeded, PromptSizeError):
+        raise
+    except Exception as e:
+        logger.warning("Skill target planning failed, continuing without it: %s", e)
+        response_warnings.append("Skill target planning failed")
+
+    if prompt_id == "heavy":
+        allowed_keys = {
+            normalize_skill_key(str(target.get("skill", "")))
+            for target in skill_targets
+        }
+        for field in ("required_skills", "preferred_skills"):
+            values = job_keywords.get(field, [])
+            if not isinstance(values, list):
+                continue
+            for value in values:
+                if not isinstance(value, str) or not value.strip():
+                    continue
+                skill_key = normalize_skill_key(value)
+                if skill_key in allowed_keys:
+                    continue
+                skill_targets.append(
+                    {
+                        "skill": value,
+                        "source": "job_inference",
+                        "reason": (
+                            "Required or preferred by the job; include when the "
+                            "source work or project makes it plausible."
+                        ),
+                    }
+                )
+                allowed_keys.add(skill_key)
+
+    return skill_targets
+
+
+async def _complete_heavy_rewrite(
+    *,
+    original_data: dict[str, Any],
+    improved_data: dict[str, Any],
+    applied_changes: list[Any],
+    rejected_changes: list[Any],
+    job_description: str,
+    job_keywords: dict[str, Any],
+    language: str,
+    response_warnings: list[str],
+    skill_targets: list[dict[str, Any]] | None = None,
+    fixed_row_sections: tuple[str, ...] = (),
+    progress: dict[str, str] | None = None,
+) -> tuple[dict[str, Any], list[Any], list[Any]]:
+    """Rewrite any summary or work/project bullets a heavy pass left untouched."""
+    required_paths = _heavy_rewrite_required_paths(original_data)
+    missing_paths = _missing_heavy_rewrite_paths(required_paths, applied_changes)
+    if not missing_paths:
+        return improved_data, applied_changes, rejected_changes
+
+    if progress is not None:
+        progress["stage"] = "complete_heavy_rewrite"
+    try:
+        completion = await generate_resume_diffs(
+            original_resume=json.dumps(improved_data, ensure_ascii=False),
+            job_description=job_description,
+            job_keywords=job_keywords,
+            language=language,
+            prompt_id="heavy",
+            original_resume_data=improved_data,
+            skill_targets=skill_targets or [],
+            fixed_row_sections=fixed_row_sections,
+            required_paths=missing_paths,
+        )
+        improved_data, completion_applied, completion_rejected = apply_diffs(
+            original=improved_data,
+            changes=completion.changes,
+            allowed_skill_targets=skill_targets or [],
+            fixed_row_sections=fixed_row_sections,
+        )
+        applied_changes.extend(completion_applied)
+        rejected_changes.extend(completion_rejected)
+    except (AIOperationDeadlineExceeded, PromptSizeError):
+        raise
+    except Exception as e:
+        logger.warning("Heavy rewrite completion pass failed: %s", e)
+        response_warnings.append("Heavy rewrite completion pass failed")
+
+    still_missing = _missing_heavy_rewrite_paths(required_paths, applied_changes)
+    if still_missing:
+        logger.warning(
+            "Heavy rewrite incomplete: %d required summary or bullet lines remain unchanged",
+            len(still_missing),
+        )
+        response_warnings.append(
+            f"Heavy rewrite incomplete: {len(still_missing)} required "
+            "summary or bullet line(s) remain unchanged"
+        )
+    return improved_data, applied_changes, rejected_changes
+
+
 def _heavy_inferred_skills(
     data: dict[str, Any], job_keywords: dict[str, Any], job_description: str
 ) -> list[str]:
@@ -1537,64 +1671,15 @@ async def _improve_preview_flow(
 
     # Diff-based improvement: generate targeted changes, apply with verification
     if original_resume_data:
-        skill_targets: list[dict[str, Any]] = []
-        try:
-            progress["stage"] = "plan_skill_targets"
-            raw_skill_plan = await generate_skill_target_plan(
-                original_resume_data=original_resume_data,
-                job_description=job["content"],
-                job_keywords=job_keywords,
-                language=language,
-            )
-            verified_skill_plan = verify_skill_target_plan(
-                raw_skill_plan,
-                original_resume_data=original_resume_data,
-                job_keywords=job_keywords,
-                job_description=job["content"],
-            )
-            accepted_targets = verified_skill_plan.get("accepted", [])
-            if isinstance(accepted_targets, list):
-                skill_targets = [
-                    target for target in accepted_targets if isinstance(target, dict)
-                ]
-            rejected_targets = verified_skill_plan.get("rejected", [])
-            if isinstance(rejected_targets, list) and rejected_targets:
-                response_warnings.append(
-                    f"{len(rejected_targets)} unsupported skill target(s) rejected"
-                )
-        except (AIOperationDeadlineExceeded, PromptSizeError):
-            raise
-        except Exception as e:
-            logger.warning("Skill target planning failed, continuing without it: %s", e)
-            response_warnings.append("Skill target planning failed")
-
-        if prompt_id == "heavy":
-            allowed_keys = {
-                normalize_skill_key(str(target.get("skill", "")))
-                for target in skill_targets
-                if isinstance(target, dict)
-            }
-            for field in ("required_skills", "preferred_skills"):
-                values = job_keywords.get(field, [])
-                if not isinstance(values, list):
-                    continue
-                for value in values:
-                    if not isinstance(value, str) or not value.strip():
-                        continue
-                    skill_key = normalize_skill_key(value)
-                    if skill_key in allowed_keys:
-                        continue
-                    skill_targets.append(
-                        {
-                            "skill": value,
-                            "source": "job_inference",
-                            "reason": (
-                                "Required or preferred by the job; include when the "
-                                "source work or project makes it plausible."
-                            ),
-                        }
-                    )
-                    allowed_keys.add(skill_key)
+        skill_targets = await _plan_skill_targets(
+            original_resume_data=original_resume_data,
+            job_description=job["content"],
+            job_keywords=job_keywords,
+            language=language,
+            prompt_id=prompt_id,
+            response_warnings=response_warnings,
+            progress=progress,
+        )
 
         progress["stage"] = "generate_resume_diffs"
         diff_result = await generate_resume_diffs(
@@ -1618,49 +1703,23 @@ async def _improve_preview_flow(
         )
 
         if prompt_id == "heavy":
-            required_paths = _heavy_rewrite_required_paths(original_resume_data)
-            missing_paths = _missing_heavy_rewrite_paths(
-                required_paths, applied_changes
+            (
+                improved_data,
+                applied_changes,
+                rejected_changes,
+            ) = await _complete_heavy_rewrite(
+                original_data=original_resume_data,
+                improved_data=improved_data,
+                applied_changes=applied_changes,
+                rejected_changes=rejected_changes,
+                job_description=job["content"],
+                job_keywords=job_keywords,
+                language=language,
+                response_warnings=response_warnings,
+                skill_targets=skill_targets,
+                fixed_row_sections=fixed_row_sections,
+                progress=progress,
             )
-            if missing_paths:
-                progress["stage"] = "complete_heavy_rewrite"
-                try:
-                    completion = await generate_resume_diffs(
-                        original_resume=json.dumps(improved_data, ensure_ascii=False),
-                        job_description=job["content"],
-                        job_keywords=job_keywords,
-                        language=language,
-                        prompt_id=prompt_id,
-                        original_resume_data=improved_data,
-                        skill_targets=skill_targets,
-                        fixed_row_sections=fixed_row_sections,
-                        required_paths=missing_paths,
-                    )
-                    (
-                        improved_data,
-                        completion_applied,
-                        completion_rejected,
-                    ) = apply_diffs(
-                        original=improved_data,
-                        changes=completion.changes,
-                        allowed_skill_targets=skill_targets,
-                        fixed_row_sections=fixed_row_sections,
-                    )
-                    applied_changes.extend(completion_applied)
-                    rejected_changes.extend(completion_rejected)
-                except (AIOperationDeadlineExceeded, PromptSizeError):
-                    raise
-                except Exception as e:
-                    logger.warning("Heavy rewrite completion pass failed: %s", e)
-                    response_warnings.append("Heavy rewrite completion pass failed")
-                still_missing = _missing_heavy_rewrite_paths(
-                    required_paths, applied_changes
-                )
-                if still_missing:
-                    response_warnings.append(
-                        f"Heavy rewrite incomplete: {len(still_missing)} required "
-                        "summary or bullet line(s) remain unchanged"
-                    )
             improved_data = _apply_heavy_skill_inferences(
                 improved_data, job_keywords, job["content"]
             )
@@ -2318,6 +2377,14 @@ async def execute_tailoring_pipeline(
 
     # Diff-based improvement: generate targeted changes, apply with verification
     if original_resume_data:
+        skill_targets = await _plan_skill_targets(
+            original_resume_data=original_resume_data,
+            job_description=job["content"],
+            job_keywords=job_keywords,
+            language=language,
+            prompt_id=effective_prompt_id,
+            response_warnings=response_warnings,
+        )
         diff_result = await generate_resume_diffs(
             original_resume=resume["content"],
             job_description=job["content"],
@@ -2325,13 +2392,31 @@ async def execute_tailoring_pipeline(
             language=language,
             prompt_id=effective_prompt_id,
             original_resume_data=original_resume_data,
+            skill_targets=skill_targets,
         )
 
         improved_data, applied_changes, rejected_changes = apply_diffs(
             original=original_resume_data,
             changes=diff_result.changes,
+            allowed_skill_targets=skill_targets,
             allow_bullet_reorder=effective_prompt_id == "heavy",
         )
+        if effective_prompt_id == "heavy":
+            (
+                improved_data,
+                applied_changes,
+                rejected_changes,
+            ) = await _complete_heavy_rewrite(
+                original_data=original_resume_data,
+                improved_data=improved_data,
+                applied_changes=applied_changes,
+                rejected_changes=rejected_changes,
+                job_description=job["content"],
+                job_keywords=job_keywords,
+                language=language,
+                response_warnings=response_warnings,
+                skill_targets=skill_targets,
+            )
         allow_appended_rows = any(
             change.action == "append" for change in applied_changes
         )
